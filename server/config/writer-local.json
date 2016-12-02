@@ -419,7 +419,7 @@
             "url": "http://localhost:3000/index.js",
             "style": "http://localhost:3000/style.css",
             "mandatory": false,
-            "enabled": false
+            "enabled": true
         }
     ]
 }

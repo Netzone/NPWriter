@@ -1,6 +1,5 @@
 import 'whatwg-fetch'
 import isObject from 'lodash/isObject'
-import {DefaultDOMElement} from 'substance'
 
 /**
  * @class Api.Router
@@ -9,6 +8,60 @@ import {DefaultDOMElement} from 'substance'
  * All router functions are available through the context.api.router object.
  */
 class Router {
+
+    /**
+     * Creates a querystring from an object, starting with a ?
+     * If a string is passed as parameter i will just be returned
+     *
+     * @note If parameters contains 'headers' it will not be added to the querystring
+     *
+     * @param {object} parameters
+     * @returns {string}
+     */
+    getQuerystringFromParameters(parameters) {
+
+        if (!parameters) return ''
+        if (!isObject(parameters)) return parameters
+
+        if (isObject(parameters)) {
+            let query = []
+
+            for (const name in parameters) {
+                if (name !== 'headers' && name !== 'body') { // Dont add the headers key to the querystring
+                    query.push(name + '=' + encodeURI(parameters[name]));
+                }
+            }
+            return '?' + query.join('&')
+        }
+
+        throw new Error('Could not convert parameters of type', typeof parameters)
+    }
+
+
+    /**
+     *
+     * @param {string} method - GET, POST, PUT, DELETE, HEAD
+     * @param {object} parameters Object containing a headers-property
+     * @returns {{method: string}}
+     */
+    getRequestPropertiesForMethod(method, parameters) {
+
+        let requestProperties = {
+            method: method.toUpperCase()
+        }
+
+        // If headers is sent pass them
+        if (parameters && parameters.headers) {
+            requestProperties['headers'] = parameters.headers
+        }
+
+        // Add a body if there is one provided
+        if (parameters && parameters.body) {
+            requestProperties['body'] = parameters.body
+        }
+
+        return requestProperties
+    }
 
     /**
      * Post a binary file object to the backend
@@ -42,7 +95,10 @@ class Router {
      * @return {object} jQuery ajax object
      */
     post(path, parameters) {
-        return this.ajax('POST', 'text', path, null, parameters);
+        let url = this.getEndpoint() + path + this.getQuerystringFromParameters(parameters)
+        let requestProperties = this.getRequestPropertiesForMethod('POST', parameters)
+        return fetch(url, requestProperties)
+
     }
 
     /**
@@ -54,7 +110,10 @@ class Router {
      * @return {object} jQuery ajax object
      */
     put(path, parameters) {
-        return this.ajax('PUT', 'text', path, null, parameters);
+        let url = this.getEndpoint() + path + this.getQuerystringFromParameters(parameters)
+        let requestProperties = this.getRequestPropertiesForMethod('PUT', parameters)
+        return fetch(url, requestProperties)
+
     }
 
     /**
@@ -77,32 +136,19 @@ class Router {
  *     }.bind(this));
      */
     get(path, parameters) {
-
-        let url = this.getEndpoint() + path,
-            query = []
-
-        let requestProperties = {
-            method: 'GET'
-        }
-
-        // If headers is sent pass them
-        if(parameters && parameters.headers) {
-            requestProperties['headers'] = parameters.headers
-            delete parameters.headers
-        }
-
-
-        if (isObject(parameters)) {
-            for (name in parameters) {
-                query.push(name + '=' + encodeURI(parameters[name]));
-            }
-
-            url += '?' + query.join('&');
-        }
-
+        let url = this.getEndpoint() + path + this.getQuerystringFromParameters(parameters)
+        let requestProperties = this.getRequestPropertiesForMethod('GET', parameters)
 
         return fetch(url, requestProperties)
     }
+
+    del(path, parameters) {
+        let url = this.getEndpoint() + path + this.getQuerystringFromParameters(parameters)
+        let requestProperties = this.getRequestPropertiesForMethod('DELETE', parameters)
+
+        return fetch(url, requestProperties)
+    }
+
 
     /**
      * Return api backend url
@@ -115,59 +161,6 @@ class Router {
         return location.protocol + "//" + location.hostname + ":" + location.port;
     }
 
-    /**
-     * Execute ajax call to backend
-     *
-     * @param {string} method (GET, PUT, POST, DELETE)
-     * @param {string} dataType (text, xml, json, script)
-     * @param {string} path
-     * @param {object} parameters
-     * @param {object} data
-     *
-     * @return {object} jQuery ajax object
-     */
-    ajax(method, dataType, path, parameters, data) {
-        var url = this.getEndpoint(),
-            name,
-            query = [];
-
-        if (typeof(path) !== 'undefined') {
-            url += path;
-        }
-
-        if (isObject(parameters)) {
-            for (name in parameters) {
-                query.push(name + '=' + encodeURI(parameters[name]));
-            }
-
-            url += '?' + query.join('&');
-        }
-
-
-        if (isObject(data)) {
-            console.warn("Data should now be object anymore");
-        }
-
-
-        // TODO + (plus) chars is stripped from dates
-
-        var sendData = {
-            method: method,
-            dataType: dataType,
-            url: url,
-            headers: {
-                "Content-Type": "application/xml",
-                "Authorization": "Basic " +btoa("admin:xxx")
-            }
-        };
-
-        if (data) {
-            // sendData['data'] = data;
-            sendData['body'] = data
-        }
-
-        return fetch(url, sendData)
-    }
 
     /**
      * Proxy ajax call to external backend
@@ -196,7 +189,7 @@ class Router {
     }
 
     _getItem(uuid, imType) {
-        return this.ajax('GET', 'xml', '/api/newsitem/' + uuid, {imType: imType}, null)
+        return this.get('/api/newsitem/' + uuid, {imType: imType, headers: {'Content-Type': 'text/xml'}}, null)
             .then(response => this.checkForOKStatus(response))
             .then(response => response.text())
             .then(text => {

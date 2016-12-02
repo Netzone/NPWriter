@@ -117,7 +117,7 @@ class SaveHandler {
     }
 
     createNewsItem(newsItemXmlString) {
-        return this.api.router.post('/api/newsitem', newsItemXmlString)
+        return this.api.router.post('/api/newsitem', {body: newsItemXmlString})
             .then(response => response.text())
             .then((uuid) => {
 
@@ -141,7 +141,7 @@ class SaveHandler {
     }
 
     updateNewsItem(uuid, newsItemXmlString) {
-        return this.api.router.put('/api/newsitem/' + uuid, newsItemXmlString)
+        return this.api.router.put('/api/newsitem/' + uuid, {body: newsItemXmlString})
             .then((response) => this.api.router.checkForOKStatus(response))
             .then(() => {
                 this.api.events.documentSaved();
