@@ -75,6 +75,21 @@
                         "name": "caption",
                         "label": "Caption",
                         "type": "text"
+                    },
+                    {
+                        "name": "credit",
+                        "label": "Credit",
+                        "type": "text"
+                    },
+                    {
+                        "name": "alttext",
+                        "label": "Alt text",
+                        "type": "text"
+                    },
+                    {
+                        "name": "alignment",
+                        "label": "Alignment",
+                        "type": "option"
                     }
                 ]
             }

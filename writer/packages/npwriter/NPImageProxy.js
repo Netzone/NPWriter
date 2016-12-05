@@ -21,10 +21,10 @@ class NPImageProxy extends FileProxy {
         this.uploadPromise = null
 
         // When an url (String) is given as the data an uri needs to be 'uploaded'
-        if (isString(fileNode.data)) {
-            this.uri = fileNode.data
+        if (fileNode.sourceUrl) {
+            this.uri = fileNode.sourceUrl
         } else {
-            this.file = fileNode.data
+            this.file = fileNode.sourceFile
             if (this.file) {
                 this._fileUrl = URL.createObjectURL(this.file)
             }
@@ -67,7 +67,7 @@ class NPImageProxy extends FileProxy {
             return this.uploadPromise
         }
 
-        if (!this.uuid && this.file) { // regular file upload
+        if (!this.fileNode.uuid && this.file) { // regular file upload
             this.uploadPromise = new Promise((resolve, reject) => {
                 const params = {
                     imType: this.fileNode.getImType()
@@ -84,7 +84,7 @@ class NPImageProxy extends FileProxy {
                         reject(new FileUploadError(e.message))
                     })
             })
-        } else if (!this.uuid && this.uri) { // uri-based upload
+        } else if (!this.fileNode.uuid && this.uri) { // uri-based upload
 
             this.uploadPromise = new Promise((resolve, reject) => {
                 this.fileService.uploadURL(this.uri, this.fileNode.getImType())
