@@ -19,6 +19,7 @@ import lodash from 'lodash'
 import SourceComponent from './packages/dialog/SourceComponent'
 import jxon from 'jxon'
 import Validator from './packages/npwriter/Validator'
+import NPWriterCommand from './packages/npwriter/NPWriterCommand'
 import uuidv5 from 'uuidv5'
 
 const STATUS_ISREADY = 'isReady',
@@ -123,6 +124,7 @@ class App extends Component {
         api.apiManager.expose('lodash', lodash) // Expose the ID Generator helper method
         api.apiManager.expose('jxon', jxon) // Expose JXON library
         api.apiManager.expose('Validator', Validator) // Expose JXON library
+        api.apiManager.expose('WriterCommand', NPWriterCommand) // The NPWriter base class for commands containg commandState method
         api.apiManager.expose('uuidv5', uuidv5) // Expose a UUID V5 library
 
         var promise = this.configurator.loadConfigJSON('/api/config')                     // Load config file and store it in configurator
@@ -298,23 +300,23 @@ class App extends Component {
 export default App
 
 window.onload = () => {
-/*
+// /
     // if(window.PRODUCTION) {
-        if('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('serviceworker.js')
-                .then(() => {
-                    console.log("Registration done");
-                    showNotification()
-                })
-                .catch((error) => {
-                    console.log("Registrsation of serviceworker failed")
-                })
-        }
+    //     if('serviceWorker' in navigator) {
+    //         navigator.serviceWorker.register('serviceworker.js')
+    //             .then(() => {
+    //                 console.log("Registration done");
+    //                 showNotification()
+    //             })
+    //             .catch((error) => {
+    //                 console.log("Registrsation of serviceworker failed")
+    //             })
+    //     }
      // }
 
 
     //
-    function showNotification() {
+/*    function showNotification() {
         Notification.requestPermission(function (result) {
             if (result === 'granted') {
                 navigator.serviceWorker.ready.then(function (registration) {
