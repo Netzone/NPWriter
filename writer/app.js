@@ -20,6 +20,7 @@ import SourceComponent from './packages/dialog/SourceComponent'
 import jxon from 'jxon'
 import Validator from './packages/npwriter/Validator'
 import NPWriterCommand from './packages/npwriter/NPWriterCommand'
+import NPFileProxy from './packages/npwriter/NPFileProxy'
 import uuidv5 from 'uuidv5'
 
 const STATUS_ISREADY = 'isReady',
@@ -126,6 +127,7 @@ class App extends Component {
         api.apiManager.expose('Validator', Validator) // Expose JXON library
         api.apiManager.expose('WriterCommand', NPWriterCommand) // The NPWriter base class for commands containg commandState method
         api.apiManager.expose('uuidv5', uuidv5) // Expose a UUID V5 library
+        api.apiManager.expose('NPFileProxy', NPFileProxy) // Expose NPFileProxy base class
 
         var promise = this.configurator.loadConfigJSON('/api/config')                     // Load config file and store it in configurator
             .then(() => this.configurator.config.writerConfigFile.plugins)  // Get the plugins section from config (stored in the configurator)
