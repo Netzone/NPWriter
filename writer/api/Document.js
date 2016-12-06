@@ -111,7 +111,12 @@ class Document {
             return deleteNode(tx, args);
         });
 
-        this.api.Events.documentChanged(name, {});
+        const event = {
+            type: 'document',
+            action: 'delete',
+            data: node.id
+        }
+        this.api.events.documentChanged(name, event);
     }
 
     /**
