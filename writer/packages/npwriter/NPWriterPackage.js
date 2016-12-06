@@ -17,7 +17,6 @@ import NewsMLArticle from './NewsMLArticle'
 import NewsMLImporter from './NewsMLImporter'
 import NewsMLExporter from './NewsMLExporter'
 import NPFileNode from './NPFileNode'
-import NPImageProxy from './NPImageProxy'
 
 import BodyPackage from '../body/BodyPackage'
 import HeadlinePackage from '../headline/HeadlinePackage'
@@ -86,8 +85,6 @@ export default {
 
         // File store extensions
         config.addNode(NPFileNode)
-        config.addFileProxy(NPImageProxy)
-        // config.addFileProxy(NPPdfProxy)
 
         config.import(SpellCheckPackage)
 
