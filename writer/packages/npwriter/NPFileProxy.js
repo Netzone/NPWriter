@@ -56,7 +56,7 @@ class NPFileProxy extends FileProxy {
     fetchUrl() {
         this.fileService.getUrl(this.fileNode.uuid, this.fileNode.imType)
             .then((url) => {
-                this.fileNode.url = url
+                this.url = url
                 this.triggerUpdate()
             })
     }
