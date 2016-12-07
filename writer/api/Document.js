@@ -103,13 +103,11 @@ class Document {
     deleteNode(name, node) {
         // TODO: is this actually always a node in the body?
         // i.e. the surface is always the body editor?
-        var editorSession = this.api.editorSession;
-        var surface = editorSession.getFocusedSurface();
-        editorSession.transaction((tx, args) => {
-            args.nodeId = node.id;
-            args.containerId = surface.getContainerId();
-            return deleteNode(tx, args);
-        });
+        const editorSession = this.api.editorSession;
+
+        editorSession.transaction((tx) => {
+            tx.delete(node.id)
+        })
 
         const event = {
             type: 'document',
