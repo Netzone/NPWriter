@@ -63,14 +63,14 @@ class NPFileProxy extends FileProxy {
 
     sync() {
 
-        if(this.uploadPromise){
+        if (this.uploadPromise) {
             return this.uploadPromise
         }
 
         if (!this.fileNode.uuid && this.sourceFile) { // regular file upload
             this.uploadPromise = new Promise((resolve, reject) => {
 
-                if(!this.fileNode.imType) {
+                if (!this.fileNode.imType) {
                     reject(new Error('Trying to upload a file without ImType'))
                 }
                 const params = {
@@ -93,7 +93,11 @@ class NPFileProxy extends FileProxy {
         } else if (!this.fileNode.uuid && this.sourceUrl) { // uri-based upload
 
             this.uploadPromise = new Promise((resolve, reject) => {
-                this.fileService.uploadURL(this.sourceUrl, this.fileNode.getImType())
+                if (!this.fileNode.imType) {
+                    reject(new Error('Trying to upload a file without ImType'))
+                }
+                this.fileService.uploadURL(this.sourceUrl, this.fileNode.imType)
+
                     .then((xmlString) => {
                         this.fileNode.handleDocument(xmlString);
                         this.uploadPromise = null
