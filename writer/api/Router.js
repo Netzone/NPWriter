@@ -227,7 +227,7 @@ class Router {
      */
     updateConceptItem(id, concept) {
         return this.put('/api/newsitem/' + id, {body: concept})
-            .then(response => this.context.api.router.checkForOKStatus(response))
+            .then(response => this.checkForOKStatus(response))
     }
 
     /**
@@ -237,7 +237,7 @@ class Router {
      */
     createConceptItem(concept) {
         return this.post('/api/newsitem', {body: concept})
-            .then(response => this.context.api.router.checkForOKStatus(response))
+            .then(response => this.checkForOKStatus(response))
             .then(response => response.text())
     }
 
