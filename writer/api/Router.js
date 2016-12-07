@@ -220,6 +220,28 @@ class Router {
 
 
     /**
+     * Updates a Concept Item
+     * @param id The ID of the Concept Item to update
+     * @param concept The updated XML
+     * @return A promise with no data
+     */
+    updateConceptItem(id, concept) {
+        return this.put('/api/newsitem/' + id, {body: concept})
+            .then(response => this.checkForOKStatus(response))
+    }
+
+    /**
+     * Creates a Concept Item
+     * @param concept The concept to create
+     * @return {*|Promise.<TResult>} containing the resulting UUID
+     */
+    createConceptItem(concept) {
+        return this.post('/api/newsitem', {body: concept})
+            .then(response => this.checkForOKStatus(response))
+            .then(response => response.text())
+    }
+
+    /**
      * Method checks for a status code between 200 and 299
      * Throws error if otherwise.
      *
