@@ -313,7 +313,11 @@
             "mandatory": false,
             "enabled": true,
             "data": {
-                "foo": "bar"
+                "teaserPosition": "top",
+                "fields": [
+                    "subject",
+                    "text"
+                ]
             }
         },
         {
@@ -419,7 +423,14 @@
             "url": "http://localhost:3000/index.js",
             "style": "http://localhost:3000/style.css",
             "mandatory": false,
-            "enabled": true
+            "enabled": false
+        },
+        {
+            "id": "nl.fdmg.quote",
+            "name": "quote",
+            "url": "http://localhost:3000/index.js",
+            "enabled": true,
+            "mandatory": false
         }
     ]
 }

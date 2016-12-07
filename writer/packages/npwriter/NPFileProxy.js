@@ -2,7 +2,7 @@ import {FileProxy} from 'substance'
 import FileService from './FileService'
 import isString from 'lodash/isString'
 
-class NPPdfProxy extends FileProxy {
+class NPFileProxy extends FileProxy {
 
     constructor(fileNode, context) {
         super(fileNode, context)
@@ -19,9 +19,6 @@ class NPPdfProxy extends FileProxy {
 
         // If a file upload is in progress
         this.uploadPromise = null
-
-        // If this file is being uploaded
-        this._isSyncing = false
 
         // When an url (String) is given as the data an uri needs to be 'uploaded'
         if (fileNode.sourceUrl) {
@@ -57,9 +54,9 @@ class NPPdfProxy extends FileProxy {
     }
 
     fetchUrl() {
-        this.fileService.getUrl(this.fileNode.uuid, this.fileNode.getImType())
+        this.fileService.getUrl(this.fileNode.uuid, this.fileNode.imType)
             .then((url) => {
-                this.fileNode.url = url
+                this.url = url
                 this.triggerUpdate()
             })
     }
@@ -73,8 +70,11 @@ class NPPdfProxy extends FileProxy {
         if (!this.fileNode.uuid && this.sourceFile) { // regular file upload
             this.uploadPromise = new Promise((resolve, reject) => {
 
+                if(!this.fileNode.imType) {
+                    reject(new Error('Trying to upload a file without ImType'))
+                }
                 const params = {
-                    imType: this.fileNode.getImType()
+                    imType: this.fileNode.imType
                 }
 
                 this.fileService.uploadFile(this.sourceFile, params)
@@ -118,9 +118,4 @@ class NPPdfProxy extends FileProxy {
 
 }
 
-// to detect that this class should take responsibility for a fileNode
-NPPdfProxy.match = function (fileNode) {
-    return fileNode.fileType === 'pdf'
-}
-
-export default NPPdfProxy
+export default NPFileProxy
