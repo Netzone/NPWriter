@@ -1174,6 +1174,10 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
+cropjs:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/cropjs/-/cropjs-1.0.3.tgz#b3ce48ba36075932064cbead1ac497356661c01d"
+
 cross-spawn@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-3.0.1.tgz#1256037ecb9f0c5f79e3d6ef135e30770184b982"
@@ -5283,6 +5287,10 @@ utils-merge@1.0.0:
 uuid@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
+
+uuidv5@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/uuidv5/-/uuidv5-0.0.1.tgz#dbe204fe7ceaad09f11ac3e7958a4686cfc46dde"
 
 v8flags@^2.0.10:
   version "2.0.11"

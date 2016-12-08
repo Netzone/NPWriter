@@ -79,6 +79,10 @@ module.exports = {
                 to: './writer/substance'
             },
             {
+                from: 'node_modules/cropjs/dist',
+                to: './cropjs'
+            },
+            {
                 from: 'node_modules/font-awesome',
                 to: './writer/font-awesome'
             },
