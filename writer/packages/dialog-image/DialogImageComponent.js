@@ -567,7 +567,8 @@ class DialogImageComponent extends Component {
                 this.context.api.ui.showNotification('', '', this.getLabel('Image data saved to archive'))
             })
             .catch((error) => {
-                this.context.api.ui.showNotification('', '', this.getLable('Image data could not be saved'))
+                console.log(error)
+                this.context.api.ui.showNotification('', '', this.getLabel('Error! Image data could not be saved.'))
             })
     }
 }
