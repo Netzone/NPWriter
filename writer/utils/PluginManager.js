@@ -21,11 +21,13 @@ class PluginManager {
 
     /**
      * Fetch a list of plugins from backend and parse result to JSON
-     * @param configURL {string} A URL to the config file containt plugins
+     * @param configURL {string} A URL to the config file constraint plugins
      * @returns {Promise.<TResult>|*}
      */
     getListOfPlugins(configURL) {
-        return fetch(configURL)
+        return fetch(configURL, {
+            credentials: "same-origin"
+        })
             .then(response => response.json())
             .then(configJson => configJson.plugins)
     }
@@ -45,7 +47,7 @@ class PluginManager {
 
     appendPluginStylesheet(plugin) {
         const resourceLoader = new ResourceLoader()
-        if(plugin.style) {
+        if (plugin.style) {
             resourceLoader.load(plugin, 'css')
         }
     }
@@ -63,7 +65,7 @@ class PluginManager {
         if (pluginRegisterFunction) {
             pluginRegisterFunction(pluginPackage);
         } else {
-            console.info("Trying to call register on a plugin that's not registered with the writer",pluginPackage.id);
+            console.info("Trying to call register on a plugin that's not registered with the writer", pluginPackage.id);
         }
     }
 
@@ -93,7 +95,7 @@ class PluginManager {
 
                 this.registerPluginList.set(plugin.id, (pluginPackage) => {
                     pluginPackage.index = idx // Set the sort index for the package
-                    this.pluginPackages.push({pluginPackage:pluginPackage, pluginConfigObject: plugin})
+                    this.pluginPackages.push({pluginPackage: pluginPackage, pluginConfigObject: plugin})
                     resolved = true;
                     this.plugins.set(plugin.id, plugin)
                     this.registerPluginList.delete(plugin.id)
@@ -108,7 +110,7 @@ class PluginManager {
                     if (!resolved) {
                         this.registerPluginList.delete(plugin.id) // Delete from loading list
 
-                        if(plugin.mandatory) {
+                        if (plugin.mandatory) {
                             reject(plugin.id + " did not respond in time");
                         }
                         // plugin is not mandatory, resolve
@@ -126,7 +128,7 @@ class PluginManager {
     importPluginPackagesSortedByIndex() {
 
         let packages = sortBy(this.pluginPackages, [(pluginPackage) => {
-            if(pluginPackage.pluginPackage.index === undefined) { // Undefined is a higher number than zero
+            if (pluginPackage.pluginPackage.index === undefined) { // Undefined is a higher number than zero
                 pluginPackage.pluginPackage.index = 0
             }
             return pluginPackage.pluginPackage.index;
@@ -192,7 +194,7 @@ class PluginManager {
         else {
 
             let pluginData = this.plugins.get(name)
-            if(pluginData) {
+            if (pluginData) {
                 ptr = pluginData.data
                 // console.log("", pluginData.data[path]);
             }

@@ -160,11 +160,11 @@ class FormSearchComponent extends Component {
         }
         else {
             const fetchParameters = {
-                method: "GET",
                 contentType: 'application/json',
                 dataType: 'application/json'
             }
-            fetch(this.props.searchUrl + input, fetchParameters)
+
+            this.context.api.get(this.props.searchUrl + input, fetchParameters)
                 .then(response => this.context.api.router.checkForOKStatus(response))
                 .then(response => this.context.api.router.toJson(response))
                 .then((json) => {
