@@ -85,10 +85,10 @@ class DialogComponent extends Component {
         const contentComponent = props.content;
         const modalInnerContent = $$(contentComponent, props.contentProps).addClass('modal-inner-content').ref('contentComponent')
 
-        if(props.options.takeover) {
+        if (props.options.takeover) {
             modal.addClass('global takeover')
         }
-        if(props.options.cssClass) {
+        if (props.options.cssClass) {
             modal.addClass(options.cssClass)
         }
 
@@ -115,10 +115,17 @@ class DialogComponent extends Component {
      */
     addTitleIfExist($$, modalContent, options) {
         if (options.title) {
+
+            let title = ''
+            if (options.icon) {
+                title = $$('span').append($$(FontAwesomeIcon, {icon: options.icon})).append(' ' + this.getLabel(options.title))
+            } else {
+                title = this.getLabel(options.title)
+            }
             modalContent.append(
                 $$('div').addClass('modal-header').append(
                     $$('h2').append(
-                        this.getLabel(options.title)
+                        title
                     )
                 )
             );
@@ -130,13 +137,13 @@ class DialogComponent extends Component {
      * Recalculate the height of the modal window depending on the resolution on the client.innerHeight
      */
     changeModalHeight() {
-        var clientHeight = window.innerHeight;
+        const clientHeight = window.innerHeight;
         if (clientHeight < 700) {
             this.el.find('.modal-content').addClass('small-screen');
-            this.el.find('.modal-content').css('height', (parseInt(clientHeight - 60, 10))+"px")
+            this.el.find('.modal-content').css('height', (parseInt(clientHeight - 60, 10)) + "px")
         } else {
             this.el.find('.modal-content').removeClass('small-screen');
-            this.el.find('.modal-content').css('max-height', clientHeight - 120+"px");
+            this.el.find('.modal-content').css('max-height', clientHeight - 120 + "px");
             this.el.find('.modal-content').css('height', 'auto')
         }
     }
