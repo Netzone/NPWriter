@@ -457,6 +457,14 @@
       "enabled": true
     },
     {
+      "id": "se.infomaker.ximcontentprofile",
+      "name": "ximcontentprofile",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
       "id": "se.infomaker.npwriterdevkit",
       "name": "npwriterdevkit",
       "url": "http://localhost:3000/index.js",
