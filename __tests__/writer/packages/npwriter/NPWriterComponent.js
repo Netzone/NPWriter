@@ -17,66 +17,35 @@ window.crypto = {
 window.document.createRange = () => {}
 
 
-class App extends Component {
-
-    getChildContext() {
-        return Object.assign({}, {
-            configurator: this.props.configurator,
-            api: this.api
-        });
-    }
-
-    render($$) {
-
-
-
-        this.api = new Api({}, this.props.configurator)
-        this.api.init(Helper.getParsedExampleDocument(), {getDocument:()=>{}}, {}) // Mocking documentSession parameter
-
-        let context = {
-            api: this.api
-        }
-
-        // this.props.configurator.import(UnsupportedPackage)
-        var importer = this.props.configurator.createImporter('newsml', context)
-        const idfDocument = importer.importDocument(Helper.getContentFromExampleDocument())
-
-        let editorSession = new EditorSession(idfDocument, {
-            configurator: this.props.configurator,
-            lang: "sv_SE",
-            context: context
-        })
-
-        let writer = $$(NPWriterCompontent, {
-            editorSession: editorSession,
-            configurator: this.props.configurator,
-            api: this.api
-        }).ref('writer')
-
-        return $$('div').attr('id', 'main').append('hello')
-                .append(writer)
-    }
-
-}
-
 describe('Start a Writer', () => {
 
-    let xhr, requests
+    let xhr, requests, api, app, App
     beforeEach(() => {
 
         xhr = sinon.useFakeXMLHttpRequest();
         requests = [];
-        xhr.onCreate = function (req) { requests.push(req); };
+        xhr.onCreate = function (req) {
+            requests.push(req);
+        };
+        let configurator = Helper.getConfigurator()
+        api = new Api({}, configurator)
+        api.init(Helper.getParsedExampleDocument(), {getDocument:()=>{}}, {}) // Mocking documentSession parameter
+
+        App = Helper.getApp(api)
+        app = App.mount({configurator: configurator}, document.body)
 
     })
 
     afterEach(() => {
+        document.body.innerHTML = '<div></div>';
+        app = null
+        App = null
         xhr.restore();
     })
 
     it('Mounts a writer to document', () => {
-        var configurator = new NPWriterConfigurator().import(AppPackage)
-        App.mount({configurator: configurator}, document.body)
+        // var configurator = new NPWriterConfigurator().import(AppPackage)
+        // App.mount({configurator: configurator}, document.body)
 
         expect(document.getElementById('main').nodeName).toBe('DIV')
         expect(document.getElementById('main').getAttribute('id')).toBe('main')

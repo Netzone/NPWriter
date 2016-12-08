@@ -5,7 +5,7 @@ import UnsupportedPackage from '../writer/packages/unsupported/UnsupportedPackag
 import NPWriterCompontent from '../writer/packages/npwriter/NPWriterComponent'
 import NPWriterConfigurator from '../writer/packages/npwriter/NPWriterConfigurator'
 import AppPackage from '../writer/AppPackage'
-
+import {ParagraphPackage} from 'substance'
 class Helper {
 
     static getContentFromExampleDocument() {
@@ -19,7 +19,11 @@ class Helper {
     }
 
     static getConfigurator() {
-        return new NPWriterConfigurator().import(AppPackage)
+        const configurator = new NPWriterConfigurator().import(AppPackage)
+        configurator.import(ParagraphPackage)
+        configurator.import(UnsupportedPackage)
+
+        return configurator
 
     }
 

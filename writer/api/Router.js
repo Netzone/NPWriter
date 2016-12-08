@@ -60,6 +60,10 @@ class Router {
             requestProperties['body'] = parameters.body
         }
 
+        if (!parameters || !parameters.credentials) {
+            requestProperties['credentials'] = 'same-origin'
+        }
+
         return requestProperties
     }
 
