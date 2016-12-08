@@ -328,13 +328,45 @@
       "mandatory": false,
       "enabled": true,
       "data": {
-        "fields": [
-          {
-            "name": "caption",
-            "label": "Caption",
-            "type": "text"
-          }
-        ]
+          "fields":[
+              {
+                  "name": "caption",
+                  "label": "Caption",
+                  "type": "text"
+              },
+              {
+                  "name": "credit",
+                  "label": "Credit",
+                  "type": "text"
+              },
+              {
+                  "name": "alttext",
+                  "label": "Alt text",
+                  "type": "text"
+              },
+              {
+                  "name": "alignment",
+                  "label": "Alignment",
+                  "type": "option",
+                  "options": [
+                      {
+                          "name": "auto",
+                          "label": "Automatic",
+                          "icon": "fa-align-center"
+                      },
+                      {
+                          "name": "left",
+                          "label": "Left",
+                          "icon": "fa-align-left"
+                      },
+                      {
+                          "name": "right",
+                          "label": "Right",
+                          "icon": "fa-align-right"
+                      }
+                  ]
+              }
+          ]
       }
     },
     {

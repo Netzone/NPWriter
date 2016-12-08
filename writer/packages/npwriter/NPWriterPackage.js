@@ -22,6 +22,7 @@ import BodyPackage from '../body/BodyPackage'
 import SwitchTextTypePackage from '../switch-text-type/SwitchTextTypePackage'
 import ConfigEditorPackage from '../config-editor/ConfigEditorPackage'
 import DialogPackage from '../dialog/DialogPackage'
+import DialogImagePackage from '../dialog-image/DialogImagePackage'
 import AboutPackage from '../about/AboutPackage'
 import LabelPackage from '../label/LabelPackage'
 import NPWContextMenuPackage from '../npw-context-menu/NPWContextMenuPackage'
@@ -60,6 +61,7 @@ export default {
         config.import(ConfigEditorPackage)
 
         config.import(DialogPackage)
+        config.import(DialogImagePackage)
         config.import(AboutPackage)
         // general purpose
         config.import(SwitchTextTypePackage)

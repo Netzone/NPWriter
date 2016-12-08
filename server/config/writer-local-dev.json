@@ -89,7 +89,24 @@
                     {
                         "name": "alignment",
                         "label": "Alignment",
-                        "type": "option"
+                        "type": "option",
+                        "options": [
+                            {
+                                "name": "auto",
+                                "label": "Automatic",
+                                "icon": "fa-align-center"
+                            },
+                            {
+                                "name": "left",
+                                "label": "Left",
+                                "icon": "fa-align-left"
+                            },
+                            {
+                                "name": "right",
+                                "label": "Right",
+                                "icon": "fa-align-right"
+                            }
+                        ]
                     }
                 ]
             }

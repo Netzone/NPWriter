@@ -1,0 +1,216 @@
+div.dialog-image-info {
+    display: table;
+    margin: 0 15px;
+
+    &>div {
+        display: table-cell;
+        vertical-align: top;
+
+        &:first-child {
+            width: 25%;
+            min-width: 215px;
+            padding: 0 15px 0 0;
+
+            img {
+                display: block;
+                width: 100%;
+                border-radius: 4px 4px 0 0;
+                padding: 6px 6px 0 6px;
+                border: 1px solid #ddd;
+                border-bottom: none;            }
+
+            p {
+                font-size: 80%;
+                color: #444;
+                display: block;
+                padding: 10px 5px;
+                border-radius: 0 0 4px 4px;
+                border: 1px solid #ddd;
+                border-top: none;
+
+                strong {
+                    display: block;
+                    margin: 10px 0 0 0;
+                }
+
+                span {
+                    display: block;
+                    &:before {
+                        font-family: FontAwesome;
+                        width: 20px;
+                        display: inline-block;
+                        text-align: center;
+                        margin-right: 10px;
+                    }
+
+                    &.dialog-image-width {
+                        &:before {
+                            content: "\f07e";
+                        }
+                    }
+
+                    &.dialog-image-height {
+                        &:before {
+                            content: "\f07d";
+                        }
+                    }
+
+                    &.dialog-image-photo-date ,
+                    &.dialog-image-photo-time {
+                        border: 1px solid #ccc;
+                        border-radius: 0.25rem;
+
+                    input {
+                            border: none;
+                            font-size: inherit;
+                            line-height: 1.6;
+                            padding-left: 0;
+                            padding-right: 0;
+                        }
+                    }
+
+                    &.dialog-image-create-date,
+                    &.dialog-image-photo-date {
+                        margin-bottom: 5px;
+
+                        &:before {
+                            content: "\f133";
+                        }
+                    }
+
+                    &.dialog-image-create-time,
+                    &.dialog-image-photo-time {
+                        &:before {
+                            content: "\f017";
+                        }
+                    }
+                } /* span */
+            }
+        }
+    }
+
+    &>form {
+        display: table-cell;
+        vertical-align: top;
+
+        div.dialog-image-info {
+            margin: 0;
+
+            &> div:first-child {
+                padding-right: 0;
+            }
+
+            .authors {
+                min-height: 80px;
+            }
+        }
+    }
+
+}
+
+
+/*
+<ul class="dialog-image-authorlist">
+    <li>
+        <div>
+            <img src="http://pbs.twimg.com/profile_images/378800000737740122/d94266765107a8f418e3bcaab8132805_normal.jpeg">
+            <div>
+                <strong>Danne Lundqvist</strong>
+                <em>danne@dotvoid.se</em>
+            </div>
+        </div>
+        <span><a href="#"><i class="fa fa-remove"></i></a></span>
+    </li>
+</ul>
+*/
+
+.dialog-image-info.authors {
+    display: block;
+    min-height: 93px;
+    padding-bottom: 7px;
+}
+
+.dialog-image-info.authors .search__container {
+    width: 100%;
+}
+
+.dialog-image-info.authors > div {
+    display: block;
+    padding: 0 7px;
+}
+
+.dialog-image-authorlist {
+    display: flex;
+    padding-left: 0;
+    float: left;
+    margin: -6px;
+    line-height: 18px;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.dialog-image-authorlist li {
+    display: inline-block;
+    border-radius: 0.25rem;
+    padding: 3px 12px 4px 8px;
+
+    &:hover {
+        background-color: #f5f5f5;
+    }
+}
+
+.dialog-image-info.authors .dialog-image-authorlist li {
+    background-color: #f5f5f5;
+    margin: 0 8px 8px 0;
+}
+
+.dialog-image-authorlist li > div {
+    display: flex;
+}
+
+.dialog-image-authorlist li > div img {
+    margin: 0 8px 0 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 12px;
+}
+
+.dialog-image-authorlist li > div div strong,
+.dialog-image-authorlist li > div div em {
+    display: block;
+}
+
+.dialog-image-authorlist li > div div strong {
+    font-weight: 700;
+}
+
+.dialog-image-authorlist li > div div em {
+    color: #888;
+    font-style: normal;
+    font-size: 85%;
+}
+
+.dialog-image-authorlist li span {
+    width: 23px;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;}
+
+.dialog-image-authorlist li span a {
+    display: none;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.dialog-image-authorlist li:hover span a {
+    display: inline;
+    color: #d9534f;
+}
+
+.dialog-image-status {
+    background: #f5f5f5;
+    border-radius: 30px;
+    padding: 3px;
+    text-align: center;
+}
