@@ -10,8 +10,12 @@ import {BasePackage,
 } from 'substance'
 
 import StrongXmlConverter from '../strong/StrongXMLConverter'
+import StrongCommand from '../strong/StrongCommand'
+
 import EmphasisXmlConverter from '../emphasis/EmphasisXMLConverter'
+import EmphasisCommand from '../emphasis/EmphasisCommand'
 import LinkXMLConverter from '../link/LinkXMLConverter'
+import LinkCommand from '../link/LinkCommand'
 
 import NewsMLArticle from './NewsMLArticle'
 import NewsMLImporter from './NewsMLImporter'
@@ -53,6 +57,10 @@ export default {
         config.import(StrongPackage, {toolGroup: 'overlay'})
         config.import(EmphasisPackage, {toolGroup: 'overlay'})
         config.import(LinkPackage, {toolGroup: 'overlay'})
+
+        config.addCommand('strong', StrongCommand, { nodeType: 'strong' })
+        config.addCommand('emphasis', EmphasisCommand, { nodeType: 'emphasis' })
+        config.addCommand('link', LinkCommand, { nodeType: 'link' })
 
         // content-nodes
         config.import(BodyPackage)

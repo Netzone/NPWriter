@@ -232,7 +232,6 @@
       "enabled": true,
       "mandatory": true
     },
-
     {
       "id": "se.infomaker.madmansrow",
       "name": "madmansrow",
@@ -241,7 +240,6 @@
       "enabled": true,
       "mandatory": true
     },
-
     {
       "id": "se.infomaker.drophead",
       "name": "drophead",
@@ -303,7 +301,6 @@
       "enabled": true,
       "mandatory": true
     },
-
     {
       "id": "se.infomaker.skeleton",
       "name": "skeleton",
@@ -345,6 +342,10 @@
       "enabled": true,
       "data": {
         "teaserPosition": "top",
+        "disableUseOfAnnotationToolsForFields": [
+          "title",
+          "subject"
+        ],
         "fields": [
           "subject",
           "text"
@@ -446,7 +447,10 @@
       "name": "ximpdf",
       "url": "http://localhost:5001/index.js",
       "mandatory": false,
-      "enabled": true
+      "enabled": true,
+      "data": {
+        "disableUseOfAnnotationTools": true
+      }
     },
     {
       "id": "se.infomaker.ximstory",
