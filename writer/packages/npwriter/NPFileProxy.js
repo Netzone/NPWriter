@@ -86,6 +86,8 @@ class NPFileProxy extends FileProxy {
                     })
                     .catch((e) => {
                         console.log("Error uploading", e)
+                        const api = this.context.api
+                        api.ui.showNotification('NPFile Upload', api.getLabel('Error occured'), api.getLabel('An error occured') + e.message)
                         this.uploadPromise = null
                         reject(e)
                     })
@@ -106,6 +108,8 @@ class NPFileProxy extends FileProxy {
                     })
                     .catch((e) => {
                         console.log("Error uploading", e);
+                        const api = this.context.api
+                        api.ui.showNotification('NPFile Upload', api.getLabel('Error occured'), api.getLabel('An error occured') + e.message)
                         this.uploadPromise = null
                         reject(e)
                     })

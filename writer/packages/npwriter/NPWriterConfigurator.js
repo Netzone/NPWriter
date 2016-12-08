@@ -151,7 +151,9 @@ class NPWriterConfigurator extends Configurator {
      * @throws Error
      */
     loadConfigJSON(configURL) {
-        return fetch(configURL)
+        return fetch(configURL, {
+            credentials: "same-origin"
+        })
             .then((response) => {
                 if (response.status === 200) {
                     return response

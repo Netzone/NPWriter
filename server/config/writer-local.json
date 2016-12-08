@@ -1,452 +1,483 @@
 {
-    "newsItemTemplateId": "30eae1c0-c640-4053-b114-05c64e28bbe7",
-    "language": "sv_SE",
-    "labelLanguage": "sv",
-    "plugins": [
-        {
-            "id": "se.infomaker.hdsds.channelselector",
-            "name": "channelselector",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "mandatory": false,
-            "enabled": true,
-            "data": {
-                "products": [
-                    {
-                        "name": "Sydsvenskan.se",
-                        "qcode": "imchn:sydsvenskan"
-                    },
-                    {
-                        "name": "8till5.se",
-                        "qcode": "imchn:8till5"
-                    },
-                    {
-                        "name": "Hd.se",
-                        "qcode": "imchn:hd"
-                    }
-                ]
-            }
+  "newsItemTemplateId": "30eae1c0-c640-4053-b114-05c64e28bbe7",
+  "language": "sv_SE",
+  "labelLanguage": "sv",
+  "plugins": [
+    {
+      "id": "se.infomaker.hdsds.channelselector",
+      "name": "channelselector",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "products": [
+          {
+            "name": "Sydsvenskan.se",
+            "qcode": "imchn:sydsvenskan"
+          },
+          {
+            "name": "8till5.se",
+            "qcode": "imchn:8till5"
+          },
+          {
+            "name": "Hd.se",
+            "qcode": "imchn:hd"
+          }
+        ]
+      }
+    },
+    {
+      "id": "se.infomaker.mitm.publicationchannel",
+      "name": "publicationchannel",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "publicationchannels": [
+          {
+            "qcode": "imchn:mmse",
+            "name": "MittMedia Gemensam",
+            "icon": "data:image/png;base64,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",
+            "scope": "main"
+          },
+          {
+            "qcode": "imchn:amse",
+            "name": "allehanda.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAbRJREFUOBFjvO1u+Z+BCoCJCmaAjaCaQSwYLmJk+MXMy3eNTUH5I6e2AROHjp4AMz8/BxMHJxsTBxfH/9+/fv96/PDtr4f3v/y4euH313OnZf7/+qXCCAojRgaG/8wi4qcF/IJ/83kH6DBxc/MjW/Dv338GJiagKhzg14N791hYhUTOSNS08rBr6Zghq1t35DrDxA0nGa49fMXwF2iQmowwQ6qnEUOCmyEDM5qhbApKSoz//wNVoYGq+XsZJq4/iSYK4QZaazAsKQ/CkMMI7OuP3uA0BKR7/dEbDNtP3yFs0IV7LzAUoQtgU4PhIn0lcXR9GHwDLGowDNKSE2XI9jPF0AwT8LVQY/AwUYVxIfS/f3+wBjZIduXBqwyTQbH26DUw1v4xqEpDYi3Zw4iBhRlmP+P/jxtWn3g7d4oE4+uZEw8IBkWoM4uISqBaA7PsP8O///+RNDMw/Lh84dr7lYtefTt/Vvn/3z+yIJXwBMnIzXOVTVbuHauMwj92eUVWJh4eln/fvv75/+3bv7+fP/37cfsm4+/HDwT+fv2swPCfgQ/dUrBB6ILk8GGeJUcvip7BZxAAlqyiWNSTRq4AAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:abse",
+            "name": "arbetarbladet.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAVVJREFUOBFjnC2j+5+BCoCJCmaAjaCvQVziogxMbKx4HU/QRaaVBQzBe9YzCGmqUWaQarAvA7sAH4O0jQX5BgmqqzB8f/OW4ffXbwyKXq7kG6Tg6cxwe81mhoe79jOI6Gkx8MrJ4DQMbxgpersx3Nuyi+He5p1gA5T8PEg3SEhDlYFPXpbBsqmcQSM6BGyASqA3ToNYcMkoAzXdWr2R4eWZ82AlzGxsDNK2FgzCOpoMb69cx9CG3SBGRgblAC+GzYFxDF+fvQBr+vf7D9ggtVB/huNYDMIaRlLW5gxMrKxwQ0AmPT9+BmygSrAPAzMHB5iNTGAYxMjCwmCYn8bw/+9fBg4hQbhaVm4uhv///zOw8/MxGOSmwMVhDGY/PvEGGAdEi5sYMLDx8jC8u3EbqImX4e3Vm2BpUDp6f/suw6uzFxlYubgYXp69wPDv1y+4VsbhW4wAAPJcVUHxHNFJAAAAAElFTkSuQmCC"
+          },
+          {
+            "qcode": "imchn:avestatidningcom",
+            "name": "avestatidning.com",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAc9JREFUOBGtlEsvA1EUx/+j1YemVeqR2qhHJSw04hF8AEJISFhLbMTKxoKFlbWlhYXYioVEfIOiYddUUE1YYYhU03qkrVKnp+01NTNJF85i7ut/fvecc+8dCRvBLP7BKv6BwQijHmi8xY6RZjsvZ76zWD99Qjz9rSeHLmiuqxZ9jVa0Os2IxJJY9su6kNyCZmr1VgOm2h3YDEbZ2WzQlJWANRUL3S6EX1Lw37+x2GKQSpy0BipQJc0s+uqwFYrik2qTs3IiUtVotsMJt83IkDGPIw8yStif9HBf+bmIJrEWeOQpVURLPfW4jqUw43ViorUAotRu4ylUUIbT3mr00iHsXsdgN/26l0Q06K5iUcdOmBzT8DpNiMx3EkDC6rGMw6kW3t1/9469SByh56QIUCBzndWBBhzcxBmSU3gcJiFsqzajv7GKx4GHd27DFHnRREQWqsPKkYxE+qu4hsuXJNq3r3jsshhQa83LA3IeJITUEaCPTBZXdORKu3/LiOFwUw33X2mjc0VKRYFIrTih1w415dM6kz+g9VDKBg27bbzHSaE+fzcsCzRKj9fXYGXfREorHkAq539E5wC6AWxZuuxUTpWJYqtWFBPsqOGskOAH4fmCWOIllLoAAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:Bandypuls",
+            "name": "bandypuls.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAApZJREFUOBGtk7lPVFEUxn9vVmdltkREEFFEg1QYKTQUYkyM0VJtbSysbEysjJbG2PgfmJiYGJdCpKNQExpERwU1mhl02GSZGWCY9a3e9yaD80Q6TnPvOfee737fOedKqe47Bjtgjh3AsCBc/wJJPjfe3lY8h3fjCHjAIYkrEkZNQV0uoqRXkKezoOi2VBtQ/OYZ1GyR2qd5ymNpJLcLV2sYdXEdyeu2wJzxIOGL/bg7ouTuj4JWr4wNSFuvIEkS4Uv9VJOzuNpaBLs9KHNrGFUFdANtrYycyuIIeS2/QctWI0nIcER8GKqOa28EZyJI9eOc9bperKHXVLx9bWjLG0gewaGpTTZGgg7aahl1YR35+xJ6pc6iMp7BN9BJdSJjXqE2uYB/qKdBxlptQIZ4UfmZwz94EJx1sp6uuHjdycrtEaLXBim/y9QBhMxms0mzOmTKC3o3a2CoGnpJxuyme18MScgWTbTkbwskuRzI3xaRfyxTfDmJ70QXeqEqsgy8R+tFN2vl3h9H+ZVrxsEmTV3asDpRHptGFZ1aufUKZ8yPuzNuxR1+N8rMKoGzveRHpxADIcDMOcMO9HT4GbJTQ/4tWIgLfj1ENNRKLCLcrzO47ibFxqD0uUAuP8MpuoVfNxuj1WqBI0MDxLvb8QYFk8Au/NEwiUMdPHx+o5GDK5PlAOFN39xIzZ/2iZ4Uzfpbf2/Yz/l71/ky/JaO473IpQq59Dzp1+9R8kVO00MIMZjCbIzajQgLcgFfooX+K+dYm11kKZkSf2yDDw9eUK0JyWWFGD666NwEMYFsjMxAw5yJAJGrJyk8niB4oc8awvKbVON4y7otkHVTDGL48jFKI1No+fKW5OaATVrzgbWXNQqPxreE/xf4A2hABEBX2bpJAAAAAElFTkSuQmCC"
+          },
+          {
+            "qcode": "imchn:bblatse",
+            "name": "bblat.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAVRJREFUOBHtUz1Lw1AUPclL0toECXVRSyEgSgV/gIhLl7q5OOjgIjj4M/oDdHD3Nyg4dNFZEBwEcRBqqVI6+IFNUzUfTep9DxLbpV0y9kKS8+4599yX+xIJJ/cDpBByCh7CYmo0eZLJjFRCmiwlFQZPDEVO+eeG0gkUan672lnC+kJOEAVDwdNBKRHtrpg4qxSTdQysWTWGUDiK6Kp3PGwWdJgZhstGF24/wuFaHjftb8Fx3bKpUTOdQzyTvroxj/3aK95++xjZ/8OHi72SiXJRh8YkXNRtnG9biF/KUBlsL8RpeRFuGOHLDYUJNxY74oCHHw5APDJMBv/cO1TEn7QUZhXLEJqIkrIkgXqBjzKgGoatoypp0fVDZGmgj58eak0HrV6A1bksju/eYWgMjh/htv2D/IyC65ceWk4AlTo0bB8OOUnTf42PcWyMHP9Y5QQyNaM/sWhnkk3alQEAAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:ddse",
+            "name": "dalademokraten.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAcJJREFUOBGtlM1KAlEUx/93nM9AjBIjTRAUiiZS30F6idbt3PQGEbhy7a6W7dv2Bm1U6AukpaYkQvmZOo7TvdccprxKCw/MnTPn/u+Pc86cGVIxTQdrMGkNDI5YG0gWZaREo9jN50F0HdNOB8Qw8Hlzg87trUi+PCOrWoUzHkNLJPB+cQFfIIDg+flSCNsQlybL0EwTdrcLq9GAHAqBwVeZsDT98BCSpqFfKkGnwO7dHQh93snlOGvSbOLj6grTft9lCzMy0mkuGD48QD8+BgiBP5OBtr+Pr2IR22dn2Dw9dSHMEYL0VGoGenyEQX1CS2U2LJcBZzZ2drvNY/NFCPqbEVEUrh8ycDI585+f5wx+XwApe3uQg0FYtRqkjQ34trYgh8Nc/MVKpSDHsjCuVJaDiKpi5/KSC9gMhQsFjOgBNgY2nSe71YIaj2P0+sphXtKvt8Zm5y2bpb0lrkY7OkL0+hqsLJ36RJIwfHlx9+fOLxALOoMBvF8xazYzDvrpz+jpice8ywLIu6kdHMB/csJDaizG+2P3ehjc33tl3CerfiOsyUokwueIqXmTaX+mFPbXVmY0qdfBrv/Ywuv/zyGR5htSgpPx7ITHQgAAAABJRU5ErkJggg=="
+          },
+          {
+            "qcode": "imchn:dtse",
+            "name": "dt.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAXVJREFUOBFjVC5b/5+BCoCJCmaAjRiCBknwczDMiDdnqPTWwRsKLHhlgZJcbCwMLloSDFeefGSQFeJiMJIXYnjw5ivDxcfvUbSSFEYmCsIMvRHGDKGm8iiGgDgYLmJmYmSItlRkCDKSY/j77z/D/hsvMDRZqogy2KmLMRy6+Qouh2FQtY8uQ5y1IlyBvpwAnA1j/Pn7D+jVDzAumEbxmiAXG0MM0DVffv5hSFtwkkG/divD0uMPUDSAOKDweff1F4o4ikG6sgIMTECRk3ffMOy7/oLh668/DBN3X0fRgIuDYtDzD9/B6swURRiEuNnAbB0ZTK9hMwwljG6//Mxw9sE7BmMFIYaZ8RYMR26/YkiwUYbre/PlJ5gNCgJ0gOIikGT24lMMB268ZNCTFWRId1BjOHjzJcPLTz8Y3n79yXDi7muGTeefMICSgYGcIIpZjLhyPxcbM8OP338ZgCmAKIDiNWQd3379ReYSZGN4jaAOHAqoZhAABmBp1Evnx8IAAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:fagerstapostense",
+            "name": "fagersta-posten.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAbdJREFUOBFjZOi98J+BCoCJCmaAjaCaQSzILmIEciwluRiYGBkZ/gMhCPwHUj///mc4++o7mI+LQDGICWjSbDdZBmkeVoYrb34wsADdqyrAzvDl9z8G+TnXcZkBFkcxCGgxw72PPxnefP/DYL/qLlgBM9DwJB0hvIaAJFEMgqkGeREGlPjZGF58/cNQaCQCE2L49ucfw8qbHxg+/PwHF8NqkKkEF8PtRA0GLlYmhu9ATa0nXzL02ksx3Pnwi4GThRHs9UIjUQa9RbcYfv2DhCVWgx5++sWQv/8Z2DZtYQ6Gt9//gtmRWx+CA73bTpKh2FiUwUGWm2HXwy9gOazR/+HnX4adDz+Dcd+513DnwxgHHkM087Ixw4QYsBoEin5cAOhbhix9EYZfwJg58fwrXBmG15iBhnCAogoL8FTkZZjlKsOgK8LJkLr7McPTL3/gqlAMYgMmpAfA8Hn25TcDD9BqUPpBBhVmYgyb7n5iiNr2iOHm+5/IUqjRD4qBrL1PURQgc+xX3sWZwrGGEbJmEJuHDaJMCpjicQGiDALlt4rDz4F5EJcxOFI2uvLlwFRMCBDlIkKGgOQByXaHmesJdvAAAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:gdse",
+            "name": "gd.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAWtJREFUOBFjVIua+J+BCoCJCmaAjRjGBrGghxErCzODnrI4Aw8nG8Otx28Y2IB8Xi52BkZGRrDSr99/MTx8+YHh7z/UOEIJIzlxfoaN7ZEMLMxMDEcuPWTID7FksNKRAxuypjkcbIGYIDfD+tZIBldTZRQ3oBhUn+DA8P7zD4aT156AbWxdfJDh649fDI9ffYS4Bsg+AZTbevwWQ1+OB4OMKB/cMLhBIJebakgzPH39CS75+dsvhk1Hb8L5MMb1h6/BXjbVlIYJMcAN+g/08u8/fxk42SDBpiojxDAhz5Mh2dsIrhjGYGKChNcXYHjBANwgkMC+8/cZ9FUlgGHCwHD7yTsGUX4uBg15EZhaOG2kJsVw79l7hmNXHsPFmIV1PRtgPFDYKEoKMphpyjCICHAxcHGwMjx985mBn5uDQVNBlOHv3/8MrCxMDGKCPAwN8/YzfPzyA6aVgXE0r8HDAhcDJdZwKSJGnGoGAQDZ1GYr+fxzMQAAAABJRU5ErkJggg=="
+          },
+          {
+            "qcode": "imchn:hhse",
+            "name": "helahalsingland.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAgRJREFUOBGtk89rE0EUx79vdrJNFGmSSkErjbEUrJYiqCh4UKsXFQrGP8C/QqUHrz0J1UsLPXnz5M1cRaxoi4q/QEUoRKlKLLYqIWmT2Rnfru7UMRvoIQ+WnXn7nc++X0ONW0cMumCiC4wIITuBaPchyNGLoHwR8Hpgat+gK/MIXt8FTNB2LBFE/fvhl2ZBwts80FeEVzgG6h2Eenhj0/931QaiXWMQfUPA+i+0Hs9EkSAE8iMPXwZlshDDZ6GXHgBaWaADomwB/qU5oLGGZvkKUuOTf6AsN611qPlpiD1H4Z+bgnp6G+rJjAU5xfZGLnA6Aq1HN5E6c91CQjWl0pCnJ6Hel2GadXgHJywkXDggyg3C8DAYTkvkC44w3BBx3fedgq6+A23LA/52q3FAkBkg2ACF7w5GmVyUevRZpq3KAZn6d4ZwqzdqMLq9xeEp/fUVqH+EI+fQuZaxOSD9aTHyy7ES1CIX/T/TKx9gGj8gsgPQy8+4BtoqnK7ppfsIKuc5/52gdBXNe9fgDY8DPTugv7yMRkGOlqBXK1AL7o8o6a6JvSfgT0zD1Fc5lTdAs8bpHOAuFhHw/LTKV20k8cKJKHbq5ecIPi7wJB+HN3QydjN4DerFHbv/d5EYUSyg3gFQju+a9DmtFZjq28R7FuoTI4pB5udnhM9WzOnaVg500nQN9BvJuqkB16uyzQAAAABJRU5ErkJggg=="
+          },
+          {
+            "qcode": "imchn:Hockeypuls",
+            "name": "hockeypulsapparna",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAALsWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgICAgICAgICAgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iCiAgICAgICAgICAgIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiCiAgICAgICAgICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgICAgICAgICAgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6T3JpZW50YXRpb24+MTwvdGlmZjpPcmllbnRhdGlvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjIwNTwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOkNvbG9yU3BhY2U+NjU1MzU8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjIwNTwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2UvcG5nPC9kYzpmb3JtYXQ+CiAgICAgICAgIDx4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ+eG1wLmRpZDoxYWE5MDg5Ny1lMWZhLTQzMjQtYmRlZC1mOGM1NGE1YjdiMjU8L3htcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOkhpc3Rvcnk+CiAgICAgICAgICAgIDxyZGY6U2VxPgogICAgICAgICAgICAgICA8cmRmOmxpIHJkZjpwYXJzZVR5cGU9IlJlc291cmNlIj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OnNvZnR3YXJlQWdlbnQ+QWRvYmUgUGhvdG9zaG9wIENDIDIwMjIgKE1hY2ludG9zaCk8L3N0RXZ0OnNvZnR3YXJlQWdlbnQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDp3aGVuPjIwMTYtMDEtMTFUMTM6Mzc6MzYrMDE6MDA8L3N0RXZ0OndoZW4+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6MWFhOTA4OTctZTFmYS00MzI0LWJkZWQtZjhjNTRhNWI3YjI1PC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6YWN0aW9uPmNyZWF0ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAyMiAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAxNi0wMS0xMlQxMToxMzowMyswMTowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDpiN2MzMTU4OC1hZGUwLTQ2MDItOThiNy02ZmJmMzBkN2ViMDA8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+c2F2ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAyMiAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAxNi0wMS0xMlQxMToxNTozNyswMTowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDpmNDIzZjE2MC1mMjBlLTRlODItOTExNS1lMmZjMmU4ZTY0OWQ8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+c2F2ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOlNlcT4KICAgICAgICAgPC94bXBNTTpIaXN0b3J5PgogICAgICAgICA8eG1wTU06SW5zdGFuY2VJRD54bXAuaWlkOmY0MjNmMTYwLWYyMGUtNGU4Mi05MTE1LWUyZmMyZThlNjQ5ZDwveG1wTU06SW5zdGFuY2VJRD4KICAgICAgICAgPHhtcE1NOkRvY3VtZW50SUQ+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjc0ZTFiYjgxLWY5YTMtMTE3OC04M2QyLThlZWIwYTc2MTRjODwveG1wTU06RG9jdW1lbnRJRD4KICAgICAgICAgPHhtcDpDcmVhdGVEYXRlPjIwMTYtMDEtMTFUMTM6Mzc6MzYrMDE6MDA8L3htcDpDcmVhdGVEYXRlPgogICAgICAgICA8eG1wOk1ldGFkYXRhRGF0ZT4yMDE2LTAxLTEyVDExOjE1OjM3KzAxOjAwPC94bXA6TWV0YWRhdGFEYXRlPgogICAgICAgICA8eG1wOk1vZGlmeURhdGU+MjAxNi0wMS0xMlQxMToxNTozNyswMTowMDwveG1wOk1vZGlmeURhdGU+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+QWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCk8L3htcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CgJmh3QAAALjSURBVDgRZZS5SqtRFIVX/sR5RKNRURGbaAQHCBaC8QXSiBYqiqVPYGN10XcwpBIES5GQJgiCjWijFopTZwRHxHkecvPtexMEN+RP/nPOXnutvfaJq6ysLKV0fH9/q6KiQo7jKJlM6uvri+VfwX5jY6NSqZSur6/ldrvtjAsgQAoLC3VxcZFN7OrqUmVlpXJycuTxePT09KTLy0vt7u5mz/h8Pj0/P1txD6sFBQUGMjQ0pFAopPz8fKvocrkM5OPjwwBhAVNANzY2tLCwIMBeXl7kkEQlYnx8XCUlJfYOOAF1Pg8PD1b57u5ONTU1Ghsbs33ec3Nz2XNsIRAI2GEA+vr6VFtbK9YeHx/V09OjhoYGY+L1ei2R/nR2dur19dUKONAloIeUoqIiUQXtJycnSvdQa2trJvXz81P7+/s6OjqynPf3d/sGIwtEZeL4+FhnZ2fm3MHBgVVE/uzsrIHDAleRc3t7mwWyZvMGg7e3N5ODS9XV1eYQjOrr6xWJRNTd3W2JuAmL09NTlZaWmgEO1mMxTuBOcXGxbcCMw+wjaW9vT7FYzNyFcSYYG5w0IJIJGOXl5Wlra8uktLa2mgTYRqNRtbe3y+/3KxwOWx/J4TxAHh4A3dzcWLNp5NLSklZXV63Rm5ub6u3tNRNwiAZjDJII1MDaAYhmErgGG0D6+/sFo9HRUQ0ODqq5uVkrKyuamJiwq0EykRkfT8Z+FrF7YGBATU1NVrmqqkodHR26urpSeXm5JicnrXowGNTi4iIp/9ikZ9GdHsA/UGZ+EomE2traVFdXp/X1dUuk0PLysqanp22dO7izs2N7OEpfUWKXlsNoxbX7+3uNjIyYNGTPzc1ZQ4eHh+3exeNxzc/P21VilsjJAmUoZubn8PDQaE9NTQkZxPb2tmZmZux3S0uL3UdAMj0yRrb7/4ErXEqmFid/BlL4zzo/P7ex+Ln3CwiaDCDzgcUkIZ1LjGx6AvOfJgH4F/PPo8f1wcIiAAAAAElFTkSuQmCC"
+          },
+          {
+            "qcode": "imchn:lanstidningensodertaljese",
+            "name": "lt.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAUJJREFUOBFjZCha9pvh/38WBgoBE4X64dpHDYIHBU4G1tiqddVh8NeRYbj79jND9tozDNOCTRk4WZkZJPg4GF58+sEgycfJULjhLMPh+6/hBmMN7O3XnzEYyQgydO69xvDl528GA2kBhootFxiMZYQYJh66ycDCxMjw+MM3uCEgBlaD9KQEGH7//cdw+fkHBmFudoaabZcYVEV5wRrPPX3HsOD0PYYH778SNsgIaPOVFx8Zfv/7z/D043eGVRcfMRhKCzI8BGp+9+0XwwSgq9ABVheBvHX+yXuw2moXbQY2ZiYGQyQxdENAfAyDZAW4gLYLAZ3+hSHaSIEh2VyZgZ+DlcFcToTh1ZcfDMDgwQoY0fNajo0aWCNM9b23Xxi42IAxxssJFppy5BbDxx+/YdJwGiP6QQrJARheI8cQkJ5hbBAAO8hklPVZCRcAAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:ltse",
+            "name": "ltz.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAV1JREFUOBFj3Kah9/v///8sDBQCJgr1w7UPY4MwAplXQ51B2teb4f+/fwzfnz5jeLJ2PYN8TCQDu7AwAyMrC8PfHz8Z/v34wfDv12+GH69eMjzbvA0cThgGyYYEMSgANYLA68NHGD7fucugWV4C5qMTt6dMhwthBLaAvi5c8s3xkwziDnZwPjrj5d79cCEUg5jY2Bj4gF6DgVf7D4KZDxYtZfj78ydMmOHZ1u0Md2bMZvh0/QZcDMVrQqbGDEysrGDJv8BwkPb3BYbJD4bH6zYwKMRFw8UvVlQz/P/9B24IiIHiIikfL7gkMwcHg0pGKgMbMJAlPdzg4u9On8UwBMUgkLfEXZ3hGmCMZ5u3MkgH+MG4DK8OHYazkRlwr7GLiTHcmTqD4d/v3wzMnJwMLED8+/Nnhq+PHjE8Xb+R4f/fvwwsfLwML3buQdYPZzOOZlp4WOBioEQ/LkXEiAMAP0ZzhyeOWuoAAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:nase",
+            "name": "na.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAbNJREFUOBFjZPCs/89ABcBEBTPARgxjg1hgYeRrpsbAxMQI5h6//oTh779/DDbacmD+t5+/GX7/+cfAz80O5n/48oPh4JWHMK1gGm5QlKMuQ7idDlhw0d6LDG0rDzOUhVgzmKlLM0zZfIrh/ecfDPkB5gyCPJwMIINFwrsYfvz+AzcMHtgx3evAgiDbYhz1GEBuq128n+HRq48MhbN2MjQtP8jw5M0nhnsv3jNwsbMyOOorwA0BMeAG/Yempp51x8BebIxxZPgPFIQlMlkRPgY1aWGGsrm7wQb4AIMCGcANggku2XeJ4cbjNwxhdtoM+ooSMGEGf0sNhpfvvzJoyIqAxQgaBArkOqCXQKAizAZMg4gAoEGHgAH85+8/hjO3nzHIivIz6CmIw+XhLnLQUwAL2unIM2w6eZPhwr0XDGIC3GAxJ31FBntdeYbNQPHpW08znLjxBCxeGGjBIMzLCWYzM6g6NIBYkzO9GB4CA9ZQWZJh44kbDFcevGKQEuJluProNYO6jAjDx68/GXSBLgBZEGmvCw50Pi52hsdvPjLcefYOGDmjmRYcongIeKzhUUOUFAD2F47r4yuhIwAAAABJRU5ErkJggg=="
+          },
+          {
+            "qcode": "imchn:norrteljetidningse",
+            "name": "norrteljetidning.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAghJREFUOBFjZHAo/M9ABcBEBTPARhA0qDbWlWFRZRSDADcHXjsJGiTMx83AwszEIMLPwyACZOMCLNgkbHQUGf4DIQicvvmIIchWj0FSmJfBx1KL4cr95wxnbj5m+PD1B4pWrC7i5mRj4OaAYF5OdgYONhaGOHdThmsPXzCA5JiBLkQHWF208/RNuDoTNRmGZG8LhrTe1QxP33yEi6MzMI1GUmGgLMUQ62bCcP3hS7yGgLTgNMhWV5FBWpSfYdWBC+DARjIfKxOrQUyMjAwKEkIMW09cZ2BlZmZgZWHGqhlZEKtB7KwsDDcevQKrA0U9CBMCKCrYgDZHuxgxfP/1m+Hbz19gvSDXoBukCHStp5kGitkoBv3685fBVF2OoS7OjeH+8/cM7KzMDFoKEgzKUiIMzEyMDBxAl4ba6zOsbohnOHn9EYpBjOiZlhEoDcvFLExMDLZ6SgyBtroM6rJiDHzc7Ax3n75lmLDmIMOZW09QDMJIR6YacgytKV4MxsD0w8fFwXD90UuGdYcuMVTN2cpwFqoZZBkoaYDkfv7+CzYQxUXaCuIMqtKiDOfvPGUAhZeZphyDn5UOg6e5BgMPMIW/+fiV4e2nrwyX7j4HG3z32Vu4q1AMAkX7v/8wj8HVgMPGWF2GgZeTg+HqgxcMj19/QEhCWShew2YISN2P338Yjl55ANWCnQIAumSHzKu7tt0AAAAASUVORK5CYII="
+          },
+          {
+            "qcode": "imchn:nynashamnspostense",
+            "name": "nynashamnsposten.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAY9JREFUOBFjZOxd9p+BCoCJCmaAjaCaQSykuEici4Mh20CVQYSTnWHj3acMOx88h2snaBAbMxPDr7//GMSAhkx2MmboP3uT4fjzN3ADYAycBmkJ8zOUmmgwMALh0y/fGE69eMsQufUYw9//2OOGETnWtIGaD4W7gC0pPXSe4dzL9wxMjIwMK32sGIQ52BlaT15lyDNSY8jYc5ph+32Et0AaUAL7zfefDCAswM7KwAw04PX3Hwwvvn1nYGFiYuAHit39+IVBhoeLocfOEOYjOI1iEEh0+/1nYElbaVG4InSGBDcnuhCqi0CyB5+8AiuylRHDUAwT2PUQ1VsgcYzAvvr2I8O7H78Y5Hi5GGSB+NHnbzD9DILsbAw5+84wLLr2AC4GY2B4DRQpR56+BsvbSqO6ahvQ29Mv3mH4+vsPTD+cxjAIJHMI7j3c4QQ3AcrAbhDURV6KUujqcfJRwoiblYWBmYmR4fyr9wwzL90BJ8bfwFS9/vZjBg4WZjDGZRJKgsSliBhxrF4jRiO6GqoZBAByO3LO6xiWmQAAAABJRU5ErkJggg=="
+          },
+          {
+            "qcode": "imchn:salaallehandacom",
+            "name": "salaallehanda.com",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAb5JREFUOBHNlN8rQ2EYx7/HzpjtDG3m1/yIcEk0LoRRkgt3SrmXFG5QlEsXboxrWbmVP2FCopSiZRd+hEJY26zZxmZ2drznSM2eU2524T2d3vc87/v99H2e9+lwcLglZGHkZIGhILIG4jMdaThgsaMMA7VGuH1xuO4i2LwMZR4j38TReJMZY+yd2HmE0/OCoYZCIlILEEcmHY88ZutDlHDqi8F78KymIzHiyHHigycQx9FIPaZbLbh9TRCRWoCA3pMSerZusO4JYtlejqXOMkU33FiorK0CSULZJ6AaoxaJlITJ3Uesnvox1VIM+QJspXrMtZXAqNWoGQIBzbeXQNB+h5+jSXDsYeVCb5WASCIFe5VBFUR8mvN5pT5ysZst+Zjdf4JJp2EwCXsPUdgrBaydBQmMgEZdDxBTQEeFHnfhT1yFPpQW2L2PIhATMWOzEIgcIKAwsy+PbSb8GX3VAgbrCsBKh3IDj/qiXFyHft8mqdGPOH3usgpo3LhArfMcwbiopJe+L6//BHVbDYh+ioixtpC9Hnvf0V9jzOTQ1DJPJFk+C4dedndQ2mDlxM9mDgY+B2/J7zLIGu7f/Y++ACIOinhcoegsAAAAAElFTkSuQmCC"
+          },
+          {
+            "qcode": "imchn:stnu",
+            "name": "st.nu",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAa1JREFUOBFj1Gw8+J+BCoCJCmaAjRh8BrGge42NmZHBXk0YLHzzxRcwLcHPjq6M4c6rbwzvvv2Gi2MYVO+tyhBoIA5XMP3QI4ZMOzk4H8YoXnODYfu11zAuA0YYmcjzMzx+/4MhZv5Fhl9/IBH64O13hrrNt8Gaph18xHD6wUe4ATAGhotYmZkY/v77z3Du8SeG5Weegb2wneE12HCQpheffjLsufGG4cmHHzAzwDSGQTeA4eKgJsQQaiTB0LnrHkTxNQYGcwUBuMbFp57B2TAGhtemHnzI8Pvvf4ZqDxUGTQkemDqCNIZBV59/Yejdc5+BjYWRoTdYg4GTFUMJVkMxVHGzMTOsAIbNtquvGRSEORn89RAxCDIBV37CMGhbjilDuq0cwwxgtIOApiRx3sMIbJBmHSlehntvvoGYwCTwD0zLCHCAaVlBCA3mIBEYLgLJ2SgLMnQHaYCVnX4ISTM+umJgvi+UBnOQCEb0YkRfhpfhAzDpmwGjG5RmDt95D1auJMLJwMPOAnbhjZdfkYyAMDG8dvHJZ7DMw3cvUBTfe/MdhY/Oweo1dEXE8AHO1IPD2EWCGAAAAABJRU5ErkJggg=="
+          },
+          {
+            "qcode": "imchn:thse",
+            "name": "tidningenharjedalen.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAUxJREFUOBFjbBVS+c9ABcBEBTPARowaRDgkWdCVZF88yMAvIwkWnqhhyaDkbMfgO7UTzD/Q2s9wrG86Q+6VIwy8kmIMf37+YuiS0gHLwQ3iFhVm0I0Ighvy99dvMF9IWQGsEERwi4ow6IQHgA0B8d/ffwSiwABukKimGoNTQylMnIGZjZXBsa6E4eGRk3Ax07RYOBvEeHfnPpwPj/6nZy8yHJswEy5xbcN2hhnmbgwCCrJwsW/vPjD8+vINzn975x6cDTfo99dvDL+/fYdLcArwM4hpazDwy0qDxX59/c4wQc2c4fikWXA17+4+gLPhXgOJPAO6CgYUHawYQBgGXl27ycDw/z+DsJoyTIjh7W2EixjR85qIugoDOIAZGeEaQIyPj58yvLx0jUHOyoyBQ5AfLHdv7yGGPz9+gtkYBoFFySDgYUSGXhQtw9ggAJ5zXXyv55lrAAAAAElFTkSuQmCC"
+          },
+          {
+            "qcode": "imchn:vltse",
+            "name": "vlt.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAY5JREFUOBFjZHCY8J+BCoCJCmaAjRjGBrEQCiNjNTGGSCc1hnvPPzFM23gJp3KCYXT1/lsGCy1JBi15IbAhnGzMDGk+OhgGwl0kys/JEOWiDlbw5PUXhvO3XzH4WikxvP/8g+HTt19gcU05QYauDBsGLnZWhreffjCcvPaC4cmbL2A5uItef/zO8Pfvf4b+bDuGy/fegL0SZKvCcOr6S7jtf4Dy8uJ8DN9//mF4+e4bw49ff+BycINAIgt2XGP4+uM3Q7CdCoOUMDfD41efGW48fg9XfPvpB4ZPX38xvHz/jeHIlWcMb4CuggG410ACX4CGrNh3iyHOXZOBiYmRYdK6CzB1BGkUF4FUz9l6hUFdVhAYwBIMp24gvIVsEhsrhjYGDJGTwDC5AoyphTuug/WaqoszqMoIMJgAaW0FIYYzN18yeJgpMDQmWDCYAJMGDDBiy7RiApwMb4CB/w+YnSWFuBh4ONnA6j9+/cnw+sN3Bh1FYYaPwLB6BAxDGMBqEEySFBrDa6RoRlY7+AwCAI2+hzdeEmSDAAAAAElFTkSuQmCC"
+          },
+          {
+            "qcode": "imchn:opse",
+            "name": "op.se",
+            "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAZtJREFUOBHdkj1IQlEYht97VUxFIUsNQxukEKKIrM2anFqipamhocGkrZa29qCgqSGIhqihMZwagmgwhIIckqKbRqWi+Yf/P7dzr3o0bQkcojN95z3v99zv5zLTq6dZdOFIeZ5XdIEDthsQgfGPQdL2GS3YLfC/xmHWqxFN5eD1R9otP947QIP9KhTLFZh1avAkRSphYehVtiXzCH1mUakKjtr5BpoZM8JhM8PHxTBk0GBiWIfn9wTWF22wjejEjN2zO6zMjYInjM2Da9w8hEWdbk0uk2DbaYdQ0T0XBRdKYpKAdlyzCEZS9e8Ct48RpHNFaFQyuObHqU5BCrkUEpahD41gQKuEqkfWuIIlHpap+T5iGarT1nKFslhu3UMN0WQe2XyJ3pccVgTCaVx4ORy7fVSnFRVKFWwdeRBPF2A1aWHsU+HpLYmN/SuY9Bqa4Pa8YG3vEoHDQywHz6nOTDlPmqOvy40Wha0IW7MYm6BkpihujCE7ZcjEq0ytFtoaRZOgda3lSpX8V4nWZzEmGPAtc6CtdTh/Kfw90BdC/oJq6861+AAAAABJRU5ErkJggg=="
+          }
+        ]
+      }
+    },
+    {
+      "id": "se.infomaker.history",
+      "name": "history",
+      "url": "http://localhost:5001/index.js",
+      "enabled": true,
+      "mandatory": false
+    },
+    {
+      "id": "se.infomaker.textanalyzer",
+      "name": "textanalyzer",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
+      "id": "se.infomaker.publishflow",
+      "name": "publishflow",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.contentrelations",
+      "name": "contentrelations",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": false,
+      "data": {
+        "npDropLinkMatcher": "http://127.0.0.1:8080/opencontent[^\\s]+"
+      }
+    },
+    {
+      "id": "se.infomaker.ximauthor",
+      "name": "ximauthor",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.youtubeembed",
+      "name": "youtubeembed",
+      "url": "http://localhost:5001/index.js",
+      "enabled": true,
+      "mandatory": false
+    },
+    {
+      "id": "se.infomaker.ximplace-position",
+      "name": "ximplace",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true,
+      "data": {
+        "features": "position",
+        "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
+      }
+    },
+    {
+      "id": "se.infomaker.ximplace-polygon",
+      "name": "ximplace",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true,
+      "data": {
+        "features": "polygon",
+        "polygon": {
+          "editable": false
         },
-        {
-            "id": "se.infomaker.mitm.publicationchannel",
-            "name": "publicationchannel",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "mandatory": false,
-            "enabled": true,
-            "data": {
-                "publicationchannels": [
-                    {
-                        "qcode": "imchn:mmse",
-                        "name": "MittMedia Gemensam",
-                        "icon": "data:image/png;base64,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",
-                        "scope": "main"
-                    },
-                    {
-                        "qcode": "imchn:amse",
-                        "name": "allehanda.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAbRJREFUOBFjvO1u+Z+BCoCJCmaAjaCaQSwYLmJk+MXMy3eNTUH5I6e2AROHjp4AMz8/BxMHJxsTBxfH/9+/fv96/PDtr4f3v/y4euH313OnZf7/+qXCCAojRgaG/8wi4qcF/IJ/83kH6DBxc/MjW/Dv338GJiagKhzg14N791hYhUTOSNS08rBr6Zghq1t35DrDxA0nGa49fMXwF2iQmowwQ6qnEUOCmyEDM5qhbApKSoz//wNVoYGq+XsZJq4/iSYK4QZaazAsKQ/CkMMI7OuP3uA0BKR7/dEbDNtP3yFs0IV7LzAUoQtgU4PhIn0lcXR9GHwDLGowDNKSE2XI9jPF0AwT8LVQY/AwUYVxIfS/f3+wBjZIduXBqwyTQbH26DUw1v4xqEpDYi3Zw4iBhRlmP+P/jxtWn3g7d4oE4+uZEw8IBkWoM4uISqBaA7PsP8O///+RNDMw/Lh84dr7lYtefTt/Vvn/3z+yIJXwBMnIzXOVTVbuHauMwj92eUVWJh4eln/fvv75/+3bv7+fP/37cfsm4+/HDwT+fv2swPCfgQ/dUrBB6ILk8GGeJUcvip7BZxAAlqyiWNSTRq4AAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:abse",
-                        "name": "arbetarbladet.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAVVJREFUOBFjnC2j+5+BCoCJCmaAjaCvQVziogxMbKx4HU/QRaaVBQzBe9YzCGmqUWaQarAvA7sAH4O0jQX5BgmqqzB8f/OW4ffXbwyKXq7kG6Tg6cxwe81mhoe79jOI6Gkx8MrJ4DQMbxgpersx3Nuyi+He5p1gA5T8PEg3SEhDlYFPXpbBsqmcQSM6BGyASqA3ToNYcMkoAzXdWr2R4eWZ82AlzGxsDNK2FgzCOpoMb69cx9CG3SBGRgblAC+GzYFxDF+fvQBr+vf7D9ggtVB/huNYDMIaRlLW5gxMrKxwQ0AmPT9+BmygSrAPAzMHB5iNTGAYxMjCwmCYn8bw/+9fBg4hQbhaVm4uhv///zOw8/MxGOSmwMVhDGY/PvEGGAdEi5sYMLDx8jC8u3EbqImX4e3Vm2BpUDp6f/suw6uzFxlYubgYXp69wPDv1y+4VsbhW4wAAPJcVUHxHNFJAAAAAElFTkSuQmCC"
-                    },
-                    {
-                        "qcode": "imchn:avestatidningcom",
-                        "name": "avestatidning.com",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAc9JREFUOBGtlEsvA1EUx/+j1YemVeqR2qhHJSw04hF8AEJISFhLbMTKxoKFlbWlhYXYioVEfIOiYddUUE1YYYhU03qkrVKnp+01NTNJF85i7ut/fvecc+8dCRvBLP7BKv6BwQijHmi8xY6RZjsvZ76zWD99Qjz9rSeHLmiuqxZ9jVa0Os2IxJJY9su6kNyCZmr1VgOm2h3YDEbZ2WzQlJWANRUL3S6EX1Lw37+x2GKQSpy0BipQJc0s+uqwFYrik2qTs3IiUtVotsMJt83IkDGPIw8yStif9HBf+bmIJrEWeOQpVURLPfW4jqUw43ViorUAotRu4ylUUIbT3mr00iHsXsdgN/26l0Q06K5iUcdOmBzT8DpNiMx3EkDC6rGMw6kW3t1/9469SByh56QIUCBzndWBBhzcxBmSU3gcJiFsqzajv7GKx4GHd27DFHnRREQWqsPKkYxE+qu4hsuXJNq3r3jsshhQa83LA3IeJITUEaCPTBZXdORKu3/LiOFwUw33X2mjc0VKRYFIrTih1w415dM6kz+g9VDKBg27bbzHSaE+fzcsCzRKj9fXYGXfREorHkAq539E5wC6AWxZuuxUTpWJYqtWFBPsqOGskOAH4fmCWOIllLoAAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:Bandypuls",
-                        "name": "bandypuls.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAApZJREFUOBGtk7lPVFEUxn9vVmdltkREEFFEg1QYKTQUYkyM0VJtbSysbEysjJbG2PgfmJiYGJdCpKNQExpERwU1mhl02GSZGWCY9a3e9yaD80Q6TnPvOfee737fOedKqe47Bjtgjh3AsCBc/wJJPjfe3lY8h3fjCHjAIYkrEkZNQV0uoqRXkKezoOi2VBtQ/OYZ1GyR2qd5ymNpJLcLV2sYdXEdyeu2wJzxIOGL/bg7ouTuj4JWr4wNSFuvIEkS4Uv9VJOzuNpaBLs9KHNrGFUFdANtrYycyuIIeS2/QctWI0nIcER8GKqOa28EZyJI9eOc9bperKHXVLx9bWjLG0gewaGpTTZGgg7aahl1YR35+xJ6pc6iMp7BN9BJdSJjXqE2uYB/qKdBxlptQIZ4UfmZwz94EJx1sp6uuHjdycrtEaLXBim/y9QBhMxms0mzOmTKC3o3a2CoGnpJxuyme18MScgWTbTkbwskuRzI3xaRfyxTfDmJ70QXeqEqsgy8R+tFN2vl3h9H+ZVrxsEmTV3asDpRHptGFZ1aufUKZ8yPuzNuxR1+N8rMKoGzveRHpxADIcDMOcMO9HT4GbJTQ/4tWIgLfj1ENNRKLCLcrzO47ibFxqD0uUAuP8MpuoVfNxuj1WqBI0MDxLvb8QYFk8Au/NEwiUMdPHx+o5GDK5PlAOFN39xIzZ/2iZ4Uzfpbf2/Yz/l71/ky/JaO473IpQq59Dzp1+9R8kVO00MIMZjCbIzajQgLcgFfooX+K+dYm11kKZkSf2yDDw9eUK0JyWWFGD666NwEMYFsjMxAw5yJAJGrJyk8niB4oc8awvKbVON4y7otkHVTDGL48jFKI1No+fKW5OaATVrzgbWXNQqPxreE/xf4A2hABEBX2bpJAAAAAElFTkSuQmCC"
-                    },
-                    {
-                        "qcode": "imchn:bblatse",
-                        "name": "bblat.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAVRJREFUOBHtUz1Lw1AUPclL0toECXVRSyEgSgV/gIhLl7q5OOjgIjj4M/oDdHD3Nyg4dNFZEBwEcRBqqVI6+IFNUzUfTep9DxLbpV0y9kKS8+4599yX+xIJJ/cDpBByCh7CYmo0eZLJjFRCmiwlFQZPDEVO+eeG0gkUan672lnC+kJOEAVDwdNBKRHtrpg4qxSTdQysWTWGUDiK6Kp3PGwWdJgZhstGF24/wuFaHjftb8Fx3bKpUTOdQzyTvroxj/3aK95++xjZ/8OHi72SiXJRh8YkXNRtnG9biF/KUBlsL8RpeRFuGOHLDYUJNxY74oCHHw5APDJMBv/cO1TEn7QUZhXLEJqIkrIkgXqBjzKgGoatoypp0fVDZGmgj58eak0HrV6A1bksju/eYWgMjh/htv2D/IyC65ceWk4AlTo0bB8OOUnTf42PcWyMHP9Y5QQyNaM/sWhnkk3alQEAAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:ddse",
-                        "name": "dalademokraten.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAcJJREFUOBGtlM1KAlEUx/93nM9AjBIjTRAUiiZS30F6idbt3PQGEbhy7a6W7dv2Bm1U6AukpaYkQvmZOo7TvdccprxKCw/MnTPn/u+Pc86cGVIxTQdrMGkNDI5YG0gWZaREo9jN50F0HdNOB8Qw8Hlzg87trUi+PCOrWoUzHkNLJPB+cQFfIIDg+flSCNsQlybL0EwTdrcLq9GAHAqBwVeZsDT98BCSpqFfKkGnwO7dHQh93snlOGvSbOLj6grTft9lCzMy0mkuGD48QD8+BgiBP5OBtr+Pr2IR22dn2Dw9dSHMEYL0VGoGenyEQX1CS2U2LJcBZzZ2drvNY/NFCPqbEVEUrh8ycDI585+f5wx+XwApe3uQg0FYtRqkjQ34trYgh8Nc/MVKpSDHsjCuVJaDiKpi5/KSC9gMhQsFjOgBNgY2nSe71YIaj2P0+sphXtKvt8Zm5y2bpb0lrkY7OkL0+hqsLJ36RJIwfHlx9+fOLxALOoMBvF8xazYzDvrpz+jpice8ywLIu6kdHMB/csJDaizG+2P3ehjc33tl3CerfiOsyUokwueIqXmTaX+mFPbXVmY0qdfBrv/Ywuv/zyGR5htSgpPx7ITHQgAAAABJRU5ErkJggg=="
-                    },
-                    {
-                        "qcode": "imchn:dtse",
-                        "name": "dt.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAXVJREFUOBFjVC5b/5+BCoCJCmaAjRiCBknwczDMiDdnqPTWwRsKLHhlgZJcbCwMLloSDFeefGSQFeJiMJIXYnjw5ivDxcfvUbSSFEYmCsIMvRHGDKGm8iiGgDgYLmJmYmSItlRkCDKSY/j77z/D/hsvMDRZqogy2KmLMRy6+Qouh2FQtY8uQ5y1IlyBvpwAnA1j/Pn7D+jVDzAumEbxmiAXG0MM0DVffv5hSFtwkkG/divD0uMPUDSAOKDweff1F4o4ikG6sgIMTECRk3ffMOy7/oLh668/DBN3X0fRgIuDYtDzD9/B6swURRiEuNnAbB0ZTK9hMwwljG6//Mxw9sE7BmMFIYaZ8RYMR26/YkiwUYbre/PlJ5gNCgJ0gOIikGT24lMMB268ZNCTFWRId1BjOHjzJcPLTz8Y3n79yXDi7muGTeefMICSgYGcIIpZjLhyPxcbM8OP338ZgCmAKIDiNWQd3379ReYSZGN4jaAOHAqoZhAABmBp1Evnx8IAAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:fagerstapostense",
-                        "name": "fagersta-posten.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAbdJREFUOBFjZOi98J+BCoCJCmaAjaCaQSzILmIEciwluRiYGBkZ/gMhCPwHUj///mc4++o7mI+LQDGICWjSbDdZBmkeVoYrb34wsADdqyrAzvDl9z8G+TnXcZkBFkcxCGgxw72PPxnefP/DYL/qLlgBM9DwJB0hvIaAJFEMgqkGeREGlPjZGF58/cNQaCQCE2L49ucfw8qbHxg+/PwHF8NqkKkEF8PtRA0GLlYmhu9ATa0nXzL02ksx3Pnwi4GThRHs9UIjUQa9RbcYfv2DhCVWgx5++sWQv/8Z2DZtYQ6Gt9//gtmRWx+CA73bTpKh2FiUwUGWm2HXwy9gOazR/+HnX4adDz+Dcd+513DnwxgHHkM087Ixw4QYsBoEin5cAOhbhix9EYZfwJg58fwrXBmG15iBhnCAogoL8FTkZZjlKsOgK8LJkLr7McPTL3/gqlAMYgMmpAfA8Hn25TcDD9BqUPpBBhVmYgyb7n5iiNr2iOHm+5/IUqjRD4qBrL1PURQgc+xX3sWZwrGGEbJmEJuHDaJMCpjicQGiDALlt4rDz4F5EJcxOFI2uvLlwFRMCBDlIkKGgOQByXaHmesJdvAAAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:gdse",
-                        "name": "gd.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAWtJREFUOBFjVIua+J+BCoCJCmaAjRjGBrGghxErCzODnrI4Aw8nG8Otx28Y2IB8Xi52BkZGRrDSr99/MTx8+YHh7z/UOEIJIzlxfoaN7ZEMLMxMDEcuPWTID7FksNKRAxuypjkcbIGYIDfD+tZIBldTZRQ3oBhUn+DA8P7zD4aT156AbWxdfJDh649fDI9ffYS4Bsg+AZTbevwWQ1+OB4OMKB/cMLhBIJebakgzPH39CS75+dsvhk1Hb8L5MMb1h6/BXjbVlIYJMcAN+g/08u8/fxk42SDBpiojxDAhz5Mh2dsIrhjGYGKChNcXYHjBANwgkMC+8/cZ9FUlgGHCwHD7yTsGUX4uBg15EZhaOG2kJsVw79l7hmNXHsPFmIV1PRtgPFDYKEoKMphpyjCICHAxcHGwMjx985mBn5uDQVNBlOHv3/8MrCxMDGKCPAwN8/YzfPzyA6aVgXE0r8HDAhcDJdZwKSJGnGoGAQDZ1GYr+fxzMQAAAABJRU5ErkJggg=="
-                    },
-                    {
-                        "qcode": "imchn:hhse",
-                        "name": "helahalsingland.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAgRJREFUOBGtk89rE0EUx79vdrJNFGmSSkErjbEUrJYiqCh4UKsXFQrGP8C/QqUHrz0J1UsLPXnz5M1cRaxoi4q/QEUoRKlKLLYqIWmT2Rnfru7UMRvoIQ+WnXn7nc++X0ONW0cMumCiC4wIITuBaPchyNGLoHwR8Hpgat+gK/MIXt8FTNB2LBFE/fvhl2ZBwts80FeEVzgG6h2Eenhj0/931QaiXWMQfUPA+i+0Hs9EkSAE8iMPXwZlshDDZ6GXHgBaWaADomwB/qU5oLGGZvkKUuOTf6AsN611qPlpiD1H4Z+bgnp6G+rJjAU5xfZGLnA6Aq1HN5E6c91CQjWl0pCnJ6Hel2GadXgHJywkXDggyg3C8DAYTkvkC44w3BBx3fedgq6+A23LA/52q3FAkBkg2ACF7w5GmVyUevRZpq3KAZn6d4ZwqzdqMLq9xeEp/fUVqH+EI+fQuZaxOSD9aTHyy7ES1CIX/T/TKx9gGj8gsgPQy8+4BtoqnK7ppfsIKuc5/52gdBXNe9fgDY8DPTugv7yMRkGOlqBXK1AL7o8o6a6JvSfgT0zD1Fc5lTdAs8bpHOAuFhHw/LTKV20k8cKJKHbq5ecIPi7wJB+HN3QydjN4DerFHbv/d5EYUSyg3gFQju+a9DmtFZjq28R7FuoTI4pB5udnhM9WzOnaVg500nQN9BvJuqkB16uyzQAAAABJRU5ErkJggg=="
-                    },
-                    {
-                        "qcode": "imchn:Hockeypuls",
-                        "name": "hockeypulsapparna",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAALsWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgICAgICAgICAgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iCiAgICAgICAgICAgIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiCiAgICAgICAgICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgICAgICAgICAgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6T3JpZW50YXRpb24+MTwvdGlmZjpPcmllbnRhdGlvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjIwNTwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOkNvbG9yU3BhY2U+NjU1MzU8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjIwNTwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2UvcG5nPC9kYzpmb3JtYXQ+CiAgICAgICAgIDx4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ+eG1wLmRpZDoxYWE5MDg5Ny1lMWZhLTQzMjQtYmRlZC1mOGM1NGE1YjdiMjU8L3htcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOkhpc3Rvcnk+CiAgICAgICAgICAgIDxyZGY6U2VxPgogICAgICAgICAgICAgICA8cmRmOmxpIHJkZjpwYXJzZVR5cGU9IlJlc291cmNlIj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OnNvZnR3YXJlQWdlbnQ+QWRvYmUgUGhvdG9zaG9wIENDIDIwMjIgKE1hY2ludG9zaCk8L3N0RXZ0OnNvZnR3YXJlQWdlbnQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDp3aGVuPjIwMTYtMDEtMTFUMTM6Mzc6MzYrMDE6MDA8L3N0RXZ0OndoZW4+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6MWFhOTA4OTctZTFmYS00MzI0LWJkZWQtZjhjNTRhNWI3YjI1PC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6YWN0aW9uPmNyZWF0ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAyMiAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAxNi0wMS0xMlQxMToxMzowMyswMTowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDpiN2MzMTU4OC1hZGUwLTQ2MDItOThiNy02ZmJmMzBkN2ViMDA8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+c2F2ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAyMiAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAxNi0wMS0xMlQxMToxNTozNyswMTowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDpmNDIzZjE2MC1mMjBlLTRlODItOTExNS1lMmZjMmU4ZTY0OWQ8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+c2F2ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOlNlcT4KICAgICAgICAgPC94bXBNTTpIaXN0b3J5PgogICAgICAgICA8eG1wTU06SW5zdGFuY2VJRD54bXAuaWlkOmY0MjNmMTYwLWYyMGUtNGU4Mi05MTE1LWUyZmMyZThlNjQ5ZDwveG1wTU06SW5zdGFuY2VJRD4KICAgICAgICAgPHhtcE1NOkRvY3VtZW50SUQ+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjc0ZTFiYjgxLWY5YTMtMTE3OC04M2QyLThlZWIwYTc2MTRjODwveG1wTU06RG9jdW1lbnRJRD4KICAgICAgICAgPHhtcDpDcmVhdGVEYXRlPjIwMTYtMDEtMTFUMTM6Mzc6MzYrMDE6MDA8L3htcDpDcmVhdGVEYXRlPgogICAgICAgICA8eG1wOk1ldGFkYXRhRGF0ZT4yMDE2LTAxLTEyVDExOjE1OjM3KzAxOjAwPC94bXA6TWV0YWRhdGFEYXRlPgogICAgICAgICA8eG1wOk1vZGlmeURhdGU+MjAxNi0wMS0xMlQxMToxNTozNyswMTowMDwveG1wOk1vZGlmeURhdGU+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+QWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCk8L3htcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CgJmh3QAAALjSURBVDgRZZS5SqtRFIVX/sR5RKNRURGbaAQHCBaC8QXSiBYqiqVPYGN10XcwpBIES5GQJgiCjWijFopTZwRHxHkecvPtexMEN+RP/nPOXnutvfaJq6ysLKV0fH9/q6KiQo7jKJlM6uvri+VfwX5jY6NSqZSur6/ldrvtjAsgQAoLC3VxcZFN7OrqUmVlpXJycuTxePT09KTLy0vt7u5mz/h8Pj0/P1txD6sFBQUGMjQ0pFAopPz8fKvocrkM5OPjwwBhAVNANzY2tLCwIMBeXl7kkEQlYnx8XCUlJfYOOAF1Pg8PD1b57u5ONTU1Ghsbs33ec3Nz2XNsIRAI2GEA+vr6VFtbK9YeHx/V09OjhoYGY+L1ei2R/nR2dur19dUKONAloIeUoqIiUQXtJycnSvdQa2trJvXz81P7+/s6OjqynPf3d/sGIwtEZeL4+FhnZ2fm3MHBgVVE/uzsrIHDAleRc3t7mwWyZvMGg7e3N5ODS9XV1eYQjOrr6xWJRNTd3W2JuAmL09NTlZaWmgEO1mMxTuBOcXGxbcCMw+wjaW9vT7FYzNyFcSYYG5w0IJIJGOXl5Wlra8uktLa2mgTYRqNRtbe3y+/3KxwOWx/J4TxAHh4A3dzcWLNp5NLSklZXV63Rm5ub6u3tNRNwiAZjDJII1MDaAYhmErgGG0D6+/sFo9HRUQ0ODqq5uVkrKyuamJiwq0EykRkfT8Z+FrF7YGBATU1NVrmqqkodHR26urpSeXm5JicnrXowGNTi4iIp/9ikZ9GdHsA/UGZ+EomE2traVFdXp/X1dUuk0PLysqanp22dO7izs2N7OEpfUWKXlsNoxbX7+3uNjIyYNGTPzc1ZQ4eHh+3exeNxzc/P21VilsjJAmUoZubn8PDQaE9NTQkZxPb2tmZmZux3S0uL3UdAMj0yRrb7/4ErXEqmFid/BlL4zzo/P7ex+Ln3CwiaDCDzgcUkIZ1LjGx6AvOfJgH4F/PPo8f1wcIiAAAAAElFTkSuQmCC"
-                    },
-                    {
-                        "qcode": "imchn:lanstidningensodertaljese",
-                        "name": "lt.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAUJJREFUOBFjZCha9pvh/38WBgoBE4X64dpHDYIHBU4G1tiqddVh8NeRYbj79jND9tozDNOCTRk4WZkZJPg4GF58+sEgycfJULjhLMPh+6/hBmMN7O3XnzEYyQgydO69xvDl528GA2kBhootFxiMZYQYJh66ycDCxMjw+MM3uCEgBlaD9KQEGH7//cdw+fkHBmFudoaabZcYVEV5wRrPPX3HsOD0PYYH778SNsgIaPOVFx8Zfv/7z/D043eGVRcfMRhKCzI8BGp+9+0XwwSgq9ABVheBvHX+yXuw2moXbQY2ZiYGQyQxdENAfAyDZAW4gLYLAZ3+hSHaSIEh2VyZgZ+DlcFcToTh1ZcfDMDgwQoY0fNajo0aWCNM9b23Xxi42IAxxssJFppy5BbDxx+/YdJwGiP6QQrJARheI8cQkJ5hbBAAO8hklPVZCRcAAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:ltse",
-                        "name": "ltz.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAV1JREFUOBFj3Kah9/v///8sDBQCJgr1w7UPY4MwAplXQ51B2teb4f+/fwzfnz5jeLJ2PYN8TCQDu7AwAyMrC8PfHz8Z/v34wfDv12+GH69eMjzbvA0cThgGyYYEMSgANYLA68NHGD7fucugWV4C5qMTt6dMhwthBLaAvi5c8s3xkwziDnZwPjrj5d79cCEUg5jY2Bj4gF6DgVf7D4KZDxYtZfj78ydMmOHZ1u0Md2bMZvh0/QZcDMVrQqbGDEysrGDJv8BwkPb3BYbJD4bH6zYwKMRFw8UvVlQz/P/9B24IiIHiIikfL7gkMwcHg0pGKgMbMJAlPdzg4u9On8UwBMUgkLfEXZ3hGmCMZ5u3MkgH+MG4DK8OHYazkRlwr7GLiTHcmTqD4d/v3wzMnJwMLED8+/Nnhq+PHjE8Xb+R4f/fvwwsfLwML3buQdYPZzOOZlp4WOBioEQ/LkXEiAMAP0ZzhyeOWuoAAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:nase",
-                        "name": "na.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAbNJREFUOBFjZPCs/89ABcBEBTPARgxjg1hgYeRrpsbAxMQI5h6//oTh779/DDbacmD+t5+/GX7/+cfAz80O5n/48oPh4JWHMK1gGm5QlKMuQ7idDlhw0d6LDG0rDzOUhVgzmKlLM0zZfIrh/ecfDPkB5gyCPJwMIINFwrsYfvz+AzcMHtgx3evAgiDbYhz1GEBuq128n+HRq48MhbN2MjQtP8jw5M0nhnsv3jNwsbMyOOorwA0BMeAG/Yempp51x8BebIxxZPgPFIQlMlkRPgY1aWGGsrm7wQb4AIMCGcANggku2XeJ4cbjNwxhdtoM+ooSMGEGf0sNhpfvvzJoyIqAxQgaBArkOqCXQKAizAZMg4gAoEGHgAH85+8/hjO3nzHIivIz6CmIw+XhLnLQUwAL2unIM2w6eZPhwr0XDGIC3GAxJ31FBntdeYbNQPHpW08znLjxBCxeGGjBIMzLCWYzM6g6NIBYkzO9GB4CA9ZQWZJh44kbDFcevGKQEuJluProNYO6jAjDx68/GXSBLgBZEGmvCw50Pi52hsdvPjLcefYOGDmjmRYcongIeKzhUUOUFAD2F47r4yuhIwAAAABJRU5ErkJggg=="
-                    },
-                    {
-                        "qcode": "imchn:norrteljetidningse",
-                        "name": "norrteljetidning.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAghJREFUOBFjZHAo/M9ABcBEBTPARhA0qDbWlWFRZRSDADcHXjsJGiTMx83AwszEIMLPwyACZOMCLNgkbHQUGf4DIQicvvmIIchWj0FSmJfBx1KL4cr95wxnbj5m+PD1B4pWrC7i5mRj4OaAYF5OdgYONhaGOHdThmsPXzCA5JiBLkQHWF208/RNuDoTNRmGZG8LhrTe1QxP33yEi6MzMI1GUmGgLMUQ62bCcP3hS7yGgLTgNMhWV5FBWpSfYdWBC+DARjIfKxOrQUyMjAwKEkIMW09cZ2BlZmZgZWHGqhlZEKtB7KwsDDcevQKrA0U9CBMCKCrYgDZHuxgxfP/1m+Hbz19gvSDXoBukCHStp5kGitkoBv3685fBVF2OoS7OjeH+8/cM7KzMDFoKEgzKUiIMzEyMDBxAl4ba6zOsbohnOHn9EYpBjOiZlhEoDcvFLExMDLZ6SgyBtroM6rJiDHzc7Ax3n75lmLDmIMOZW09QDMJIR6YacgytKV4MxsD0w8fFwXD90UuGdYcuMVTN2cpwFqoZZBkoaYDkfv7+CzYQxUXaCuIMqtKiDOfvPGUAhZeZphyDn5UOg6e5BgMPMIW/+fiV4e2nrwyX7j4HG3z32Vu4q1AMAkX7v/8wj8HVgMPGWF2GgZeTg+HqgxcMj19/QEhCWShew2YISN2P338Yjl55ANWCnQIAumSHzKu7tt0AAAAASUVORK5CYII="
-                    },
-                    {
-                        "qcode": "imchn:nynashamnspostense",
-                        "name": "nynashamnsposten.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAY9JREFUOBFjZOxd9p+BCoCJCmaAjaCaQSykuEici4Mh20CVQYSTnWHj3acMOx88h2snaBAbMxPDr7//GMSAhkx2MmboP3uT4fjzN3ADYAycBmkJ8zOUmmgwMALh0y/fGE69eMsQufUYw9//2OOGETnWtIGaD4W7gC0pPXSe4dzL9wxMjIwMK32sGIQ52BlaT15lyDNSY8jYc5ph+32Et0AaUAL7zfefDCAswM7KwAw04PX3Hwwvvn1nYGFiYuAHit39+IVBhoeLocfOEOYjOI1iEEh0+/1nYElbaVG4InSGBDcnuhCqi0CyB5+8AiuylRHDUAwT2PUQ1VsgcYzAvvr2I8O7H78Y5Hi5GGSB+NHnbzD9DILsbAw5+84wLLr2AC4GY2B4DRQpR56+BsvbSqO6ahvQ29Mv3mH4+vsPTD+cxjAIJHMI7j3c4QQ3AcrAbhDURV6KUujqcfJRwoiblYWBmYmR4fyr9wwzL90BJ8bfwFS9/vZjBg4WZjDGZRJKgsSliBhxrF4jRiO6GqoZBAByO3LO6xiWmQAAAABJRU5ErkJggg=="
-                    },
-                    {
-                        "qcode": "imchn:salaallehandacom",
-                        "name": "salaallehanda.com",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAb5JREFUOBHNlN8rQ2EYx7/HzpjtDG3m1/yIcEk0LoRRkgt3SrmXFG5QlEsXboxrWbmVP2FCopSiZRd+hEJY26zZxmZ2drznSM2eU2524T2d3vc87/v99H2e9+lwcLglZGHkZIGhILIG4jMdaThgsaMMA7VGuH1xuO4i2LwMZR4j38TReJMZY+yd2HmE0/OCoYZCIlILEEcmHY88ZutDlHDqi8F78KymIzHiyHHigycQx9FIPaZbLbh9TRCRWoCA3pMSerZusO4JYtlejqXOMkU33FiorK0CSULZJ6AaoxaJlITJ3Uesnvox1VIM+QJspXrMtZXAqNWoGQIBzbeXQNB+h5+jSXDsYeVCb5WASCIFe5VBFUR8mvN5pT5ysZst+Zjdf4JJp2EwCXsPUdgrBaydBQmMgEZdDxBTQEeFHnfhT1yFPpQW2L2PIhATMWOzEIgcIKAwsy+PbSb8GX3VAgbrCsBKh3IDj/qiXFyHft8mqdGPOH3usgpo3LhArfMcwbiopJe+L6//BHVbDYh+ioixtpC9Hnvf0V9jzOTQ1DJPJFk+C4dedndQ2mDlxM9mDgY+B2/J7zLIGu7f/Y++ACIOinhcoegsAAAAAElFTkSuQmCC"
-                    },
-                    {
-                        "qcode": "imchn:stnu",
-                        "name": "st.nu",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAa1JREFUOBFj1Gw8+J+BCoCJCmaAjRh8BrGge42NmZHBXk0YLHzzxRcwLcHPjq6M4c6rbwzvvv2Gi2MYVO+tyhBoIA5XMP3QI4ZMOzk4H8YoXnODYfu11zAuA0YYmcjzMzx+/4MhZv5Fhl9/IBH64O13hrrNt8Gaph18xHD6wUe4ATAGhotYmZkY/v77z3Du8SeG5Weegb2wneE12HCQpheffjLsufGG4cmHHzAzwDSGQTeA4eKgJsQQaiTB0LnrHkTxNQYGcwUBuMbFp57B2TAGhtemHnzI8Pvvf4ZqDxUGTQkemDqCNIZBV59/Yejdc5+BjYWRoTdYg4GTFUMJVkMxVHGzMTOsAIbNtquvGRSEORn89RAxCDIBV37CMGhbjilDuq0cwwxgtIOApiRx3sMIbJBmHSlehntvvoGYwCTwD0zLCHCAaVlBCA3mIBEYLgLJ2SgLMnQHaYCVnX4ISTM+umJgvi+UBnOQCEb0YkRfhpfhAzDpmwGjG5RmDt95D1auJMLJwMPOAnbhjZdfkYyAMDG8dvHJZ7DMw3cvUBTfe/MdhY/Oweo1dEXE8AHO1IPD2EWCGAAAAABJRU5ErkJggg=="
-                    },
-                    {
-                        "qcode": "imchn:thse",
-                        "name": "tidningenharjedalen.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAUxJREFUOBFjbBVS+c9ABcBEBTPARowaRDgkWdCVZF88yMAvIwkWnqhhyaDkbMfgO7UTzD/Q2s9wrG86Q+6VIwy8kmIMf37+YuiS0gHLwQ3iFhVm0I0Ighvy99dvMF9IWQGsEERwi4ow6IQHgA0B8d/ffwSiwABukKimGoNTQylMnIGZjZXBsa6E4eGRk3Ax07RYOBvEeHfnPpwPj/6nZy8yHJswEy5xbcN2hhnmbgwCCrJwsW/vPjD8+vINzn975x6cDTfo99dvDL+/fYdLcArwM4hpazDwy0qDxX59/c4wQc2c4fikWXA17+4+gLPhXgOJPAO6CgYUHawYQBgGXl27ycDw/z+DsJoyTIjh7W2EixjR85qIugoDOIAZGeEaQIyPj58yvLx0jUHOyoyBQ5AfLHdv7yGGPz9+gtkYBoFFySDgYUSGXhQtw9ggAJ5zXXyv55lrAAAAAElFTkSuQmCC"
-                    },
-                    {
-                        "qcode": "imchn:vltse",
-                        "name": "vlt.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAY5JREFUOBFjZHCY8J+BCoCJCmaAjRjGBrEQCiNjNTGGSCc1hnvPPzFM23gJp3KCYXT1/lsGCy1JBi15IbAhnGzMDGk+OhgGwl0kys/JEOWiDlbw5PUXhvO3XzH4WikxvP/8g+HTt19gcU05QYauDBsGLnZWhreffjCcvPaC4cmbL2A5uItef/zO8Pfvf4b+bDuGy/fegL0SZKvCcOr6S7jtf4Dy8uJ8DN9//mF4+e4bw49ff+BycINAIgt2XGP4+uM3Q7CdCoOUMDfD41efGW48fg9XfPvpB4ZPX38xvHz/jeHIlWcMb4CuggG410ACX4CGrNh3iyHOXZOBiYmRYdK6CzB1BGkUF4FUz9l6hUFdVhAYwBIMp24gvIVsEhsrhjYGDJGTwDC5AoyphTuug/WaqoszqMoIMJgAaW0FIYYzN18yeJgpMDQmWDCYAJMGDDBiy7RiApwMb4CB/w+YnSWFuBh4ONnA6j9+/cnw+sN3Bh1FYYaPwLB6BAxDGMBqEEySFBrDa6RoRlY7+AwCAI2+hzdeEmSDAAAAAElFTkSuQmCC"
-                    },
-                    {
-                        "qcode": "imchn:opse",
-                        "name": "op.se",
-                        "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAZtJREFUOBHdkj1IQlEYht97VUxFIUsNQxukEKKIrM2anFqipamhocGkrZa29qCgqSGIhqihMZwagmgwhIIckqKbRqWi+Yf/P7dzr3o0bQkcojN95z3v99zv5zLTq6dZdOFIeZ5XdIEDthsQgfGPQdL2GS3YLfC/xmHWqxFN5eD1R9otP947QIP9KhTLFZh1avAkRSphYehVtiXzCH1mUakKjtr5BpoZM8JhM8PHxTBk0GBiWIfn9wTWF22wjejEjN2zO6zMjYInjM2Da9w8hEWdbk0uk2DbaYdQ0T0XBRdKYpKAdlyzCEZS9e8Ct48RpHNFaFQyuObHqU5BCrkUEpahD41gQKuEqkfWuIIlHpap+T5iGarT1nKFslhu3UMN0WQe2XyJ3pccVgTCaVx4ORy7fVSnFRVKFWwdeRBPF2A1aWHsU+HpLYmN/SuY9Bqa4Pa8YG3vEoHDQywHz6nOTDlPmqOvy40Wha0IW7MYm6BkpihujCE7ZcjEq0ytFtoaRZOgda3lSpX8V4nWZzEmGPAtc6CtdTh/Kfw90BdC/oJq6861+AAAAABJRU5ErkJggg=="
-                    }
-                ]
-            }
-        },
-        {
-            "id": "se.infomaker.history",
-            "name": "history",
-            "url": "http://localhost:5001/index.js",
-            "enabled": true,
-            "mandatory": false
-        },
-        {
-            "id": "se.infomaker.textanalyzer",
-            "name": "textanalyzer",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true
-        },
-        {
-            "id": "se.infomaker.publishflow",
-            "name": "publishflow",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.contentrelations",
-            "name": "contentrelations",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": false,
-            "data": {
-                "npDropLinkMatcher": "http://127.0.0.1:8080/opencontent[^\\s]+"
-            }
-        },
-        {
-            "id": "se.infomaker.ximauthor",
-            "name": "ximauthor",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.youtubeembed",
-            "name": "youtubeembed",
-            "url": "http://localhost:5001/index.js",
-            "enabled": true,
-            "mandatory": false
-        },
-        {
-            "id": "se.infomaker.ximplace-position",
-            "name": "ximplace",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true,
-            "data": {
-                "features": "position",
-                "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
-            }
-        },
-        {
-            "id": "se.infomaker.ximplace-polygon",
-            "name": "ximplace",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true,
-            "data": {
-                "features": "polygon",
-                "polygon": {
-                    "editable": false
-                },
-                "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
-            }
-        },
-        {
-            "id": "se.infomaker.preamble",
-            "name": "preamble",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.madmansrow",
-            "name": "madmansrow",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.drophead",
-            "name": "drophead",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.pagedateline",
-            "name": "pagedateline",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.dateline",
-            "name": "dateline",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.preleadin",
-            "name": "preleadin",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "enabled": true,
-            "mandatory": true
-        },
-        {
-            "id": "se.infomaker.skeleton",
-            "name": "skeleton",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": false
-        },
-        {
-            "id": "se.infomaker.socialembed",
-            "name": "socialembed",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true,
-            "data": {
-                "foo": "bar"
-            }
-        },
-        {
-            "id": "se.infomaker.ximimage",
-            "name": "ximimage",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true,
-            "data": {
-                "fields": [
-                    {
-                        "name": "caption",
-                        "label": "Caption",
-                        "type": "text"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "se.infomaker.ximteaser",
-            "name": "ximteaser",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true,
-            "data": {
-                "teaserPosition": "top",
-                "fields": [
-                    "subject",
-                    "text"
-                ]
-            }
-        },
-        {
-            "id": "se.infomaker.defaultvalidation",
-            "name": "defaultvalidation",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true
-        },
-        {
-            "id": "se.infomaker.headereditor",
-            "name": "headereditor",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true,
-            "data": {
-                "elements": [
-                    "headline",
-                    "leadin"
-                ]
-            }
-        },
-        {
-            "id": "se.infomaker.newspriority",
-            "name": "newspriority",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true,
-            "data": {
-                "durationKey": "duration",
-                "defaultLifetimesIndex": "1",
-                "defaultScoresIndex": 1,
-                "scores": [
-                    {
-                        "value": 1,
-                        "text": "Breaking news"
-                    },
-                    {
-                        "value": 2,
-                        "text": "Stoppa pressarna"
-                    },
-                    {
-                        "value": 3,
-                        "text": "Värdigt för löpet"
-                    },
-                    {
-                        "value": 4,
-                        "text": "Allmänt intresse"
-                    },
-                    {
-                        "value": 5,
-                        "text": "Liten notis"
-                    },
-                    {
-                        "value": 6,
-                        "text": "Katt i träd"
-                    }
-                ],
-                "lifetimes": [
-                    {
-                        "value": "3600",
-                        "label": "6H",
-                        "text": "6 timmar"
-                    },
-                    {
-                        "value": "84600",
-                        "label": "1D",
-                        "text": "1 dag"
-                    },
-                    {
-                        "value": "592200",
-                        "label": "7D",
-                        "text": "7 dagar"
-                    },
-                    {
-                        "value": "2538000",
-                        "label": "30D",
-                        "text": "30 dagar"
-                    },
-                    {
-                        "value": "",
-                        "label": "∞",
-                        "text": "För evigt"
-                    },
-                    {
-                        "value": "custom",
-                        "label": "Tid",
-                        "text": "Tidsangivelse"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "se.infomaker.ximpdf",
-            "name": "ximpdf",
-            "url": "http://localhost:5001/index.js",
-            "mandatory": false,
-            "enabled": true
-        },
-        {
-            "id": "se.infomaker.ximstory",
-            "name": "ximstory",
-            "url": "http://localhost:5001/index.js",
-            "style": "http://localhost:5001/style.css",
-            "mandatory": false,
-            "enabled": true
-        },
-        {
-          "id": "se.infomaker.ximcontentprofile",
-          "name": "ximcontentprofile",
-          "url": "http://localhost:5001/index.js",
-          "style": "http://localhost:5001/style.css",
-          "mandatory": false,
-          "enabled": true
-        },
-        {
-            "id": "se.infomaker.npwriterdevkit",
-            "name": "npwriterdevkit",
-            "url": "http://localhost:3000/index.js",
-            "style": "http://localhost:3000/style.css",
-            "mandatory": false,
-            "enabled": false
-        },
-        {
-            "id": "nl.fdmg.quote",
-            "name": "quote",
-            "url": "http://localhost:3000/index.js",
-            "enabled": true,
-            "mandatory": false
-        }
-    ]
+        "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
+      }
+    },
+    {
+      "id": "se.infomaker.headline",
+      "name": "headline",
+      "url": "http://localhost:5001/index.js",
+      "enabled": true,
+      "mandatory": true
+    },
+
+    {
+      "id": "se.infomaker.madmansrow",
+      "name": "madmansrow",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+
+    {
+      "id": "se.infomaker.drophead",
+      "name": "drophead",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.pagedateline",
+      "name": "pagedateline",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.dateline",
+      "name": "dateline",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.preamble",
+      "name": "preamble",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.preleadin",
+      "name": "preleadin",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.paragraph",
+      "name": "paragraph",
+      "url": "http://localhost:5001/index.js",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.blockquote",
+      "name": "blockquote",
+      "url": "http://localhost:5001/index.js",
+      "enabled": true,
+      "mandatory": true
+    },
+    {
+      "id": "se.infomaker.subheadline",
+      "name": "subheadline",
+      "url": "http://localhost:5001/index.js",
+      "enabled": true,
+      "mandatory": true
+    },
+
+    {
+      "id": "se.infomaker.skeleton",
+      "name": "skeleton",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": false
+    },
+    {
+      "id": "se.infomaker.socialembed",
+      "name": "socialembed",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "foo": "bar"
+      }
+    },
+    {
+      "id": "se.infomaker.ximimage",
+      "name": "ximimage",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "fields": [
+          {
+            "name": "caption",
+            "label": "Caption",
+            "type": "text"
+          }
+        ]
+      }
+    },
+    {
+      "id": "se.infomaker.ximteaser",
+      "name": "ximteaser",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "teaserPosition": "top",
+        "fields": [
+          "subject",
+          "text"
+        ]
+      }
+    },
+    {
+      "id": "se.infomaker.defaultvalidation",
+      "name": "defaultvalidation",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
+      "id": "se.infomaker.headereditor",
+      "name": "headereditor",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "elements": [
+          "headline",
+          "leadin"
+        ]
+      }
+    },
+    {
+      "id": "se.infomaker.newspriority",
+      "name": "newspriority",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "durationKey": "duration",
+        "defaultLifetimesIndex": "1",
+        "defaultScoresIndex": 1,
+        "scores": [
+          {
+            "value": 1,
+            "text": "Breaking news"
+          },
+          {
+            "value": 2,
+            "text": "Stoppa pressarna"
+          },
+          {
+            "value": 3,
+            "text": "Värdigt för löpet"
+          },
+          {
+            "value": 4,
+            "text": "Allmänt intresse"
+          },
+          {
+            "value": 5,
+            "text": "Liten notis"
+          },
+          {
+            "value": 6,
+            "text": "Katt i träd"
+          }
+        ],
+        "lifetimes": [
+          {
+            "value": "3600",
+            "label": "6H",
+            "text": "6 timmar"
+          },
+          {
+            "value": "84600",
+            "label": "1D",
+            "text": "1 dag"
+          },
+          {
+            "value": "592200",
+            "label": "7D",
+            "text": "7 dagar"
+          },
+          {
+            "value": "2538000",
+            "label": "30D",
+            "text": "30 dagar"
+          },
+          {
+            "value": "",
+            "label": "∞",
+            "text": "För evigt"
+          },
+          {
+            "value": "custom",
+            "label": "Tid",
+            "text": "Tidsangivelse"
+          }
+        ]
+      }
+    },
+    {
+      "id": "se.infomaker.ximpdf",
+      "name": "ximpdf",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
+      "id": "se.infomaker.ximstory",
+      "name": "ximstory",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
+      "id": "se.infomaker.ximcontentprofile",
+      "name": "ximcontentprofile",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
+      "id": "se.infomaker.npwriterdevkit",
+      "name": "npwriterdevkit",
+      "url": "http://localhost:3000/index.js",
+      "style": "http://localhost:3000/style.css",
+      "mandatory": false,
+      "enabled": false
+    },
+    {
+      "id": "nl.fdmg.quote",
+      "name": "quote",
+      "url": "http://localhost:3000/index.js",
+      "enabled": true,
+      "mandatory": false
+    }
+  ]
 }

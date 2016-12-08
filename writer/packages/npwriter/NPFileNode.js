@@ -45,8 +45,9 @@ NPFileNode.define({
     imType: {type: 'string', optional: false},
     uuid: {type: 'string', optional: true},
     url: {type: 'string', optional: true},
-    sourceFile: {type: 'object', optional: true},
-    sourceUrl: {type: 'string', optional: true}
+    sourceFile: {type: 'object', optional: true}, // If we upload from a file
+    sourceUrl: {type: 'string', optional: true}, // Upload from an url
+    sourceUUID: {type: 'string', optional: true} // Added from an existing item that has a UUID
 })
 
 export default NPFileNode

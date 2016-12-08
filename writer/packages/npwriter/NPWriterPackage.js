@@ -19,10 +19,6 @@ import NewsMLExporter from './NewsMLExporter'
 import NPFileNode from './NPFileNode'
 
 import BodyPackage from '../body/BodyPackage'
-import HeadlinePackage from '../headline/HeadlinePackage'
-import SubheadlinePackage from '../subheadline/SubheadlinePackage'
-import ParagraphPackage from '../paragraph/ParagraphPackage'
-import BlockquotePackage from '../blockquote/BlockquotePackage'
 import SwitchTextTypePackage from '../switch-text-type/SwitchTextTypePackage'
 import ConfigEditorPackage from '../config-editor/ConfigEditorPackage'
 import DialogPackage from '../dialog/DialogPackage'
@@ -60,10 +56,6 @@ export default {
 
         // content-nodes
         config.import(BodyPackage)
-        config.import(HeadlinePackage)
-        config.import(SubheadlinePackage)
-        config.import(ParagraphPackage)
-        config.import(BlockquotePackage)
 
         config.import(ConfigEditorPackage)
 
