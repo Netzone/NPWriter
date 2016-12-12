@@ -1,6 +1,6 @@
 import './styles/app.scss'
 
-import {Component, EditorSession} from 'substance'
+import {Component, EditorSession, keys} from 'substance'
 import NPWriterComponent from './packages/npwriter/NPWriterComponent'
 import NPWriterConfigurator from './packages/npwriter/NPWriterConfigurator'
 import AppPackage from './AppPackage'
@@ -214,6 +214,8 @@ class App extends Component {
             this.api.ui.showDialog(SourceComponent, {message: xml}, {title: 'Source', primary: 'Ok', secondary: false, takeover: true})
 
             handled = true;
+        } else if(e.keyCode === keys.ESCAPE) {
+            this.api.events.triggerEvent(null, Event.USERACTION_KEY_ESCAPE, {})
         }
 
         if (handled) {

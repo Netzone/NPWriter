@@ -7,5 +7,6 @@ export default {
     HISTORY_SAVED: 'history:saved',
     HISTORY_CLEARED: 'history:cleared',
     USERACTION_SAVE: 'useraction:save',
+    USERACTION_KEY_ESCAPE: 'useraction:keypressed_esc',
     USERACTION_CANCEL_SAVE: 'useraction:cancel_save'
 }
