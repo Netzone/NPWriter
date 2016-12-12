@@ -21,17 +21,17 @@ describe('Add Items to configuration', () => {
         }
 
         configurator.addComponentToSidebarWithTabId('dummy', 'dummy', dummyComponent)
-        expect(configurator.getSidebarPanels().length).toBe(2)
+        expect(configurator.getSidebarPanels().length).toBe(1)
     })
 
     it('Only add one tabs even if plugins add more', () => {
         class dummyComponent extends Component {
         }
+        expect(configurator.config.sidebarTabs.length).toBe(0)
+        configurator.addSidebarTab('mytab', 'Tab1')
+        configurator.addSidebarTab('mytab', 'Tab1')
+        configurator.addSidebarTab('mytab', 'Tab1')
         expect(configurator.config.sidebarTabs.length).toBe(1)
-        configurator.addSidebarTab('mytab', 'Tab1')
-        configurator.addSidebarTab('mytab', 'Tab1')
-        configurator.addSidebarTab('mytab', 'Tab1')
-        expect(configurator.config.sidebarTabs.length).toBe(2)
     })
 
 })
