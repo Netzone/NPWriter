@@ -24,7 +24,7 @@ import NPFileNode from './NPFileNode'
 
 import BodyPackage from '../body/BodyPackage'
 import SwitchTextTypePackage from '../switch-text-type/SwitchTextTypePackage'
-import ConfigEditorPackage from '../config-editor/ConfigEditorPackage'
+// import ConfigEditorPackage from '../config-editor/ConfigEditorPackage'
 import DialogPackage from '../dialog/DialogPackage'
 import AboutPackage from '../about/AboutPackage'
 import LabelPackage from '../label/LabelPackage'
@@ -65,7 +65,7 @@ export default {
         // content-nodes
         config.import(BodyPackage)
 
-        config.import(ConfigEditorPackage)
+        // config.import(ConfigEditorPackage)
 
         config.import(DialogPackage)
         config.import(AboutPackage)
