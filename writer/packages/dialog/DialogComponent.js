@@ -7,7 +7,7 @@ class DialogComponent extends Component {
         super(...args)
 
         // When esc:pressed event close the dialog
-        this.context.api.events.on('__dialog', 'keypressed:esc', () => {
+        this.context.api.events.on('__dialog', Event.USERACTION_KEY_ESCAPE, () => {
             this.close()
         })
 
