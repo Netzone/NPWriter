@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 var s3 = new AWS.S3();
 var path = require('path');
-
+var log = require('../utils/logger');
 const configurationManager = require('./ConfigurationManager');
 const environmentSettings = process.env
 
@@ -35,15 +35,22 @@ class ConfigurationLoader {
     downloadServerConfigFromS3() {
 
         return new Promise((resolve, reject) => {
-
             let s3KeyName = process.env.AWS_S3_SERVER_CONFIG_NAME ? process.env.AWS_S3_SERVER_CONFIG_NAME : 'server.json'
 
+            log.info({
+                    configFile: s3KeyName,
+                    bucket: awsS3BucketName
+                },
+                'Download Server config from S3')
+
             s3.getObject({Bucket: awsS3BucketName, Key: s3KeyName}).on('success', function (response) {
+
                 const file = require('fs').createWriteStream('./server/config/server.external.json');
                 const stream = s3.getObject(response.request.params).createReadStream();
                 stream.pipe(file)
 
                 stream.on('finish', () => {
+                    log.info('Server config downloaded')
                     configurationManager.load(path.join(__dirname, '..', 'config', 'server.external.json'));
                     resolve(configurationManager)
                 })
@@ -68,12 +75,21 @@ class ConfigurationLoader {
         return new Promise((resolve, reject) => {
 
             let s3KeyName = process.env.AWS_S3_CLIENT_CONFIG_NAME ? process.env.AWS_S3_CLIENT_CONFIG_NAME : 'writer.json'
+
+            log.info({
+                    configFile: s3KeyName,
+                    bucket: awsS3BucketName
+                },
+                'Download client config from S3')
+
+
             s3.getObject({Bucket: awsS3BucketName, Key: s3KeyName}).on('success', function (response) {
                 const file = require('fs').createWriteStream('./server/config/writer.external.json');
                 const stream = s3.getObject(response.request.params).createReadStream();
                 stream.pipe(file)
 
                 stream.on('finish', () => {
+                    log.info('Client config downloaded')
                     resolve()
                 })
 
