@@ -13,11 +13,16 @@ class SidebarComponent extends Component {
 
     getInitialState() {
         return {
-            tabs: this.context.configurator.config.sidebarTabs.reverse(),
             tabId: "main"
         }
     }
 
+    getTabs() {
+        const tabs = this.context.configurator.config.sidebarTabs
+        const sidebarTabs = tabs.slice(0) // Create of copy of the array to not reverse the original tabs array
+        return sidebarTabs.reverse()
+
+    }
     render($$) {
 
         const el = $$('div').addClass('se-context-section').ref('sidebar');
@@ -31,7 +36,8 @@ class SidebarComponent extends Component {
         let panels = this.getSidebarPanelsForTabId($$, tabId)
         let topBars = this.getTopBarComponents($$)
 
-        let tabsPanel = $$(TabbedPane, {activeTab: tabId, tabs: this.state.tabs})
+
+        let tabsPanel = $$(TabbedPane, {activeTab: tabId, tabs: this.getTabs()})
             .ref(String(this.state.tabId))
             .append(panels)
 
