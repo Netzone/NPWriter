@@ -70,6 +70,12 @@
             "mandatory": false,
             "enabled": true,
             "data": {
+                "crops":{
+                     "16:9":[ 16,9 ],
+                     "8:5":[ 8,5 ],
+                     "4:3":[ 4,3 ],
+                     "1:1":[ 1,1 ]
+                },
                 "fields":[
                     {
                         "name": "caption",
@@ -89,7 +95,24 @@
                     {
                         "name": "alignment",
                         "label": "Alignment",
-                        "type": "option"
+                        "type": "option",
+                        "options": [
+                            {
+                                "name": "auto",
+                                "label": "Automatic",
+                                "icon": "fa-align-center"
+                            },
+                            {
+                                "name": "left",
+                                "label": "Left",
+                                "icon": "fa-align-left"
+                            },
+                            {
+                                "name": "right",
+                                "label": "Right",
+                                "icon": "fa-align-right"
+                            }
+                        ]
                     }
                 ]
             }
