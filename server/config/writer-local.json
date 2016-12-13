@@ -232,7 +232,6 @@
       "enabled": true,
       "mandatory": true
     },
-
     {
       "id": "se.infomaker.madmansrow",
       "name": "madmansrow",
@@ -241,7 +240,6 @@
       "enabled": true,
       "mandatory": true
     },
-
     {
       "id": "se.infomaker.drophead",
       "name": "drophead",
@@ -303,7 +301,6 @@
       "enabled": true,
       "mandatory": true
     },
-
     {
       "id": "se.infomaker.skeleton",
       "name": "skeleton",
@@ -383,6 +380,10 @@
       "enabled": true,
       "data": {
         "teaserPosition": "top",
+        "disableUseOfAnnotationToolsForFields": [
+          "title",
+          "subject"
+        ],
         "fields": [
           "subject",
           "text"
@@ -484,7 +485,10 @@
       "name": "ximpdf",
       "url": "http://localhost:5001/index.js",
       "mandatory": false,
-      "enabled": true
+      "enabled": true,
+      "data": {
+        "disableUseOfAnnotationTools": true
+      }
     },
     {
       "id": "se.infomaker.ximstory",
@@ -505,6 +509,22 @@
     {
       "id": "se.infomaker.mitm.tags",
       "name": "mmtags",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
+      "id": "se.infomaker.tags",
+      "name": "ximtags",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
+      "id": "se.infomaker.htmlembed",
+      "name": "htmlembed",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
       "mandatory": false,

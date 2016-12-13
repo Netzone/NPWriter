@@ -781,7 +781,7 @@ class NewsItem {
 
     /**
      * Get tags from document
-     * Includes following concept types: x-im/person, x-im/organisation, x-cmbr/channel, x-im/category, x-im/category
+     * @param types An array of types considered being tags. Example ['x-im/person, x-im/channel']
      *
      * @example:
      * {
@@ -793,14 +793,11 @@ class NewsItem {
      *
      * @returns {*} Return array of tags in JSON or null if no links was found
      */
-    getTags() {
-        var tagLinkNodes = this.api.newsItemArticle.querySelectorAll(
-            'itemMeta links link[type="x-im/person"][rel="subject"], ' +
-            'itemMeta links link[type="x-im/organisation"][rel="subject"], ' +
-            'itemMeta links link[type="x-cmbr/channel"][rel="subject"], ' +
-            'itemMeta links link[type="x-im/channel"][rel="subject"], ' +
-            'itemMeta links link[type="x-im/category"][rel="subject"], ' +
-            'itemMeta links link[type="x-im/category"][rel="subject"]');
+    getTags(types) {
+
+        const querySelectors = types.map(item => `itemMeta links link[type="${item}"][rel="subject"]`).join(', ')
+
+        var tagLinkNodes = this.api.newsItemArticle.querySelectorAll(querySelectors);
 
         if (!tagLinkNodes) {
             return null;

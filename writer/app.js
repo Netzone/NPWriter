@@ -1,6 +1,6 @@
 import './styles/app.scss'
 
-import {Component, EditorSession} from 'substance'
+import {Component, EditorSession, keys} from 'substance'
 import NPWriterComponent from './packages/npwriter/NPWriterComponent'
 import NPWriterConfigurator from './packages/npwriter/NPWriterConfigurator'
 import AppPackage from './AppPackage'
@@ -22,6 +22,8 @@ import Validator from './packages/npwriter/Validator'
 import NPWriterCommand from './packages/npwriter/NPWriterCommand'
 import NPFileProxy from './packages/npwriter/NPFileProxy'
 import uuidv5 from 'uuidv5'
+
+import NPWriterAnnotationCommand from './packages/npwriter/NPWriterAnnotationCommand'
 
 const STATUS_ISREADY = 'isReady',
     STATUS_LOADING = 'loading',
@@ -124,10 +126,12 @@ class App extends Component {
         api.apiManager.expose('idGenerator', idGenerator) // Expose the ID Generator helper method
         api.apiManager.expose('lodash', lodash) // Expose the ID Generator helper method
         api.apiManager.expose('jxon', jxon) // Expose JXON library
-        api.apiManager.expose('Validator', Validator) // Expose JXON library
-        api.apiManager.expose('WriterCommand', NPWriterCommand) // The NPWriter base class for commands containg commandState method
         api.apiManager.expose('uuidv5', uuidv5) // Expose a UUID V5 library
+
         api.apiManager.expose('NPFileProxy', NPFileProxy) // Expose NPFileProxy base class
+        api.apiManager.expose('Validator', Validator) // Expose the validator base class
+        api.apiManager.expose('WriterCommand', NPWriterCommand) // The NPWriter base class for commands containg commandState method
+        api.apiManager.expose('NPWriterAnnotationCommand', NPWriterAnnotationCommand) // Expose NPWriterAnnotationCommand base class
 
         var promise = this.configurator.loadConfigJSON('/api/config')                     // Load config file and store it in configurator
             .then(() => this.configurator.config.writerConfigFile.plugins)  // Get the plugins section from config (stored in the configurator)
@@ -210,6 +214,8 @@ class App extends Component {
             this.api.ui.showDialog(SourceComponent, {message: xml}, {title: 'Source', primary: 'Ok', secondary: false, takeover: true})
 
             handled = true;
+        } else if(e.keyCode === keys.ESCAPE) {
+            this.api.events.triggerEvent(null, Event.USERACTION_KEY_ESCAPE, {})
         }
 
         if (handled) {

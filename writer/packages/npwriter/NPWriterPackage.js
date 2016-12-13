@@ -10,8 +10,12 @@ import {BasePackage,
 } from 'substance'
 
 import StrongXmlConverter from '../strong/StrongXMLConverter'
+import StrongCommand from '../strong/StrongCommand'
+
 import EmphasisXmlConverter from '../emphasis/EmphasisXMLConverter'
+import EmphasisCommand from '../emphasis/EmphasisCommand'
 import LinkXMLConverter from '../link/LinkXMLConverter'
+import LinkCommand from '../link/LinkCommand'
 
 import NewsMLArticle from './NewsMLArticle'
 import NewsMLImporter from './NewsMLImporter'
@@ -20,7 +24,7 @@ import NPFileNode from './NPFileNode'
 
 import BodyPackage from '../body/BodyPackage'
 import SwitchTextTypePackage from '../switch-text-type/SwitchTextTypePackage'
-import ConfigEditorPackage from '../config-editor/ConfigEditorPackage'
+// import ConfigEditorPackage from '../config-editor/ConfigEditorPackage'
 import DialogPackage from '../dialog/DialogPackage'
 import DialogImagePackage from '../dialog-image/DialogImagePackage'
 import AboutPackage from '../about/AboutPackage'
@@ -55,10 +59,14 @@ export default {
         config.import(EmphasisPackage, {toolGroup: 'overlay'})
         config.import(LinkPackage, {toolGroup: 'overlay'})
 
+        config.addCommand('strong', StrongCommand, { nodeType: 'strong' })
+        config.addCommand('emphasis', EmphasisCommand, { nodeType: 'emphasis' })
+        config.addCommand('link', LinkCommand, { nodeType: 'link' })
+
         // content-nodes
         config.import(BodyPackage)
 
-        config.import(ConfigEditorPackage)
+        // config.import(ConfigEditorPackage)
 
         config.import(DialogPackage)
         config.import(DialogImagePackage)
