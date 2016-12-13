@@ -5,7 +5,7 @@
   "external": {
     "contentrepository": {
       "protocol": "http:",
-      "host": "52.212.77.42",
+      "host": "52.210.249.105",
       "port": "8181",
       "endpoint": "cxf/writer/v2/commands",
       "upload": "cxf/writer/images/upload"
