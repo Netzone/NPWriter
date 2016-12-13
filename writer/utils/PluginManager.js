@@ -114,6 +114,7 @@ class PluginManager {
                             reject(plugin.id + " did not respond in time");
                         }
                         // plugin is not mandatory, resolve
+                        console.warn(`Plugin ${plugin.id} did not respond, but marked as optional`)
                         resolve()
                     }
                 }, 5000)
