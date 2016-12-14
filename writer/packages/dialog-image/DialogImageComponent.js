@@ -224,8 +224,11 @@ class DialogImageComponent extends Component {
             )
     }
 
-    renderAuthor(/*$$, author*/) {
-        return ($$('div').append('x'))
+    /**
+     * TODO: Implement byline search
+     */
+    renderAuthor($$/*, author*/) {
+        return ($$('div').append('*Not implemented*'))
         // var avatar,
         //     ref
         //
