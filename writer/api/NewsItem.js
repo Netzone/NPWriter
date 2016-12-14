@@ -1441,6 +1441,143 @@ class NewsItem {
         }
     }
 
+    /**
+     * Retrieve objects from contentmeta.medata section based on type.
+     *
+     * @param {string} type The type of object
+     * @return {Array} Array of objects in jxon format
+     *
+     */
+    getContentMetaObjectsByType(objectType) {
+        var nodes = this.api.newsItemArticle.querySelectorAll(
+            'contentMeta metadata object[type="' + objectType + '"]'
+        )
 
+        if (!nodes || nodes.length === 0) {
+            console.warn('Content meta data objects not found: ' + objectType)
+            return null
+        }
+
+        var jxonObjects = []
+        for (var n = 0; n < nodes.length; n++) {
+            jxonObjects.push(jxon.build(nodes[n]))
+        }
+
+        return jxonObjects
+    }
+
+    /**
+     * Retrieve object from contentmeta.medata section based on id.
+     *
+     * @param {string} id The id of object
+     * @return {Object} Object in jxon format
+     *
+     */
+    getContentMetaObjectById(id) {
+        var node = this.api.newsItemArticle.querySelector(
+            'contentMeta metadata object[id="' + id + '"]'
+        )
+
+        if (!node) {
+            console.warn('Content meta data object not found: ' + id)
+            return null
+        }
+
+        return jxon.build(node)
+    }
+
+    /**
+     * Create and add an object into the contentmeta.metadata section.
+     * The object is encoded as a jxon object with the mandatory attributes
+     * id and type. All data must reside in the sub data structure. If an
+     * object with the specified id already exists it is silently replaced.
+     * Triggers a document:changed event.
+     *
+     * @param {string} name Name of the plugin making the call
+     * @param {Object} jxonObject The jxon encoded object
+     *
+     * @example
+     * var idGen = require('writer/utils/IdGenerator');
+     *
+     * api.setContentMetaObject('ximimage', {
+     *      '@id': idGen(),
+     *      '@type': "x-im/newsvalue",
+     *      data: {
+     *          score: "2",
+     *          description: 'My description',
+     *          format: "lifetimecode",
+     *          end: "2016-01-31T10:00:00.000+01:00"
+     *      }
+     * });
+     *
+     * // <object id="8400c74d665x" type="x-im/newsvalue">
+     * //     <data>
+     * //         <score>2</score>
+     * //         <description>My description</description>
+     * //         <format>lifetimecode</format>
+     * //         <end>2016-01-31T10:00:00.000+01:00</end>
+     * //     </data>
+     * // </object>
+     *
+     */
+    setContentMetaObject(name, jxonObject) {
+        if ('undefined' === typeof jxonObject) {
+            throw new Error('Undefined value')
+        }
+
+        if (typeof(jxonObject['@id']) === 'undefined') {
+            throw new Error('Jxon object missing @id attribute')
+        }
+
+        if (typeof(jxonObject['@type']) === 'undefined') {
+            throw new Error('Jxon object missing @type attribute')
+        }
+
+        var metaDataNode = this.api.newsItemArticle.querySelector('contentMeta metadata'),
+            objectNode = this.api.newsItemArticle.querySelector(
+                'contentMeta metadata object[id="' + jxonObject['@id'] + '"]'
+            )
+
+        if (!metaDataNode) {
+            var contentMetaNode = this.api.newsItemArticle.querySelector('contentMeta')
+            metaDataNode = this.api.newsItemArticle.createElement('metadata')
+            contentMetaNode.appendChild(metaDataNode)
+        }
+        else if (objectNode) {
+            metaDataNode.removeChild(objectNode)
+        }
+
+        objectNode = jxon.unbuild(jxonObject, null, 'object')
+        metaDataNode.appendChild(objectNode.childNodes[0])
+
+        this.api.events.documentChanged(name, {
+            type: 'contentmetaobject',
+            action: 'delete',
+            data: jxonObject
+        })
+    }
+
+    /**
+     * Remove a specific object identied by id from the contentmeta.metadata section.
+     * Triggers a document:changed event.
+     *
+     * @param {string} name Name of the plugin making the call
+     * @param {string} id The id of the object
+     */
+    removeContentMetaObject(name, id) {
+        var node = this.api.newsItemArticle.querySelector(
+            'contentMeta metadata object[id="' + id + '"]'
+        )
+
+        if (node) {
+            node.parentElement.removeChild(node)
+
+            this.api.events.documentChanged(name, {
+                type: 'contentmetaobject',
+                action: 'delete',
+                data: id
+            })
+        }
+    }
 }
 export default NewsItem
