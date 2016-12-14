@@ -49,6 +49,25 @@ class NPWriter extends AbstractEditor {
             })
             this.props.api.ui.showMessageDialog(errorMessages)
         })
+
+        // Warn user before navigating away from unsaved article
+        this.promptUserBeforeUnload = false
+
+        this.props.api.events.on('__internal', Event.DOCUMENT_CHANGED, () => {
+            this.promptUserBeforeUnload = true
+        })
+
+        this.props.api.events.on('__internal', Event.DOCUMENT_SAVED, () => {
+            this.promptUserBeforeUnload = false
+        })
+
+        window.addEventListener('beforeunload', (e) => {
+            if (this.promptUserBeforeUnload) {
+                var message = 'Document is not saved'
+                e.returnValue = message
+                return message
+            }
+        });
     }
 
 
@@ -63,7 +82,6 @@ class NPWriter extends AbstractEditor {
         this.addVersion = debounce(() => {
             this.props.api.history.snapshot();
         }, 7000)
-
     }
 
 
