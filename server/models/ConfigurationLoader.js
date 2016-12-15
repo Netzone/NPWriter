@@ -2,19 +2,91 @@ var AWS = require('aws-sdk');
 var s3 = new AWS.S3();
 var path = require('path');
 var log = require('../utils/logger');
+var fs = require('fs');
+
 const configurationManager = require('./ConfigurationManager');
 const environmentSettings = process.env
 
 const awsS3BucketName = environmentSettings.AWS_S3_BUCKET_NAME
 
+const configFiles = ['./server/config/writer-config-1', './server/config/writer-config-2']
+
+let configFileIndex = -1
+let waitingForConfig;
+let periodicDownloadRef
+let writerConfig
 
 class ConfigurationLoader {
 
-    constructor(environment, environmentVariables) {
+    constructor(environment, environmentVariables, params) {
         this.environment = environment
         this.environmentVariables = environmentVariables
+        if (params && params.daemon) {
+            this.initDaemon();
+        }
     }
 
+
+    initDaemon() {
+        periodicDownloadRef = setInterval(this.periodicDownload.bind(this), 30000)
+        this.periodicDownload();
+    }
+
+    periodicDownload() {
+        this.downloadWriterConfigFromS3()
+            .then(() => this.copyWriterConfigToLocalFile())
+            .then(() => { configFileIndex = (configFileIndex + 1) % configFiles.length })
+            .then(() => this.loadWriterConfig())
+            .then(() => {
+                if (typeof waitingForConfig !== 'undefined') {
+                    waitingForConfig(writerConfig)
+                    waitingForConfig = undefined
+                }
+            })
+            .catch((e) => {
+                log.error({err: e}, "Exception while downloading conf")
+            })
+    }
+
+    loadWriterConfig() {
+        return new Promise((resolve, reject) => {
+            let content = fs.readFileSync(ConfigurationLoader.getConfigFile(), 'utf8');
+            if (!content) {
+                log.error({path: path}, 'Missing configuration file');
+                return reject(path);
+            }
+
+            writerConfig = JSON.parse(content);
+
+            resolve()
+
+        });
+    }
+
+    copyWriterConfigToLocalFile() {
+        return new Promise((resolve, reject) => {
+            const rd = fs.createReadStream('./server/config/writer.external.json');
+            rd.on('error', rejectCleanup);
+            const wr = fs.createWriteStream(ConfigurationLoader.peekNextConfigFile());
+            wr.on('error', rejectCleanup);
+            function rejectCleanup(err) {
+                rd.destroy();
+                wr.end();
+                reject(err);
+            }
+
+            wr.on('finish', resolve);
+            rd.pipe(wr);
+        });
+    }
+
+    static getConfigFile() {
+        return configFiles[configFileIndex]
+    }
+
+    static peekNextConfigFile() {
+        return configFiles[(configFileIndex + 1) % configFiles.length]
+    }
 
     /**
      * Loads a local config file for server
@@ -28,6 +100,16 @@ class ConfigurationLoader {
             }
             catch (error) {
                 reject(error)
+            }
+        })
+    }
+
+    getConfig() {
+        return new Promise((resolve, reject) => {
+            if (configFileIndex === -1) {
+                waitingForConfig = resolve;
+            } else {
+                resolve(writerConfig)
             }
         })
     }
