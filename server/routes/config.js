@@ -4,6 +4,7 @@ var path = require('path')
 var AWS = require('aws-sdk');
 const ConfigurationLoader = require('../models/ConfigurationLoader')
 var log = require('../utils/logger').child({api: 'Router'});
+let configurationLoader
 
 const ConfigRoutes = {}
 
@@ -34,7 +35,6 @@ ConfigRoutes.getConfig = (req, res) => {
 
 
     if (isProduction) {
-        let configurationLoader;
         if (typeof configurationLoader === 'undefined') {
             configurationLoader = new ConfigurationLoader(environment, environmentVariables, {daemon: true})
         }
