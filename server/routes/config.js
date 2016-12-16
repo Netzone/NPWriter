@@ -39,7 +39,6 @@ ConfigRoutes.getConfig = (req, res) => {
             configurationLoader = new ConfigurationLoader(environment, environmentVariables, {daemon: true})
         }
         configurationLoader.getConfig().then((config) => {
-            log.debug({config: config}, "Found some client config")
             res.contentType('application/json').status(200).send(config);
         }).catch(() => {
             res.contentType('application/json').status(500).send({error: "Could not load config file"});

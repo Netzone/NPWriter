@@ -15,6 +15,7 @@ let configFileIndex = -1
 let waitingForConfig;
 let periodicDownloadRef
 let writerConfig
+let currentConfigEtag
 
 class ConfigurationLoader {
 
@@ -32,19 +33,49 @@ class ConfigurationLoader {
         this.periodicDownload();
     }
 
+    checkForWriterConfigUpdates() {
+        return new Promise((resolve, reject) => {
+                let s3KeyName = process.env.AWS_S3_CLIENT_CONFIG_NAME ? process.env.AWS_S3_CLIENT_CONFIG_NAME : 'writer.json'
+
+                s3.headObject({Bucket: awsS3BucketName, Key: s3KeyName})
+                    .on('success', (response) => {
+                        let etag = response.data.ETag
+                        if (etag !== currentConfigEtag) {
+                            log.info({filename: s3KeyName, currentEtag: currentConfigEtag, newEtag: etag}, "Found config updates");
+                            currentConfigEtag = etag
+                            return resolve(true)
+                        }
+                        resolve(false)
+                    })
+                    .on('error', (error) => {
+                        reject(error)
+                    })
+                    .send();
+            }
+        )
+    }
+
     periodicDownload() {
-        this.downloadWriterConfigFromS3()
-            .then(() => this.copyWriterConfigToLocalFile())
-            .then(() => { configFileIndex = (configFileIndex + 1) % configFiles.length })
-            .then(() => this.loadWriterConfig())
-            .then(() => {
-                if (typeof waitingForConfig !== 'undefined') {
-                    waitingForConfig(writerConfig)
-                    waitingForConfig = undefined
+        this.checkForWriterConfigUpdates()
+            .then((hasUpdates) => {
+                if (hasUpdates) {
+                    log.info("Found updates in writer config file on S3")
+                    this.downloadWriterConfigFromS3()
+                        .then(() => this.copyWriterConfigToLocalFile())
+                        .then(() => {
+                            configFileIndex = (configFileIndex + 1) % configFiles.length
+                        })
+                        .then(() => this.loadWriterConfig())
+                        .then(() => {
+                            if (typeof waitingForConfig !== 'undefined') {
+                                waitingForConfig(writerConfig)
+                                waitingForConfig = undefined
+                            }
+                        })
+                        .catch((e) => {
+                            log.error({err: e}, "Exception while downloading conf")
+                        })
                 }
-            })
-            .catch((e) => {
-                log.error({err: e}, "Exception while downloading conf")
             })
     }
 
