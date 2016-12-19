@@ -384,8 +384,15 @@
       "enabled": true,
       "data": {
           "softcrop": true,
-          "bylinesearch": true,
+          "bylinesearch": false,
+          "byline": false,
           "imageinfo": true,
+          "crops":{
+               "16:9":[ 16,9 ],
+               "8:5":[ 8,5 ],
+               "4:3":[ 4,3 ],
+               "1:1":[ 1,1 ]
+          },
         "teaserPosition": "top",
         "disableUseOfAnnotationToolsForFields": [
           "title",
