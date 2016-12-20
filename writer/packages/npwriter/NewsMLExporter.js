@@ -64,7 +64,7 @@ class NewsMLExporter extends XMLExporter {
 
         // Reinsert the body group
         let parser = new DOMParser()
-        var articleDomElement = parser.parseFromString(bodyGroup.outerHTML, 'application/xml');
+        var articleDomElement = parser.parseFromString(removeControlCodes(bodyGroup.outerHTML), 'application/xml');
 
         groupContainer.removeChild(idfBodyGroupNode);
         // Append body group
@@ -92,8 +92,6 @@ class NewsMLExporter extends XMLExporter {
 
     exportDocument(doc, newsItemArticle) {
 
-        recursivelyRemoveInvalidXml(doc);
-
         this.state.doc = doc
         const $$ = this.$$
         var groupContainer = newsItemArticle.querySelector('idf');
@@ -103,14 +101,12 @@ class NewsMLExporter extends XMLExporter {
         this.addTeaser(newsItemArticle, groupContainer);
 
         // let articleEl = this.convertNode(doc.get('body'))
-        return newsItemArticle.documentElement.outerHTML;
+        return removeControlCodes(newsItemArticle.documentElement.outerHTML);
     }
 
     convert(doc, options, newsItem) {
 
         console.info("convert method is deprecated, use exportDocument")
-
-        recursivelyRemoveInvalidXml(doc);
 
         this.state.doc = doc;
         var $$ = this.$$;
@@ -124,22 +120,12 @@ class NewsMLExporter extends XMLExporter {
         // this.addTeaser(newsItem, groupContainer);
 
 
-        return newsItem.documentElement.outerHTML;
+        return removeControlCodes(newsItem.documentElement.outerHTML);
     }
 }
 
 export default NewsMLExporter
 
-function recursivelyRemoveInvalidXml(doc) {
-    for (var item in doc.data.nodes) {
-        if (doc.data.nodes.hasOwnProperty(item)) {
-            var node = doc.data.nodes[item];
-            if (node.content) {
-                node.content = removeControlCodes(node.content);
-            }
-        }
-    }
-}
 
 /**
  * Removes for XML illegal control codes from text (range from 0x00 - 0x1F with the exception of
