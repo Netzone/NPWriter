@@ -36,24 +36,23 @@ router.all('/resourceproxy', function (req, res) {
 
     // Check which method that is used
     const method = req.method.toUpperCase()
-    const url = decodeURIComponent(req.query.url)
 
     switch (method) {
 
         case 'POST':
-            post(url, req, res)
+            post(req.query.url, req, res)
             break
 
         case 'GET':
-            get(url, req, res)
+            get(req.query.url, req, res)
             break
 
         case 'PUT':
-            put(url, req, res)
+            put(req.query.url, req, res)
             break
 
         case 'DELETE':
-            del(url, req, res)
+            del(req.query.url, req, res)
             break
 
         default:
@@ -71,12 +70,12 @@ router.all('/resourceproxy', function (req, res) {
 function get(url, req, res) {
     req.pipe(request(url)
         .on('response', (response) => {
-            if (response.statusCode != 200) {
+            if (response.statusCode !== 200) {
                 log.error({method: 'GET', status: response.statusCode, url: url}, "Failed fetching resource through proxy");
             }
         })
         .on('error', (error) => {
-            log.error({method: 'GET', status: response.statusCode, url: url}, "Failed fetching resource through proxy");
+            log.error({method: 'GET', error: error, url: url}, "Error while fetching resource through proxy");
         })).pipe(res)
 }
 
