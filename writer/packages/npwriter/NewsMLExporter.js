@@ -108,8 +108,6 @@ class NewsMLExporter extends XMLExporter {
 
         console.info("convert method is deprecated, use exportDocument")
 
-        recursivelyRemoveInvalidXml(doc);
-
         this.state.doc = doc;
         var $$ = this.$$;
 
