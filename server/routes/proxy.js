@@ -37,7 +37,9 @@ router.get('/proxy', function (req, res) {
 router.all('/resourceproxy', function (req, res) {
 
     if (config.get('debugProxyCalls') === true) {
-        requestDebug(request)
+        requestDebug(request, function(type, data) {
+            log.error({proxyEvent: type, data: data})
+        });
     }
 
     // Check which method that is used
