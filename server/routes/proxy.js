@@ -3,7 +3,9 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var requestDebug = require('request-debug');
 var log = require('../utils/logger').child({api: 'Router'});
+var config = require('../models/ConfigurationManager');
 
 /**
  * Proxy for plugins
@@ -33,6 +35,10 @@ router.get('/proxy', function (req, res) {
  * Fetch remote resource through local proxy
  */
 router.all('/resourceproxy', function (req, res) {
+
+    if (config.get('debugProxyCalls') === true) {
+        requestDebug(request)
+    }
 
     // Check which method that is used
     const method = req.method.toUpperCase()
