@@ -1,0 +1,85 @@
+@import 'vars/color';
+
+.tag-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tag-list__item {
+    font-size: 1rem;
+    font-weight: 700;
+    display: inline-block;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0.2rem 1rem 0.2rem 0;
+    margin-bottom: 5px;
+    margin-right: 3px;
+    position: relative;
+    line-height: 23px;
+
+    &.tag-item--dummy-avatar {
+        .tag-item__title {
+            margin-left: 1rem;
+        }
+        .avatar {
+            display: none;
+        }
+    }
+
+    .avatar {
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        border-radius: 15px;
+        height: 26px;
+    }
+
+    .tag-item__title {
+        margin-left: 2.3rem;
+        padding:0 0.3rem;
+        cursor: pointer;
+
+        &.tag-item__title--no-avatar {
+            margin-left: 0;
+            padding: 0 0.3rem 0 1rem;
+        }
+        &.tag-item__title--notexisting {
+            cursor: default;
+            color: rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    .tag-icon {
+        color: #d0d0d0;
+        padding: 0 0 0 5px;
+        width:16px;
+    }
+
+    .tag-icon--delete {
+        display: none;
+    }
+
+    &:hover {
+
+        background-color: #fafafa;
+
+        .tag-icon {
+            display: none;
+            color: darken(#e6e6e6, 20%);
+        }
+
+        .tag-icon--delete {
+            color: $red;
+            display: inline;
+
+            &:hover {
+                color: lighten($red, 15%);
+            }
+        }
+    }
+
+}
+.tag-edit-base {
+    font-size:1rem;
+}

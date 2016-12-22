@@ -1,6 +1,7 @@
 var fs = require('fs')
 import sinon from 'sinon'
 import PluginManager from '../../writer/utils/PluginManager'
+import APIManager from '../../writer/api/APIManager'
 
 const getConfigurator = () => {
     return {
@@ -13,7 +14,7 @@ describe('validate and register plugin packages with pluginmanager', () => {
     let pluginManager
 
     beforeEach(() => {
-        pluginManager = new PluginManager(getConfigurator());
+        pluginManager = new PluginManager(getConfigurator(), new APIManager());
     })
 
     it('Register Plugin with faulty package results in error', () => {
@@ -146,6 +147,9 @@ describe('validate and register plugin packages with pluginmanager', () => {
 })
 
 
+// Using SinonJS to mock the fetch call
+// https://rjzaworski.com/2015/06/testing-api-requests-from-window-fetch
+
 describe('Load list of plugins', () => {
 
     let pluginManager
@@ -166,7 +170,7 @@ describe('Load list of plugins', () => {
         });
 
         window.fetch.returns(Promise.resolve(res));
-        pluginManager = new PluginManager(getConfigurator());
+        pluginManager = new PluginManager(getConfigurator(), new APIManager());
     })
 
     it('Loads a list of plugins from external source and returns JSON format', () => {

@@ -1,0 +1,220 @@
+//@mixin box-shadow() {
+//    box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.3);
+//    -moz-box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.3);
+//    -webkit-box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.3);
+//
+//}
+
+@import '../../../styles/mixins/shadow';
+
+.modal {
+    position: absolute;
+    height: 100%;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index: 1000;
+
+    &.global{
+        position: fixed;
+    }
+
+    .modal-dialog {
+        width: 600px;
+        margin: 30px auto;
+    }
+
+    display: block;
+    background: rgba(255, 255, 255, 0.7);
+
+    .modal-content {
+        @include box-shadow;
+
+        border: 1px solid #ddd;
+        overflow-y: scroll;
+        margin: 100px auto;
+        background-color: #fff;
+        border-radius: 0.3rem;
+        &.small-screen {
+            margin: 20px auto;
+        }
+    }
+
+    .modal-header {
+        padding: 5px;
+        border-bottom: 1px solid #eee;
+        background: #fafafa;
+
+        h2 {
+            font-size: 1.1rem;
+            font-weight: normal;
+            text-align: center;
+            padding:0.2rem;
+            color: rgba(0, 0, 0, 0.74902);
+        }
+
+        &.modal-error {
+            h2 {
+                color: #d9534f;
+                font-weight: bold;
+            }
+        }
+
+        &.modal-warning {
+            h2 {
+                color: #000;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .modal-body {
+        padding: 1rem 0 0 0;
+
+        textarea {
+            font-size: 0.8rem;
+        }
+
+        div.message {
+            padding: 0 1rem;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+        h3 {
+            margin: 0 50px 20px 50px;
+            text-align: center;
+            line-height: 1.3em;
+            color: #444;
+            font-size: 1.2em;
+        }
+
+        ul.error, ul.warning, ul.info {
+            margin: 0 50px 10px 50px;
+            padding: 0;
+
+            li {
+                position: relative;
+                list-style: none;
+                margin-left: 30px;
+                padding-left: 0;
+
+                &::before {
+                    font-family: FontAwesome;
+                    content: "\f129";
+                    position: absolute;
+                    left: -22px;
+                    top: 2px;
+                    color: #55A2D6;
+                }
+            }
+        }
+
+        ul.error {
+            li {
+                &::before {
+                    content: "\f12a";
+                    color: #d9534f;
+                }
+            }
+        }
+
+        ul.warning {
+            li {
+                &::before {
+                    content: "\f12a";
+                    color: #888;
+                }
+            }
+        }
+    }
+
+    .modal-footer {
+        border: 0;
+        text-align: center;
+        padding: 0.8rem 0;
+        border-bottom-right-radius: 0.3rem;
+        border-bottom-left-radius: 0.3rem;
+        position: relative;
+
+        .btn {
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            margin-left: 4px;
+        }
+
+        .btn-secondary {
+            margin-right: 4px;
+        }
+
+        .btn-tertiary {
+            background: #f8f8f8;
+        }
+    }
+
+    &.takeover {
+        position: fixed;
+
+        .modal-dialog {
+            width: 90% !important;
+            max-width: 90% !important;
+            height: 100%;
+            margin: 0 auto;
+
+            .modal-content {
+                margin: 2% auto !important;
+                height: 85% !important;
+
+                .modal-body {
+                    position: absolute;
+                    top: 42px;
+                    bottom: 62px;
+                    width: 100%;
+                    overflow: scroll;
+                    padding: 0;
+
+                    .message {
+                        text-align: left;
+                        padding: 0;
+
+                        div.source {
+                            white-space: pre;
+                            font-family: Menlo, "DejaVu Sans Mono", monospace;
+                            font-size: 70%;
+                            counter-reset: line;
+
+                            span {
+                                display: block;
+                                line-height: 0.7rem;
+
+                                &:before {
+                                    counter-increment: line;
+                                    content: counter(line);
+                                    display: inline-block;
+                                    border-right: 1px solid #ddd;
+                                    padding: 0.5em;
+                                    margin-right: 0.5em;
+                                    color: #888;
+                                    width: 52px;
+                                    text-align: right;
+                                    background: #fcfcfc;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .modal-footer {
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    background: #fafafa;
+                    border-top: 1px solid #eee;
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,6 @@
 {
+  "newsItemTemplateId": "dummyId",
+  "labelLanguage": "sv",
   "plugins": [
     {
       "id": "se.infomaker.dummy",

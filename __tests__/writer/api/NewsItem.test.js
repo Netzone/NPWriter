@@ -1,5 +1,5 @@
 import Api from '../../../writer/api/Api'
-import { ProseEditorConfigurator } from 'substance'
+import NPWriterConfigurator from '../../../writer/packages/npwriter/NPWriterConfigurator'
 import Helper from '../../helpers'
 import 'whatwg-fetch'
 var fs = require('fs');
@@ -13,10 +13,9 @@ describe('Loads newsItem', () => {
             configure: () => {}
         }
 
-        const configurator = new ProseEditorConfigurator().import(configuratorPackage);
+        const configurator = new NPWriterConfigurator().import(configuratorPackage);
         api = new Api({}, configurator)
-
-        api.newsitem.newsItem = Helper.getParsedExampleDocument()
+        api.init(Helper.getParsedExampleDocument(), {getDocument:()=>{}}, {})
 
     })
 
@@ -24,8 +23,8 @@ describe('Loads newsItem', () => {
 
     })
 
-    it('Can reads GUID from NewsItem', () => {
-        expect(api.newsitem.getGuid()).toBe(true)
+    it('Can read GUID from NewsItem', () => {
+        expect(api.newsItem.getGuid()).toBe("809ed0c6-aa7e-42ad-86a1-917bd4614c04")
     })
 
 

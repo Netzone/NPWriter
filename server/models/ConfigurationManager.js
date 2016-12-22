@@ -18,14 +18,19 @@ function ConfigurationManager() {
  * @param {string} path Path to configuration file
  */
 ConfigurationManager.load = function (path) {
-  var content = fs.readFileSync(path, 'utf8');
-  if (!content) {
-    log.error({path: path}, 'Missing configuration file');
-    throw new Error('Configuration file is missing: ' + path);
-  }
-console.log("Content in config", content);
-  this.configurationCache = {};
-  this.configuration = JSON.parse(content);
+
+    var content = fs.readFileSync(path, 'utf8');
+    if (!content) {
+        log.error({path: path}, 'Missing configuration file');
+        throw new Error('Configuration file is missing: ' + path);
+    }
+
+    log.info({
+        path: path
+    }, 'Configuration file loaded in Configuration manager')
+
+    this.configurationCache = {};
+    this.configuration = JSON.parse(content);
 };
 
 /**
@@ -39,7 +44,7 @@ console.log("Content in config", content);
  *
  * @param {string} basePath Base path for app
  */
-ConfigurationManager.loadPluginConfiguration = function(basePath) {
+ConfigurationManager.loadPluginConfiguration = function (basePath) {
     var plugins = this.get('main.plugins');
     if (Array.isArray(plugins)) {
         return;
@@ -77,7 +82,7 @@ ConfigurationManager.loadPluginConfiguration = function(basePath) {
  *
  * @return {string}
  */
-ConfigurationManager.serialize = function(clearExternal) {
+ConfigurationManager.serialize = function (clearExternal) {
     if (clearExternal === true) {
         var copy = Object.assign({}, this.configuration);
         copy.external = {};
@@ -118,12 +123,12 @@ ConfigurationManager.set = function (path, value) {
  */
 ConfigurationManager.get = function (path, defaultValue) {
 
-  // If not cached, fetch value
-  if (false === path in this.configurationCache) {
-    this._getValue(path, defaultValue);
-  }
+    // If not cached, fetch value
+    if (false === path in this.configurationCache) {
+        this._getValue(path, defaultValue);
+    }
 
-  return this.configurationCache[path];
+    return this.configurationCache[path];
 };
 
 /**
@@ -136,7 +141,7 @@ ConfigurationManager.get = function (path, defaultValue) {
  * @returns {object}
  * @throws {object} Error object with http status code (404 | 403) and message
  */
-ConfigurationManager.getBackend = function(name, method, path) {
+ConfigurationManager.getBackend = function (name, method, path) {
     var backends = this.get('external.backend');
     if (!Array.isArray(backends)) {
         throw {
@@ -185,23 +190,23 @@ ConfigurationManager.getBackend = function(name, method, path) {
  * @param defaultValue Optional, default value to return if not set
  */
 ConfigurationManager._getValue = function (path, defaultValue) {
-  var ptr = this.configuration;
-  var keys = path.split('.');
-  var value = 'undefined' === typeof(defaultValue) ? undefined : defaultValue;
+    var ptr = this.configuration;
+    var keys = path.split('.');
+    var value = 'undefined' === typeof(defaultValue) ? undefined : defaultValue;
 
-  defaultValue = value;
-  for (var n = 0; n < keys.length; n++) {
-    if (!ptr[keys[n]]) {
-      value = defaultValue;
-      break;
+    defaultValue = value;
+    for (var n = 0; n < keys.length; n++) {
+        if (!ptr[keys[n]]) {
+            value = defaultValue;
+            break;
+        }
+
+        value = ptr[keys[n]];
+        ptr = ptr[keys[n]];
     }
 
-    value = ptr[keys[n]];
-    ptr = ptr[keys[n]];
-  }
-
-  this.configurationCache[path] = value;
-  return value;
+    this.configurationCache[path] = value;
+    return value;
 };
 
 module.exports = ConfigurationManager;

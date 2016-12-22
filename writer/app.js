@@ -1,12 +1,7 @@
-import {
-    Component,
-    DocumentSession
-} from 'substance'
+import './styles/app.scss'
 
-import './styles/app.scss';
-
-
-import NPWriterCompontent from './packages/npwriter/NPWriterComponent'
+import {Component, EditorSession, keys} from 'substance'
+import NPWriterComponent from './packages/npwriter/NPWriterComponent'
 import NPWriterConfigurator from './packages/npwriter/NPWriterConfigurator'
 import AppPackage from './AppPackage'
 import UnsupportedPackage from './packages/unsupported/UnsupportedPackage'
@@ -14,10 +9,27 @@ import PluginManager from './utils/PluginManager'
 import API from './api/Api'
 import Start from './packages/load-screens/Start'
 import Error from './packages/load-screens/Error'
+import SaveHandler from './packages/npwriter/SaveHandler'
+import Event from './utils/Event'
+import NilUUID from './utils/NilUUID'
+import moment from 'moment'
+import idGenerator from './utils/IdGenerator'
+import APIManager from './api/APIManager'
+import lodash from 'lodash'
+import SourceComponent from './packages/dialog/SourceComponent'
+import jxon from 'jxon'
+import Validator from './packages/npwriter/Validator'
+import NPWriterCommand from './packages/npwriter/NPWriterCommand'
+import NPFileProxy from './packages/npwriter/NPFileProxy'
+import uuidv5 from 'uuidv5'
+
+import NPWriterAnnotationCommand from './packages/npwriter/NPWriterAnnotationCommand'
 
 const STATUS_ISREADY = 'isReady',
     STATUS_LOADING = 'loading',
-    STATUS_HAS_ERROR = 'hasErrors'
+    STATUS_HAS_ERROR = 'hasErrors',
+    HAS_DOCUMENT = 'writerHasDocument',
+    HAS_NO_DOCUMENT = 'writerHasNoDocument'
 
 class App extends Component {
 
@@ -29,10 +41,10 @@ class App extends Component {
 
         this.handleActions({
             validate: () => {
-                console.log("Implement Validation")
+                console.warn("Implement Validation")
             }, //this.validate
             save: () => {
-                console.log("Implement save action")
+                console.warn("Implement save action")
             }, //this.save,
             replacedoc: this.replaceDoc
         });
@@ -46,86 +58,214 @@ class App extends Component {
 
     /**
      * A Dependency injection mechanism
-     * Added objects is reachable from this.context
+     * Added objects is reachable from this.context in children
      * @returns {*}
      */
     getChildContext() {
         return Object.assign({}, {
-            configurator: this.props.configurator,
+            configurator: this.configurator,
             pluginManager: this.pluginManager,
             api: this.api
         });
     }
 
+
+    /**
+     * If no ID is available in browser hash,
+     * check if there is a specified id in the config file
+     *
+     * @returns {string} hash
+     * @throws Error
+     */
+    getHash() {
+        let hash = this.api.browser.getHash();
+        if (!hash) {
+            if (this.configurator.getNewsItemTemplateId()) {
+                hash = this.configurator.getNewsItemTemplateId()
+            } else {
+                throw new Error('No template was found')
+            }
+        }
+        return hash
+    }
+
+
+    /**
+     * Returns the saveHandler or create one if not created
+     * @returns {SaveHandler}
+     */
+    getSaveHandler() {
+        if(!this.saveHandler) {
+            this.saveHandler = new SaveHandler({
+                configurator: this.configurator,
+                api: this.api
+            })
+        }
+        return this.saveHandler
+    }
+
     didMount() {
 
-        this.pluginManager = new PluginManager(this.props.configurator);
-        this.api = new API(this.pluginManager, this.props.configurator)
+        document.onkeydown = this.handleApplicationKeyCombos.bind(this)
+
+        this.configurator = new NPWriterConfigurator().import(AppPackage)
+
+        this.APIManager = new APIManager()
+
+        this.pluginManager = new PluginManager(this.configurator, this.APIManager)
+        this.api = new API(this.pluginManager, this.configurator, this.APIManager)
         const api = this.api
 
-        window.writer.api = this.api
+        api.setAppReference(this)
 
-        this.pluginManager.getListOfPlugins('/api/config')
-            .then(plugins => this.pluginManager.load(plugins))
+        // Expose classes and endpoint on window.writer
+        api.apiManager.expose('api', this.api)
+        api.apiManager.expose('NilUUID', NilUUID)
+        api.apiManager.expose('event', Event) // Expose the API on the window
+        api.apiManager.expose('moment', moment) // Expose moment.js on window
+        api.apiManager.expose('idGenerator', idGenerator) // Expose the ID Generator helper method
+        api.apiManager.expose('lodash', lodash) // Expose the ID Generator helper method
+        api.apiManager.expose('jxon', jxon) // Expose JXON library
+        api.apiManager.expose('uuidv5', uuidv5) // Expose a UUID V5 library
+
+        api.apiManager.expose('NPFileProxy', NPFileProxy) // Expose NPFileProxy base class
+        api.apiManager.expose('Validator', Validator) // Expose the validator base class
+        api.apiManager.expose('WriterCommand', NPWriterCommand) // The NPWriter base class for commands containg commandState method
+        api.apiManager.expose('NPWriterAnnotationCommand', NPWriterAnnotationCommand) // Expose NPWriterAnnotationCommand base class
+
+        var promise = this.configurator.loadConfigJSON('/api/config')                     // Load config file and store it in configurator
+            .then(() => this.configurator.config.writerConfigFile.plugins)  // Get the plugins section from config (stored in the configurator)
+            .then(plugins => this.pluginManager.load(plugins))              // Let the pluginManger load and append the plugins
             .then(() => {
-                api.router.get('/api/newsitem/' + api.browser.getHash(), {imType: 'x-im/article'})
-                    .then(response =>response.text())
+
+                this.pluginManager.importPluginPackagesSortedByIndex()
+
+
+                var promise = api.router.get('/api/newsitem/' + this.getHash(), {imType: 'x-im/article'}) // Make request to fetch article
+                    .then(response => api.router.checkForOKStatus(response))                // Check if the status is between 200 and 300
+                    .then(response => response.text())                                      // Gets the text/xml in the response
                     .then((xmlStr) => {
 
-                        // Adds package for unsupported elements in document
-                        this.props.configurator.import(UnsupportedPackage)
+                        this.addDefaultConfiguratorComponent()
 
-                        this.props.configurator.addSidebarTab({id: 'related', name: 'Relatera'})
-                        this.props.configurator.addSidebarTab({id: 'information', name: 'Information'})
-                        this.props.configurator.addSidebarTab({id: 'main-panel', name: 'Meta'})
+                        var result = api.newsItem.setSource(xmlStr, {});
 
-                        var importer = this.props.configurator.createImporter('newsml')
-                        const idfDocument = importer.importDocument(xmlStr)
-                        this.documentSession = new DocumentSession(idfDocument)
+                        // Locale for moment
+                        moment.locale(this.configurator.config.writerConfigFile.language)
 
-                        var result = api.newsitem.setSource(xmlStr, {});
+                        if (this.editorSession) this.editorSession.dispose()
+                        this.editorSession = new EditorSession(result.idfDocument, {
+                            configurator: this.configurator,
+                            lang: this.configurator.config.writerConfigFile.language,
+                            context: {
+                                api: this.api
+                            }
+                        })
+                        // ATTENTION: we need to update the API as well to use the fresh editorSession
+                        api.editorSession = this.editorSession
+
                         this.replaceDoc(result);
 
                         // Clear guid if hash is empty
                         if (!api.browser.getHash()) {
-                            api.setGuid(null);
-                            api.removeDocumentURI();
+                            api.newsItem.setGuid(null);
+                            api.newsItem.removeDocumentURI();
                         }
 
                         this.setState({
                             status: STATUS_ISREADY
                         })
                     })
-                    .catch((error) => {
-                        this.setState({
-                            status: STATUS_HAS_ERROR,
-                            statusMessage: error
-                        })
-                    });
+
+                // Don't catch errors during development as we loose the stacktrace
+                if (window.PRODUCTION) {
+                    promise.catch(this.handleError.bind(this));
+                }
             })
-            .catch((error) => {
-                this.setState({
-                    status: STATUS_HAS_ERROR,
-                    statusMessage: error
-                })
-            });
+
+        // Don't catch errors during development as we loose the stacktrace
+        if (window.PRODUCTION) {
+            promise.catch(this.handleError.bind(this));
+        }
+
     }
 
+
+    /**
+     * Handles errors from for instance plugin loading
+     * @param error
+     */
+    handleError(error) {
+        console.error(error)
+        this.setState({
+            status: STATUS_HAS_ERROR,
+            statusMessage: error
+        })
+    }
+
+    handleApplicationKeyCombos(e) {
+        let handled = false;
+
+        if (e.keyCode === 83 && (e.metaKey || e.ctrlKey)) { // Save: cmd+s
+            this.api.events.userActionSave()
+            handled = true;
+        } else if (e.keyCode === 85 && (e.metaKey || e.ctrlKey) && !e.altKey) {
+            const xml = this.getSaveHandler().getExportedDocument()
+            this.api.ui.showDialog(SourceComponent, {message: xml}, {title: 'Source', primary: 'Ok', secondary: false, takeover: true})
+
+            handled = true;
+        } else if(e.keyCode === keys.ESCAPE) {
+            this.api.events.triggerEvent(null, Event.USERACTION_KEY_ESCAPE, {})
+        }
+
+        if (handled) {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+
+    }
 
     /**
      * Replace changes the current newsItem and creates and replaces the document session and then rerenders the writer
      * @param newsItem
      * @param idfDocument
      */
-    replaceDoc({newsItem, idfDocument}) {
-        this.newsItem = newsItem;
-        this.documentSession = new DocumentSession(idfDocument)
-        this.rerender();
+    replaceDoc({newsItemArticle, idfDocument}) {
+
+        this.newsItemArticle = newsItemArticle
+        if (this.editorSession) this.editorSession.dispose()
+        this.saveHandler = null
+
+        this.editorSession = new EditorSession(idfDocument, {
+            configurator: this.configurator,
+            lang: this.configurator.config.writerConfigFile.language,
+            context: {
+                api: this.api
+            }
+        })
+        this.editorSession.saveHandler = this.getSaveHandler()
+        this.api.init(newsItemArticle, this.editorSession, this.refs)
+        // Rerender from scratch
+        // NOTE: emptying the component here makes sure that no component survives connected to the old document
+
+        if(this.refs.writer) { // First load we have to reference to writer so we know it's the initial load
+            this.api.document._setDocumentStatus(HAS_DOCUMENT)
+        } else {
+            this.api.document._setDocumentStatus(HAS_NO_DOCUMENT)
+        }
+        this.empty()
+        this.rerender()
+
+    }
+
+    setTemporaryId() {
+        if (!this.temporaryArticleID) {
+            this.temporaryArticleID = idGenerator();
+        }
     }
 
     render($$) {
         var el = $$('div').addClass('sc-app').ref('app')
-
         switch (this.state.status) {
 
             case STATUS_HAS_ERROR:
@@ -133,12 +273,16 @@ class App extends Component {
                 break
 
             case STATUS_ISREADY:
-                this.api.init(this.newsItem, this.documentSession, this.refs)
 
-                el.append($$(NPWriterCompontent, {
+                if(!this.api.browser.getHash()) {
+                    this.setTemporaryId();
+                }
+
+                el.append($$(NPWriterComponent, {
                     pluginManager: this.pluginManager,
-                    documentSession: this.documentSession,
-                    configurator: this.props.configurator
+                    editorSession: this.editorSession,
+                    configurator: this.configurator,
+                    api: this.api
                 }).ref('writer'))
                 break
 
@@ -148,10 +292,47 @@ class App extends Component {
         }
         return el
     }
+
+    /**
+     * Adds a couple of defaults component to our configurator
+     */
+    addDefaultConfiguratorComponent() {
+        // Adds package for unsupported elements in document
+        this.configurator.import(UnsupportedPackage)
+
+        this.configurator.addSidebarTab('main', 'Meta')
+
+    }
 }
 
+export default App
 
 window.onload = () => {
-    var configurator = new NPWriterConfigurator().import(AppPackage)
-    App.mount({configurator: configurator}, document.body)
+// /
+    // if(window.PRODUCTION) {
+    //     if('serviceWorker' in navigator) {
+    //         navigator.serviceWorker.register('serviceworker.js')
+    //             .then(() => {
+    //                 console.log("Registration done");
+    //                 showNotification()
+    //             })
+    //             .catch((error) => {
+    //                 console.log("Registrsation of serviceworker failed")
+    //             })
+    //     }
+     // }
+
+
+    //
+/*    function showNotification() {
+        Notification.requestPermission(function (result) {
+            if (result === 'granted') {
+                navigator.serviceWorker.ready.then(function (registration) {
+                    registration.showNotification('Service worker is installed and ready to use');
+                });
+            }
+        });
+    }
+*/
+    App.mount({}, document.body)
 }

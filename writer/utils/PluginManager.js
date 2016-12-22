@@ -1,26 +1,33 @@
 import ResourceLoader from './ResourceLoader'
 import isString from 'lodash/isString'
+import sortBy from 'lodash/sortBy'
 import 'whatwg-fetch'
 
 class PluginManager {
 
-    constructor(configurator) {
+    /**
+     *
+     * @param {NPWriterConfigurator} configurator The configurator
+     * @param {APIManager} apiManager Requires an API manager that exposes endpoints to window.writer namespace
+     */
+    constructor(configurator, apiManager) {
         this.configurator = configurator
         this.registerPluginList = new Map()
         this.plugins = new Map()
         this.configurationCache = {};
 
-        window.writer = {}
-        window.writer.registerPlugin = this.registerPlugin.bind(this)
+        apiManager.expose('registerPlugin', this.registerPlugin.bind(this))
     }
 
     /**
      * Fetch a list of plugins from backend and parse result to JSON
-     * @param configURL {string} A URL to the config file containt plugins
+     * @param configURL {string} A URL to the config file constraint plugins
      * @returns {Promise.<TResult>|*}
      */
     getListOfPlugins(configURL) {
-        return fetch(configURL)
+        return fetch(configURL, {
+            credentials: "same-origin"
+        })
             .then(response => response.json())
             .then(configJson => configJson.plugins)
     }
@@ -28,7 +35,7 @@ class PluginManager {
     /**
      * Appending script tag for plugins
      * @param plugins
-     * @returns {[{Promise.<TResult>|*}]}
+     * @returns {Promise.<TResult>|*} - Returns an array of promise objects
      */
     appendPluginScripts(plugins) {
         const resourceLoader = new ResourceLoader()
@@ -38,8 +45,16 @@ class PluginManager {
     }
 
 
+    appendPluginStylesheet(plugin) {
+        const resourceLoader = new ResourceLoader()
+        if (plugin.style) {
+            resourceLoader.load(plugin, 'css')
+        }
+    }
+
+
     /**
-     * Called by the plugin when it's done loaded.
+     * Called by the plugin when it's done loading
      * @param pluginPackage
      */
     registerPlugin(pluginPackage) {
@@ -49,6 +64,8 @@ class PluginManager {
         const pluginRegisterFunction = this.registerPluginList.get(pluginPackage.id);
         if (pluginRegisterFunction) {
             pluginRegisterFunction(pluginPackage);
+        } else {
+            console.info("Trying to call register on a plugin that's not registered with the writer", pluginPackage.id);
         }
     }
 
@@ -71,29 +88,56 @@ class PluginManager {
             return plugin.enabled
         })
 
-        const pluginRegistered = enabledPlugins.map(plugin => {
+        this.pluginPackages = []
+        const pluginRegistered = enabledPlugins.map((plugin, idx) => {
             return new Promise((resolve, reject) => {
                 let resolved = false;
 
                 this.registerPluginList.set(plugin.id, (pluginPackage) => {
-                    this.configurator.import(pluginPackage)
+                    pluginPackage.index = idx // Set the sort index for the package
+                    this.pluginPackages.push({pluginPackage: pluginPackage, pluginConfigObject: plugin})
                     resolved = true;
                     this.plugins.set(plugin.id, plugin)
                     this.registerPluginList.delete(plugin.id)
+
+                    // If plugin successfully registers then append the stylesheet provided for plugin
+                    this.appendPluginStylesheet(plugin)
+
                     resolve();
                 })
 
                 setTimeout(() => {
                     if (!resolved) {
-                        reject(plugin.id + " did not respond in time");
+                        this.registerPluginList.delete(plugin.id) // Delete from loading list
+
+                        if (plugin.mandatory) {
+                            reject(plugin.id + " did not respond in time");
+                        }
+                        // plugin is not mandatory, resolve
+                        console.warn(`Plugin ${plugin.id} did not respond, but marked as optional`)
+                        resolve()
                     }
-                }, 10000)
+                }, 5000)
             })
         })
 
         const pluginsAppendPromise = this.appendPluginScripts(enabledPlugins)
         const allPromises = [...pluginsAppendPromise, ...pluginRegistered]
         return Promise.all(allPromises)
+    }
+
+    importPluginPackagesSortedByIndex() {
+
+        let packages = sortBy(this.pluginPackages, [(pluginPackage) => {
+            if (pluginPackage.pluginPackage.index === undefined) { // Undefined is a higher number than zero
+                pluginPackage.pluginPackage.index = 0
+            }
+            return pluginPackage.pluginPackage.index;
+        }])
+
+        packages.forEach((pluginPackage) => {
+            this.configurator.import(pluginPackage.pluginPackage, pluginPackage.pluginConfigObject)
+        })
     }
 
 
@@ -124,6 +168,12 @@ class PluginManager {
         return this.configurationCache[namePath];
     }
 
+
+    getHandlerCommandsForFile(fileType) {  // eslint-disable-line no-unused-vars
+        // TODO: get commands for file drop from configurator
+        return []
+    }
+
     /**
      * Get and cache requested config path from within plugins data section
      * @protected
@@ -145,7 +195,7 @@ class PluginManager {
         else {
 
             let pluginData = this.plugins.get(name)
-            if(pluginData) {
+            if (pluginData) {
                 ptr = pluginData.data
                 // console.log("", pluginData.data[path]);
             }

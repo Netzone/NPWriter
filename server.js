@@ -2,29 +2,43 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var routes = require('./server/routes/routes')
-var config = require('./server/models/ConfigurationManager');
+var config = require('./server/models/ConfigurationManager')
+var log = require('./server/utils/logger');
 
-var isProduction = process.env.NODE_ENV === 'production';
+const ConfigurationLoader = require('./server/models/ConfigurationLoader')
+
+const environmentVariables = process.env
+
+const environment = environmentVariables.NODE_ENV ? environmentVariables.NODE_ENV : 'develop'
+const isProduction = environment === 'production';
+
 var port = isProduction ? process.env.PORT : 5000;
 var publicPath = path.resolve(__dirname, 'dist');
-
-// Load configuration
-var configFileName = 'server.json';
-if (process.env.CONFIG_FILE) {
-    configFileName = process.env.CONFIG_FILE + '.json';
+if (isProduction) {
+    var publicPath = path.resolve(__dirname, 'writer');
 }
 
-config.load(path.join(__dirname, 'server', 'config/' + configFileName));
+const configurationLoader = new ConfigurationLoader(environment, environmentVariables)
 
-const host = config.get('server.host', '127.0.0.1'),
-    protocol = config.get('server.protocol', 'http')
+configurationLoader.load().then((configurationManager) => {
 
+    const host = configurationManager.get('server.host', '127.0.0.1'),
+        protocol = configurationManager.get('server.protocol', 'http')
+    port = configurationManager.get('server.port', 'http')
 
-app.use('/', express.static(publicPath));
-app.use('/api', routes);
-app.use(express.static(path.join(__dirname)));
+    app.use('/', express.static(publicPath));
+    app.use('/api', routes);
+    app.use(express.static(path.join(__dirname)));
 
-// Listen on traffic
-app.listen(port, function () {
-    console.log({protocol: protocol, host: host, port: port}, "The Writer is running");
-});
+    app.listen(port, function () {
+        log.info({
+            env: environment
+        }, "Writer running @ " + protocol + '://' + host + ':' + port)
+    });
+
+}).catch((error) => {
+    log.error({
+        msg: error.message
+    }, error.message)
+    console.error('Could not start Writer', error.message)
+})

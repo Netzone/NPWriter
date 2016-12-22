@@ -3,38 +3,24 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
-var bodyParser = require('body-parser');
 var config = require('../models/ConfigurationManager');
-var Backend = require('../models/Backend.js');
 var os = require('os');
 var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
+var async = require('async');
 var log = require('../utils/logger').child({api: 'Router'});
+var createTmpFileName = require('../utils/tempfile');
+var Backend = require('../models/Backend.js');
+var BinaryProcessor = require('../models/BinaryProcessor.js');
 
-// ==================================
-// Middleware to do some logging
-// ==================================
-
-router.use(function timeLog(req, res, next) {
-    log.debug({method: req.method, url: req.url});
-    next();
-});
-
-router.use(bodyParser.json({limit: '50Mb', extended: true, type: "application/json"}));
-router.use(bodyParser.raw({limit: '50Mb', extended: true, type: "application/xml"}));
-router.use(bodyParser.raw({limit: '50Mb', extended: true, type: "image/jpg"}));
-router.use(bodyParser.raw({limit: '50Mb', extended: true, type: "image/jpeg"}));
-router.use(bodyParser.raw({limit: '50Mb', extended: true, type: "image/png"}));
-router.use(bodyParser.raw({limit: '50Mb', extended: true, type: "image/gif"}));
-
-router.post('/external/:name', function(req, res) {
+router.post('/external/:name', function (req, res) {
     var backend;
 
     try {
         backend = config.getBackend(req.params.name, req.body.method, req.body.path);
     }
-    catch(ex) {
+    catch (ex) {
         log.error({err: ex.message}, "Could not find a configured backend to handle the request");
         res.contentType('application/json')
             .status(ex.code)
@@ -47,7 +33,7 @@ router.post('/external/:name', function(req, res) {
         req.body,
         (error, response, body) => {
             if (error) {
-                log.error({err:error, response: response, headers: req.headers});
+                log.error({err: error, response: response, headers: req.headers});
                 res.contentType('application/json')
                     .status(response.statusCode)
                     .send({error: error});
@@ -63,7 +49,8 @@ router.post('/external/:name', function(req, res) {
 });
 
 /**
- * Get a newsitem
+ * Get a newsitem.
+ * E.g. /api/newsitem/0f144a19-32a6-4151-9c74-c51751f161bd?imType=x-im/article
  */
 router.get('/newsitem/:uuid', function (req, res) {
     var uuid = req.params.uuid,
@@ -94,7 +81,8 @@ router.get('/newsitem/:uuid', function (req, res) {
 });
 
 /**
- * Save newsitem to backend
+ * Save newsitem to backend.
+ * E.g. /api/newsitem/0f144a19-32a6-4151-9c74-c51751f161bd
  */
 router.put('/newsitem/:uuid', function (req, res) {
     var uuid = req.params.uuid,
@@ -112,7 +100,8 @@ router.put('/newsitem/:uuid', function (req, res) {
 });
 
 /**
- * Create a new newsitem
+ * Create a new newsitem.
+ * E.g. /api/newsitem
  */
 router.post('/newsitem', function (req, res) {
     var toBase64 = req.body.toString('base64');
@@ -129,10 +118,9 @@ router.post('/newsitem', function (req, res) {
 });
 
 /**
- * Upload image and retrieve NewsML document with meta data
+ * @deprecated use '/binary' instead.
  *
- * Manually via curl
- * curl -X POST -F "image=@greenalien.jpg" http://192.168.99.100:8181/cxf/writer/images/upload
+ * Upload image and retrieve NewsML document with meta data
  */
 router.post('/image', function (req, res) {
 
@@ -197,7 +185,114 @@ router.post('/image', function (req, res) {
     });
 });
 
+/**
+ * Upload binary and retrieve NewsItem document with meta data
+ *
+ * Expects header x-infomaker-type to be set, e.g. 'x-im/image'.
+ */
+router.post('/binary', function (req, res) {
+    log.info('Binary post request: ', req);
 
+    var objectName, imType, maxSize, buffer, tmpFileName, fd;
+
+    objectName = decodeURIComponent(req.headers['x-filename']);
+    log.info({clientFilename: objectName}, "Downloading content to local file");
+
+    //Sanity check
+    if (typeof req.headers['x-infomaker-type'] == "undefined") {
+        log.error('Invalid request to POST /binary. Missing request header x-infomaker-type');
+        Backend.defaultErrorHandling(
+            res, 'Error uploading binary. Invalid request', 400, null, req.headers, objectName
+        );
+        return;
+    }
+
+    imType = req.headers['x-infomaker-type'];
+    maxSize = BinaryProcessor.getMaxUploadByteSize(imType);
+    buffer = new Buffer(req.body);
+
+    if (buffer.byteLength > maxSize) {
+        log.error('Binary to large. Maximum size is', maxSize, 'bytes');
+        Backend.defaultErrorHandling(
+            res, 'Error uploading binary. Max binary size exceeded. Max size is ' +
+            maxSize + ' bytes.', 413, null, req.headers, objectName
+        );
+        return;
+    }
+
+    tmpFileName = createTmpFileName();
+    log.debug({
+        file: objectName,
+        length: buffer.byteLength,
+        contentType: req.headers['content-type']
+    }, 'Image uploaded');
+
+    fd = fs.openSync(tmpFileName, 'w');
+    if (!fd) {
+        log.error('Failed to open tmp file', tmpFileName);
+        Backend.defaultErrorHandling(
+            res, 'Error uploading binary. Failed to open tmp file', 500, null, req.headers, objectName
+        );
+        return;
+    }
+
+    fs.write(fd, buffer, 0, buffer.byteLength, function (error, written, buffer) {
+        fs.closeSync(fd);
+        buffer = null;
+        if (error) {
+            log.error('Failed writing to tmp file', tmpFileName, 'Error was', error);
+            fs.unlink(tmpFileName);
+            Backend.defaultErrorHandling(
+                res, 'Error uploading binary. Failed writing to tmp file', 500, null, req.headers, objectName
+            );
+            return;
+        }
+
+        log.debug({clientFilename: objectName}, "download done");
+        BinaryProcessor.uploadBinary(tmpFileName, imType, objectName,
+            function (error, binaryInfo, newsItem) {
+                fs.unlink(tmpFileName);
+                if (error) {
+                    log.error('Error uploading binary.', error);
+                    Backend.defaultErrorHandling(res, 'Error uploading binary.', 500, null, req.headers, objectName);
+                } else {
+                    // Optimistic view of life
+                    var response = {statusCode: 200};
+                    if (newsItem) {
+                        // Binary already associated with newsItem, use it
+                        log.debug('Found existing newsItem for binary with object name', objectName);
+                        Backend.defaultHandling(res, null, response, newsItem, null, req, objectName);
+                    } else {
+                        // First time binary gets uploaded, create newsItem for it
+                        log.debug('Got hashed binary name:', binaryInfo.hashedName);
+                        Backend.exec(
+                            '{"action":"create_binary_newsitem", "data": {"filename":"' + binaryInfo.hashedName +
+                            '", "imType":"' + imType + '", "mimetype":"' + binaryInfo.mimetype +
+                            '", "objectName":"' + objectName + '"}}', config.get('external.contentrepository'),
+                            (error, response, newsItem) => {
+                                if (error) {
+                                    log.error('Error creating newsItem.', error);
+                                    Backend.defaultErrorHandling(
+                                        res, 'Error uploading binary', 500, response, req.headers, objectName
+                                    );
+                                } else {
+                                    log.debug('Done uploading binary and creating newsItem');
+                                    Backend.defaultHandling(
+                                        res, null, response, newsItem, null, req, objectName
+                                    );
+                                }
+                            });
+                    }
+                }
+            });
+    });
+});
+
+/**
+ * @deprecated: Use router.get('binary'...) instead.
+ *
+ * Upload image using url drop.
+ */
 router.get('/image', function (req, res) {
     var source = req.query.source;
 
@@ -208,6 +303,75 @@ router.get('/image', function (req, res) {
     });
 });
 
+/**
+ * Upload binary using url drop.
+ */
+router.get('/binary', function (req, res) {
+    var context, msg, source, imType, tmpFileName;
+
+    // Sanity check
+    if (typeof req.query.imType == "undefined") {
+        msg = 'Invalid request to GET /binary. Missing query parameter imType';
+    }
+
+    if (typeof req.query.source == "undefined") {
+        msg = 'Invalid request to GET /binary. Missing query parameter source';
+    }
+
+    context = 'download binary from url';
+    if (msg) {
+        Backend.defaultErrorHandling(res, msg, null, null, req.headers, context);
+        return;
+    }
+
+    source = req.query.source;
+    imType = req.query.imType;
+    tmpFileName = createTmpFileName();
+
+    async.waterfall([
+        function download(next) {
+            BinaryProcessor.downloadByUrl(source, tmpFileName, imType, function (error) {
+                if (error) {
+                    return next(error.error, error.statusCode);
+                } else {
+                    next(null);
+                }
+            });
+        },
+        function uploadBinary(next) {
+            BinaryProcessor.uploadBinary(tmpFileName, imType, 'stream-binary', function (error, binaryInfo, newsItem) {
+                if (error) {
+                    next(error);
+                } else {
+                    if (newsItem) {
+                        // Binary already associated with newsItem, use it.
+                        next(null, null, newsItem);
+                    } else {
+                        // First time binary gets uploaded, create newsItem for it.
+                        Backend.exec(
+                            '{"action":"create_binary_newsitem", "data": {"filename":"' + binaryInfo.hashedName +
+                            '", "imType":"' + imType + '", "mimetype":"' + binaryInfo.mimetype +
+                            '", "objectName":""}}', config.get('external.contentrepository'),
+                            (error, response, newsItem) => {
+                                if (error) {
+                                    return next(error, response.statusCode);
+                                }
+                                next(null, response.statusCode, newsItem);
+                            });
+                    }
+                }
+            })
+        }
+    ], function (error, statusCode, newsItem) {
+        fs.unlink(tmpFileName);
+        if (error) {
+            Backend.defaultErrorHandling(res, error, statusCode, null, req.headers, context);
+        } else {
+            var response = {statusCode: 200};
+            Backend.defaultHandling(res, error, response, newsItem, null, req, context);
+        }
+    });
+});
 
 /**
  * Get image newsitem
@@ -217,7 +381,8 @@ router.get('/image/newsitem/:uuid', function (req, res) {
         action: 'get',
         data: {
             id: req.params.uuid,
-            itemClass: 'ninat:picture'
+            itemClass: 'ninat:picture',
+            imType: req.query.imType
         }
     });
 
@@ -231,18 +396,61 @@ router.get('/image/newsitem/:uuid', function (req, res) {
 });
 
 /**
+ * @deprecated use /binary/url... instead. This endpoint will always
+ * resolve imType query parameter to "x-im/type".
+ *
  * Get url to imgix image
  */
 router.get('/image/url/:uuid/:height?', function (req, res) {
-    //var params = {
-    //    id: req.params.uuid,
-    //    w: "800"
-    //};
+    log.warn('get /image/url/:uuid/:height? endpoint is deprecated!');
 
-    var params = req.query;
+    var redirectUrl, height, width
+
+    // Redirect to new "renderUrl" endpoint
+    redirectUrl = '/api/binary/url/' + req.params.uuid;
+    if (!isNaN(parseInt(req.params.height))) {
+        height = req.params.height;
+    }
+
+    if (!isNaN(parseInt(req.query.width))) {
+        width = req.params.width;
+    }
+
+    if (height) {
+        redirectUrl = redirectUrl + '/' + height;
+    }
+
+    redirectUrl = redirectUrl + '?imType=x-im/image';
+    if (width) {
+        redirectUrl = redirectUrl + '&width=' + width;
+    }
+
+    log.debug('Redirect URL:', redirectUrl);
+    res.redirect(redirectUrl);
+});
+
+/**
+ * Get render url for binary
+ */
+router.get('/binary/url/:uuid/:height?', function (req, res) {
+    var params, data;
+
+    // Sanity check
+    params = req.query;
+    if (typeof params.imType == "undefined") {
+        Backend.defaultErrorHandling(
+            res,
+            'Invalid request to GET /binary/url. Missing query parameter imType',
+            400,
+            null,
+            req.headers,
+            req.params.uuid
+        );
+        return;
+    }
+
     params.id = req.params.uuid;
     params.w = "800";
-
 
     if (!isNaN(parseInt(req.params.height))) {
         params.h = req.params.height.toString();
@@ -252,222 +460,18 @@ router.get('/image/url/:uuid/:height?', function (req, res) {
         params.w = req.query.width.toString();
     }
 
-    var data = JSON.stringify(params);
-
-    log.info({id: req.params.uuid}, "Getting image url");
+    data = JSON.stringify(params);
+    log.info({id: req.params.uuid}, "Getting binary url");
 
     Backend.exec(
-        '{"action": "get_imgix_url", "data": {"id": "' + req.params.uuid + '", "params": ' + JSON.stringify(
-            params) + '}}',
+        '{"action": "render_binary", "data": {"id": "' + req.params.uuid + '", "imType": "' +
+        req.query.imType + '", "params": ' + JSON.stringify(params) + '}}',
         config.get('external.contentrepository'),
         (error, response, body) => {
+            log.info({body: body}, "Got url");
             Backend.defaultHandling(res, error, response, body, null, req, req.params.uuid);
         }
     );
-});
-
-
-
-/**
- * Fetch remote resource through local proxy
- */
-router.get('/resourceproxy', function(req, res) {
-    req.pipe(
-        request(decodeURIComponent(req.query.url))
-            .on('response', function(response) {
-                if (response.statusCode != 200) {
-                    log.error({status: response.statusCode, url: req.params.uuid}, "Failed fetching resource through proxy");
-                }
-            })
-            .on('error', function(err) {
-                log.error({err: err, url: req.params.uuid}, "Failed fetching resource through proxy");
-            })
-    ).pipe(res);
-});
-
-/**
- * Search authors route
- */
-router.get('/search/concepts/authors', function (req, res) {
-    var query = req.query.q;
-    Backend.search('authors', query, res, req);
-});
-
-/**
- * Concept route
- */
-router.get('/search/concepts/tags', function (req, res) {
-    var query = req.query.q;
-    Backend.search('tags', query, res, req);
-});
-
-
-/**
- * Search for places in Concepts backend
- */
-router.get('/search/concepts/locations', function (req, res) {
-    var query = req.query.q,
-        filter = req.query.f,
-        entity = 'locations';
-
-    if (filter == 'position') {
-        entity = 'position_locations';
-    }
-    else if (filter == 'polygon') {
-        entity = 'polygon_locations';
-    }
-
-    Backend.exec(
-        '{"action":"search", "data": {"entity": "' + entity + '", "query":"' + query + '"}}',
-        config.get('external.conceptbackend'),
-        (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, null, req, "concept search");
-        }
-    );
-});
-
-
-/**
- * Search for channels in Concepts backend
- */
-router.get('/search/concepts/channels', function (req, res) {
-    var query = req.query.q;
-    Backend.search('channels', query, res, req);
-});
-
-
-router.get('/search/concepts/articles', function (req, res) {
-    var query = req.query.q;
-    Backend.search('articles', query, res, req);
-});
-
-/**
- * Search for stories in Concepts backend
- */
-router.get('/search/concepts/stories', function (req, res) {
-    var query = req.query.q;
-    Backend.search('stories', query, res, req);
-});
-
-/**
- * Search for content profiles / function-tags in Concepts backend
- */
-router.get('/search/concepts/contentprofiles', function (req, res) {
-    var query = req.query.q;
-    Backend.search('contentprofiles', query, res, req);
-});
-
-/**
- * Search for content categories in Concepts backend
- */
-router.get('/search/concepts/categories', function (req, res) {
-    var query = req.query.q;
-    Backend.search('categories', query, res, req);
-});
-
-/**
- * @param {string} twitterHandle - The username on twitter
- */
-router.get('/concepts/author/:twitterHandle/thumbnail', function (req, res) {
-    var twitterHandle = req.params.twitterHandle;
-
-    log.info({twitterHandle: twitterHandle}, "Getting twitter handle");
-
-    Backend.exec(
-        '{"action":"thumbnail", "data": {"url":"https://twitter.com/' + twitterHandle + '"}}',
-        config.get('external.conceptbackend'),
-        (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, 'text/html', req, twitterHandle);
-        }
-    );
-});
-
-
-/**
- * Proxy for plugins
- */
-router.get('/proxy', function (req, res) {
-
-    var url = req.query.url;
-
-    request({
-        method: 'GET',
-        uri: url,
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }, (error, response, body) => {
-        log.debug({url: url, body: body}, 'Get url through proxy');
-        if (error) {
-            log.error({url: url, err: error}, 'Get url through proxy');
-            res.contentType('application/json').status(404).send({error: error});
-        } else {
-            res.contentType('application/json').status(response.statusCode).send(body);
-        }
-    });
-
-});
-
-/**
- * Fetch external resource through proxying
- */
-
-
-/**
- * Error logging from browsers
- */
-router.get('/err', function (req, res) {
-    var err = req.query.error;
-
-    log.error("Browser error", {error: err, headers: req.headers});
-
-    res.status(204).send();
-});
-
-
-router.head('/healthcheck', function (req, res) {
-
-    var rp = require('request-promise');
-
-    var editorCfg = config.get('external.contentrepository');
-    var conceptCfg = config.get('external.contentrepository');
-
-    if (req.query.mode && req.query.mode === 'dependencies') {
-        var editorHealthUrl = editorCfg.protocol + "//" + editorCfg.host + ":" + editorCfg.port + "/cxf/writer/healthcheck";
-
-        rp({url: editorHealthUrl, method: 'HEAD', resolveWithFullResponse: true})
-            .then(function (response) {
-                if (response.statusCode && response.statusCode === 200) {
-                    res.status(200).send();
-                } else {
-                    log.error({error: {statusCode: response.statusCode, body: response.body}}, "Health check failed for editorservice")
-                    res.status(502).send();
-                }
-            })
-            .catch(function (e) {
-                log.error({message: e.message}, "Healthcheck failed for editorservice");
-                res.status(502).send();
-            });
-    } else if (req.query.mode && req.query.mode === 'fullstack') {
-        var templateUUID = config.get('newsItemTemplateUUID');
-
-        Backend.exec(
-            '{"action":"get", "data": {"id":"' + templateUUID + '"}}',
-            config.get('external.contentrepository'),
-            (error, response, body) => {
-                if (error) {
-                    log.error({error: error, response: response, uuid: templateUUID},
-                        "Fetching template failed for editorservice during healthcheck");
-                    res.status(502).send();
-                } else if (response.statusCode !== 200) {
-                    log.error({error: error, response: response.statusCode, uuid: templateUUID}, "Error fetching template from editorservice during healthcheck");
-                    res.status(502).send();
-                }
-                res.status(200).send();
-            });
-    } else {
-        res.status(200).send();
-    }
 });
 
 module.exports = router;

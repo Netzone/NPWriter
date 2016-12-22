@@ -1,0 +1,43 @@
+.form-group label {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.form-group {
+    &.flexible-label {
+        position: relative;
+
+        label {
+            position: absolute;
+            opacity: 0;
+            top: 1px;
+            left: 0.75rem;
+            font-size: 0.8rem;
+
+            transition-property: opacity;
+            transition-duration: .5s;
+            transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+        }
+
+        input,
+        textarea {
+            padding: 0.55rem 0.75rem;
+            transition-property: padding;
+            transition-duration: .5s;
+            transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+        }
+
+        input:valid,
+        textarea:valid,
+        textarea:not(:empty) {
+            color: #3A3D3F;
+            padding: 0.95rem 0.75rem 0.15rem 0.75rem;
+        }
+
+        input:valid + label,
+        textarea:valid + label
+        textarea:not(:empty) + label {
+            opacity: 0.75;
+        }
+    }
+}

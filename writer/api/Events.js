@@ -1,5 +1,6 @@
 import find from 'lodash/find'
 import remove from 'lodash/remove'
+import Event from '../utils/Event'
 /**
  * @class Events
  *
@@ -10,6 +11,7 @@ class Events {
     constructor() {
         this.eventListeners = []
     }
+
     /**
      * Writer controller fires keypressed:esc
      * name: keypressed:esc
@@ -25,9 +27,9 @@ class Events {
      * @param {Function} Function to call when event is triggered.
      */
     on(name, eventType, func) {
-        if (find(this.eventListeners, function (obj) {
-                return obj.name === name && obj.eventType === eventType;
-            })) {
+        if (find(this.eventListeners, (obj) => {
+            return obj.name === name && obj.eventType === eventType
+        })) {
             return;
         }
 
@@ -58,6 +60,14 @@ class Events {
      *
      * @private
      *
+     * @example
+     * Data should be
+     * {
+            type: 'edit',
+            action: 'edit',
+            data: data
+        }
+     *
      * @param {string} name Plugin type to not send event to, leave it empty to send to all
      * @param {string} eventType The event type to trigger
      * @param {*} data Event specific data
@@ -84,20 +94,26 @@ class Events {
     }
 
     /**
-     * Triggers an document changed event (document:changed)
+     * Triggers a document changed event (document:changed)
      *
-     * @param {object} change
-     * @param {object} info
-     * @param {object} doc
+     * @param {string} name Name of plugin that sends the event
+     * @param {object} data An object with change, info, and doc
      */
-    onDocumentChanged(change, info, doc) {
+    documentChanged(name, data) {
+        if (!data.type) {
+            console.warn('Document changed event triggered without type', name)
+        }
 
-        var data = {
-            change: change,
-            info: info,
-            doc: doc
-        };
-        this.triggerEvent(null, 'document:changed', data);
+        if (!data.action) {
+            console.warn('Document changed event triggered without action', name);
+        }
+        else {
+            if (-1 === ['set', 'add', 'delete', 'update', 'edit'].indexOf(data.action)) {
+                console.warn('Document change event has unknown action', data.action, name);
+            }
+        }
+
+        this.triggerEvent(null, Event.DOCUMENT_CHANGED, data);
     }
 
     /**
@@ -111,27 +127,35 @@ class Events {
     }
 
     /**
-     * Triggers an document saved event (document:saved)
+     * Triggers a document saved event (document:saved)
      */
-    onDocumentSaved() {
-        this.triggerEvent(null, 'document:saved');
+    documentSaved() {
+        this.triggerEvent(null, Event.DOCUMENT_SAVED);
     }
 
+    /**
+     * Triggers an event when the save process did not succeed (document:savefailed)
+     */
+    documentSaveFailed(error) {
+        this.triggerEvent(null, Event.DOCUMENT_SAVE_FAILED, error);
+    }
+
+    userActionSave() {
+        this.triggerEvent(null, Event.USERACTION_SAVE)
+    }
+
+    userActionCancelSave() {
+        this.triggerEvent(null, Event.USERACTION_CANCEL_SAVE)
+    }
 
     /**
      * Triggers a document start saving event (document:startsaving)
+     * @fixme Should not be named onDocument... as it is a trigger, not an event handler
      */
     onDocumentStartSaving() {
         this.triggerEvent(null, 'document:startsaving');
     }
 
-
-    /**
-     * Triggers an event when the save process did not succeed (document:savefailed)
-     */
-    onDocumentSaveFailed(error) {
-        this.triggerEvent(null, 'document:savefailed', error);
-    }
-
 }
 export default Events
+

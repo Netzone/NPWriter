@@ -2,8 +2,10 @@ var fs = require('fs')
 
 import 'whatwg-fetch'
 import Api from '../../../writer/api/Api'
-import {ProseEditorConfigurator} from 'substance'
+import NPWriterConfigurator from '../../../writer/packages/npwriter/NPWriterConfigurator'
 import PluginManager from '../../../writer/utils/PluginManager'
+import Helper from '../../helpers'
+import APIManager from '../../../writer/api/APIManager'
 
 describe('Get config values for plugins', () => {
 
@@ -11,23 +13,18 @@ describe('Get config values for plugins', () => {
 
     beforeEach(() => {
 
-        var configuratorPackage = {
-            configure: () => {
-            }
-        }
+        var configuratorPackage = { configure: () => { }}
 
-        const configurator = new ProseEditorConfigurator().import(configuratorPackage);
-        pluginManager = new PluginManager(configurator);
+        const configurator = new NPWriterConfigurator().import(configuratorPackage);
+        pluginManager = new PluginManager(configurator, new APIManager());
 
         api = new Api(pluginManager, configurator)
 
-        let contents = fs.readFileSync('data/example.xml', {encoding: 'UTF-8'})
-        var parser = new DOMParser();
-        api.newsitem.newsItem = parser.parseFromString(contents, "application/xml")
+        api.init(Helper.getParsedExampleDocument(), {getDocument:()=>{}}, {})
     })
 
     it('Sets the newsItem', () => {
-        expect(api.newsitem.newsItem).not.toBe(null)
+        expect(api.newsItemArticle).not.toBe(null)
     })
 
 

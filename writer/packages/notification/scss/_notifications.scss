@@ -1,0 +1,116 @@
+.imc-notifications {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+    z-index: 99999;
+
+    &>div {
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 9px 10px 13px 18px;
+        margin: 15px 0 15px 15px;
+        border-radius: 3px;
+        box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.3);
+        border: 1px solid #111;
+        cursor: default;
+
+        width: 100%;
+        max-width: 475px;
+
+        transition-property: background, height, padding, margin, opacity;
+        transition-duration: 1s;
+        transition-timing-function: ease-out;
+
+        &.imc-init {
+            margin-left: -515px;
+        }
+
+        &.imc-visible {
+            margin-left: -515px;
+            animation: imc-notification-slidein 0.5s forwards;
+        }
+
+        &.imc-hidden {
+            overflow: hidden;
+            height: 0;
+            padding: 0 10px 0 18px;
+            margin: 0 0 0 15px;
+            opacity: 0;
+            border: none !important;
+        }
+
+        &.imc-disposed {
+            display: none !important;
+        }
+
+        &>i.fa {
+            float: left;
+            line-height: inherit;
+            color: #eee;
+            margin: -4px 0 0 -0.3rem;
+            font-size: 110%;
+        }
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        &>div {
+            padding-left: 25px;
+            font-size: 95%;
+
+            &>strong:first-child {
+                display: block;
+                padding-bottom: 3px;
+                color: #fff;
+
+                border-bottom: 1px solid rgba(9,9,9,0.8);
+                margin: -9px -10px 10px -43px;
+                padding: 0 0 0 43px;
+                line-height: 2.5rem;
+            }
+
+            &>span {
+                color: #eee;
+                font-size: 95%;
+            }
+        }
+    }
+
+    &.light {
+        &>div {
+            background: rgba(255, 255, 255, 1);
+            color: #fff;
+            box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.3);
+            border: 1px solid #ddd;
+
+            &>i.fa {
+                color: #666;
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 1);
+            }
+
+            &>div {
+                &>strong:first-child {
+                    color: #000;
+                    background: #fafafa;
+                    border-bottom: 1px solid #eee;                }
+
+                &>span {
+                    color: #111;
+                }
+            }
+        }
+    }
+}
+
+@keyframes imc-notification-slidein {
+    100% {
+        margin-left: 15px;
+    }
+}

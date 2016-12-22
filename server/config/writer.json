@@ -1,25 +1,236 @@
 {
-
-  "plugins": [
-    {
-      "id": "se.infomaker.preamble",
-      "name": "preamble",
-      "url": "http://localhost:3000/index.js",
-      "enabled": false,
-      "mandatory": false,
-      "data": {
-        "foo": "bar"
-      }
-    },
-    {
-      "id": "se.infomaker.textanalyzer",
-      "name": "textanalyzer",
-      "url": "http://localhost:3000/index.js",
-      "mandatory": false,
-      "enabled": false,
-      "data": {
-        "foo": "bar"
-      }
-    }
-  ]
+    "newsItemTemplateId": "30eae1c0-c640-4053-b114-05c64e28bbe7",
+    "language": "sv_SE",
+    "labelLanguage": "sv",
+    "plugins": [
+        {
+            "id": "se.infomaker.history",
+            "name": "history",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": false
+        },
+        {
+            "id": "se.infomaker.textanalyzer",
+            "name": "textanalyzer",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "mandatory": false,
+            "enabled": true
+        },
+        {
+            "id": "se.infomaker.publishflow",
+            "name": "publishflow",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "style": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/style.css",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.contentrelations",
+            "name": "contentrelations",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": false
+        },
+        {
+            "id": "se.infomaker.ximauthor",
+            "name": "ximauthor",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.youtubeembed",
+            "name": "youtubeembed",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": false
+        },
+        {
+            "id": "se.infomaker.ximplace-position",
+            "name": "ximplace",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true,
+            "data": {
+                "features": "position",
+                "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
+            }
+        },
+        {
+            "id": "se.infomaker.ximplace-polygon",
+            "name": "ximplace",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true,
+            "data": {
+                "features": "polygon",
+                "polygon": {
+                    "editable": false
+                },
+                "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
+            }
+        },
+        {
+            "id": "se.infomaker.preamble",
+            "name": "preamble",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.madmansrow",
+            "name": "madmansrow",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.drophead",
+            "name": "drophead",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.pagedateline",
+            "name": "pagedateline",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.dateline",
+            "name": "dateline",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.preleadin",
+            "name": "preleadin",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.socialembed",
+            "name": "socialembed",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": "se.infomaker.headereditor",
+            "name": "headereditor",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "elements": [
+                    "headline",
+                    "leadin"
+                ]
+            }
+        },
+        {
+            "id": "se.infomaker.ximimage",
+            "name": "ximimage",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "fields": [
+                    {
+                        "name": "caption",
+                        "label": "Caption",
+                        "type": "text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "se.infomaker.ximteaser",
+            "name": "ximteaser",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": "se.infomaker.newspriority",
+            "name": "newspriority",
+            "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/index.js",
+            "mandatory": false,
+            "enabled": false,
+            "data": {
+                "durationKey": "duration",
+                "defaultLifetimesIndex": "1",
+                "defaultScoresIndex": 1,
+                "scores": [
+                    {
+                        "value": 1,
+                        "text": "Breaking news"
+                    },
+                    {
+                        "value": 2,
+                        "text": "Stoppa pressarna"
+                    },
+                    {
+                        "value": 3,
+                        "text": "Värdigt för löpet"
+                    },
+                    {
+                        "value": 4,
+                        "text": "Allmänt intresse"
+                    },
+                    {
+                        "value": 5,
+                        "text": "Liten notis"
+                    },
+                    {
+                        "value": 6,
+                        "text": "Katt i träd"
+                    }
+                ],
+                "lifetimes": [
+                    {
+                        "value": "3600",
+                        "label": "6H",
+                        "text": "6 timmar"
+                    },
+                    {
+                        "value": "84600",
+                        "label": "1D",
+                        "text": "1 dag"
+                    },
+                    {
+                        "value": "592200",
+                        "label": "7D",
+                        "text": "7 dagar"
+                    },
+                    {
+                        "value": "2538000",
+                        "label": "30D",
+                        "text": "30 dagar"
+                    },
+                    {
+                        "value": "",
+                        "label": "∞",
+                        "text": "För evigt"
+                    },
+                    {
+                        "value": "custom",
+                        "label": "Tid",
+                        "text": "Tidsangivelse"
+                    }
+                ]
+            }
+        }
+    ]
 }

@@ -5,16 +5,18 @@
   "external": {
     "contentrepository": {
       "protocol": "http:",
-      "host": "52.50.102.61",
+      "host": "52.210.249.105",
       "port": "8181",
-      "endpoint": "cxf/writer/commands",
+      "endpoint": "cxf/writer/v2/commands",
       "upload": "cxf/writer/images/upload"
     },
     "conceptbackend": {
       "protocol": "http:",
-      "host": "52.18.45.126",
+      "host": "52.212.111.16",
       "port": "3000",
       "endpoint": "commands"
     }
-  }
+  },
+  "newsItemTemplateId": "30eae1c0-c640-4053-b114-05c64e28bbe7",
+  "debugProxyCalls": false
 }

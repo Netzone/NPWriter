@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><newsItem xmlns="http://iptc.org/std/nar/2006-10-01/" conformance="power" guid="809ed0c6-aa7e-42ad-86a1-917bd4614c04" standard="NewsML-G2" standardversion="2.20" version="1">
+    <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_27.xml"/>
+    <catalogRef href="http://infomaker.se/spec/catalog/catalog.infomaker.g2.1_0.xml"/>
+    <itemMeta>
+        <itemClass qcode="ninat:text"/>
+        <provider literal="InfomakerConfig"/>
+        <versionCreated>2016-10-24T14:14:29Z</versionCreated>
+        <firstCreated>2016-10-24T14:14:29Z</firstCreated>
+        <pubStatus qcode="imext:draft"/>
+        <title>Template 1</title>
+        <links xmlns="http://www.infomaker.se/newsml/1.0"/>
+
+        <itemMetaExtProperty type="imext:uri" value="im://article/809ed0c6-aa7e-42ad-86a1-917bd4614c04"/></itemMeta>
+    <contentMeta>
+        <contentCreated>2016-10-24T14:14:29Z</contentCreated>
+        <contentModified>2016-10-24T14:14:29Z</contentModified>
+        <metadata xmlns="http://www.infomaker.se/newsml/1.0">
+            <object id="RYaudnAJj8gQ" type="x-im/newsvalue">
+                <data>
+                    <score>1</score>
+                    <description>6H</description>
+                    <text>PT6H</text>
+                    <format>lifetimecode</format>
+                    <end/>
+                    <duration>21600</duration>
+                </data>
+            </object>
+
+        </metadata>
+    </contentMeta>
+    <contentSet>
+        <inlineXML>
+            <idf xmlns="http://www.infomaker.se/idf/1.0" xml:lang="sv">
+
+                <group type="body">
+                    <object type="x-im/teaser" id="teaser1" title="Hello world">
+                        <data>
+                            <text>some annotated text</text>
+                            <subject>This is a subject</subject>
+                            <crops>
+                                <crop name="crop1">
+                                    <x>50</x>
+                                    <y>50</y>
+                                    <width>500</width>
+                                    <height>500</height>
+                                </crop>
+                            </crops>
+                            <links>
+                                <link rel="image" type="x-im/image" uri="http://foo.bar/a.jpg" uuid="some-uuid-24523" url="http://efdreams.com/data_images/dreams/lion/lion-03.jpg"></link>
+                            </links>
+                        </data>
+                    </object>
+
+                    <element id="headline-1" type="headline">Demo article</element>
+                    <element id="paragraph-1" type="body">This is regular text</element>
+                    <element id="paragraph-2" type="body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et semper justo, ut vestibulum orci. Cras iaculis lectus vitae nunc placerat bibendum. Duis nisi magna, lobortis et magna ut, molestie consequat justo. Vestibulum in tellus varius, consectetur risus sed, accumsan ante. Fusce blandit bibendum augue, quis scelerisque orci auctor et.</element>
+                    <object id="ximimage-1" uuid="8bd5c257-2ffb-5494-9c83-195efd0cee9b" type="x-im/image">
+                        <links>
+                            <link rel="self" type="x-im/image" uri="im://image/S8y0oXcdEwXEqHl8YpVp1XFZo6w.png"
+                                  uuid="8bd5c257-2ffb-5494-9c83-195efd0cee9b" url="http://efdreams.com/data_images/dreams/lion/lion-03.jpg">
+                                <data>
+                                    <width>683</width>
+                                    <height>320</height>
+                                    <text>My caption</text>
+                                </data>
+                                <links>
+                                    <link rel="author" uuid="5f9b8064-d54f-11e5-ab30-625662870761" title="Jeremy Spencer"
+                                          type="x-im/author"/>
+                                </links>
+                            </link>
+                        </links>
+                    </object>
+                    <element id="paragraph-3" type="body">Morbi volutpat sapien at dolor elementum, ut pulvinar dolor elementum. Donec nisi velit, semper sit amet consectetur quis, aliquet ut mauris. Vestibulum euismod enim arcu, ut rhoncus nibh hendrerit sit amet. Donec gravida sem vel tellus faucibus dapibus.</element>
+                    <object id="ximimage-2" uuid="8bd5c257-2ffb-5494-9c83-195efd0cee9b" type="x-im/image">
+                        <links>
+                            <link rel="self" type="x-im/image" uri="im://image/S8y0oXcdEwXEqHl8YpVp1XFZo6w.png"
+                                  uuid="8bd5c257-2ffb-5494-9c83-195efd0cee9b" url="http://efdreams.com/data_images/dreams/lion/lion-03.jpg">
+                                <data>
+                                    <width>683</width>
+                                    <height>320</height>
+                                    <text>My caption</text>
+                                </data>
+                                <links>
+                                    <link rel="author" uuid="5f9b8064-d54f-11e5-ab30-625662870761" title="Jeremy Spencer"
+                                          type="x-im/author"/>
+                                </links>
+                            </link>
+                        </links>
+                    </object>
+                    <element id="paragraph-4" type="body">https://twitter.com/ArminWolf/status/795958102956851200</element>
+                    <element id="paragraph-5" type="body">hello world</element>
+                    <element id="paragraph-6" type="body">hello world</element>
+                </group>
+            </idf>
+        </inlineXML>
+    </contentSet>
+</newsItem>

@@ -1,4 +1,5 @@
-import {Component, ScrollPane, TabbedPane, TabbedPanePackage} from 'substance'
+import './scss/sidebar.scss'
+import {Component, ScrollPane, TabbedPane} from 'substance'
 
 class SidebarComponent extends Component {
 
@@ -12,11 +13,16 @@ class SidebarComponent extends Component {
 
     getInitialState() {
         return {
-            tabs: this.context.configurator.config.sidebarTabs.reverse(),
-            tabId: "one"
+            tabId: "main"
         }
     }
 
+    getTabs() {
+        const tabs = this.context.configurator.config.sidebarTabs
+        const sidebarTabs = tabs.slice(0) // Create of copy of the array to not reverse the original tabs array
+        return sidebarTabs.reverse()
+
+    }
     render($$) {
 
         const el = $$('div').addClass('se-context-section').ref('sidebar');
@@ -30,8 +36,9 @@ class SidebarComponent extends Component {
         let panels = this.getSidebarPanelsForTabId($$, tabId)
         let topBars = this.getTopBarComponents($$)
 
-        let tabsPanel = $$(TabbedPane, {activeTab: tabId, tabs: this.state.tabs})
-            .ref("" + this.state.tabId)
+
+        let tabsPanel = $$(TabbedPane, {activeTab: tabId, tabs: this.getTabs()})
+            .ref(String(this.state.tabId))
             .append(panels)
 
         let topBar = $$('div').addClass('sidebar-top').append(topBars)
@@ -49,19 +56,25 @@ class SidebarComponent extends Component {
     getTopBarComponents($$) {
         return this.context.configurator.config.sidebarTopBar.map((plugin) => {
             return $$('div')
-                .addClass('plugin plugin-'+plugin.type)
+                .addClass('plugin plugin-' + plugin.getCSSFriendlyName())
                 .append($$(plugin.component, {panel: plugin}))
         })
     }
 
+    /**
+     * Get alll registered sidebar panels and then filter by the current tab id
+     *
+     * @param $$
+     * @param tabId
+     * @returns {Array} - Returns an array with components
+     */
     getSidebarPanelsForTabId($$, tabId) {
-        return this.context.configurator.getSidebarPanels().filter((panel) => {
-            return panel.tabId === tabId
-        }).map((panel) => {
-            console.log("panel.component", $$(panel.component));
+        return this.context.configurator.getSidebarPanels().filter((plugin) => {
+            return plugin.tabId === tabId
+        }).map((plugin) => {
             return $$('div')
-                .addClass('plugin plugin-'+panel.type)
-                .append($$(panel.component, {panel: panel}))
+                .addClass('plugin plugin-' + plugin.getCSSFriendlyName())
+                .append($$(plugin.component, {pluginConfigObject: plugin}))
         })
     }
 }

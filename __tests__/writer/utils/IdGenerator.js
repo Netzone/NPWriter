@@ -16,7 +16,7 @@ describe('Test IDGenerator', () => {
         }
 
         const id = idGenerator()
-        expect(id.length).toBeGreaterThanOrEqual(12)
+        expect(id.length).toBeGreaterThanOrEqual(10)
         expect(id.indexOf('=')).toBe(-1)
     })
 

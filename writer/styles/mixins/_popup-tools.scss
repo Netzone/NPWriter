@@ -1,0 +1,10 @@
+@import "border-radius";
+@import "shadow";
+
+@mixin popup-container() {
+    background: #fff;
+    @include border-radius(0.25rem);
+    @include box-shadow;
+    border: 1px solid rgb(221, 221, 221);
+
+}

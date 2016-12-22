@@ -1,0 +1,5 @@
+.sc-isolated-node.sm-selected {
+    > .se-container ::selection {
+        background: transparent;
+    }
+}

@@ -1,0 +1,117 @@
+@import '../../../styles/mixins/shadow';
+@import '../../../styles/mixins/border-radius';
+@import '../../../styles/mixins/popup-tools';
+
+/*
+  This just serves as a container for positioning overlay content
+*/
+.sc-overlay { z-index: 200; position: absolute; }
+.sc-overlay.sm-hidden { visibility: hidden; }
+
+.sc-overlay {
+
+    // top: 20px; // should be line-height + some extra spacing
+    .se-active-tools {
+        padding: 3px 5px;
+        @include popup-container()
+    }
+    .sc-tool-group {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+
+        .se-tool {
+            -webkit-flex: 1 1 auto;
+            flex: 1 1 auto;
+
+            &:first-child {
+                button {
+                    margin-left:0;
+                }
+            }
+            &:last-child {
+                button {
+                }
+            }
+            button {
+                background-color: #fff;
+                padding: 1px 0px;
+                margin: 3px 3px;
+                color: #333;
+                @include border-radius(0.25rem);
+                max-width: 25px;
+                max-height:25px;
+                outline: none;
+                text-align: center;
+                font-size: 1.2rem;
+
+                &:focus {
+                    background: rgba(0, 0, 0, 0.1);
+                }
+
+                &.sm-active {
+                    background-color: #efefef;
+                }
+                &:hover {
+                    background-color: darken(#efefef, 5%);
+                }
+            }
+
+            // This is so commonly used that we decided
+            // to put this into main toolbar styles
+            &.expand button::before, &.truncate button::before {
+                content: " \f07e";
+                font-family: FontAwesome;
+                position: absolute;
+                top: 3px;
+                right: 3px;
+                font-size: 7px;
+            }
+
+            &.edit button::before {
+                content: " \f013";
+                font-family: FontAwesome;
+                position: absolute;
+                top: 3px;
+                right: 3px;
+                font-size: 7px;
+            }
+
+            &.sm-active button {
+                //@include dark-fill(0.1);
+            }
+
+            button:hover {
+                //@include dark-fill(0.1);
+            }
+
+            &.sm-disabled {
+                opacity: 0.2;
+                cursor: default;
+
+                button:hover {
+                    background: none;
+                }
+            }
+
+        }
+    }
+
+    .sc-button.sm-style-outline-dark {
+        background-color: #fff;
+        color: rgba(0, 0, 0, 0.75);
+    }
+}
+
+.sc-overlay.sm-theme-dark > .se-active-tools > .sc-tool-group {
+    display: inline-block;
+}
+
+.sc-overlay.sm-theme-dark > .se-active-tools > .sc-tool-group > .se-tool {
+    display: inline-block;
+}

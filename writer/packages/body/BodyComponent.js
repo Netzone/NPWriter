@@ -14,7 +14,8 @@ class BodyComponent extends Component {
         disabled: this.props.disabled,
         node: node,
         commands: this.props.commands,
-        textTypes: this.props.textTypes
+        textTypes: this.props.textTypes,
+        spellcheck: this.props.spellcheck
       }).ref('body')
     );
     return el;

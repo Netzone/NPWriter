@@ -1,4 +1,4 @@
-import { createAnnotation, insertText, NodeSelection, deleteNode } from 'substance'
+import { createAnnotation, insertText, NodeSelection, deleteNode, insertNode } from 'substance'
 import idGenerator from '../utils/IdGenerator'
 
 /**
@@ -13,6 +13,12 @@ class Document {
         this.api = api
     }
 
+
+    triggerFetchResourceNode(node) {
+
+        this.api.writer.ResourceManageranager.triggerFetch(node)
+    }
+
     /**
      * Insert an inline node at current selection
      * @param {string} name The plugin which inserts inline node
@@ -21,28 +27,22 @@ class Document {
      */
     insertInlineNode(name, data) {
 
-        let newAnno
-        const surface = this.refs.writer.getFocusedSurface();
-
+        const surface = this.api.editorSession.getFocusedSurface();
         if (!surface) {
             throw new Error("Trying to insert node with no active surface");
         }
-
         return surface.transaction((tx, args) => {
-
             // 1. Insert fake character where the citation should stick on
             args = insertText(tx, {
                 selection: args.selection,
                 text: '$'
             });
-
-            var citationSel = this.doc.createSelection({
+            var citationSel = this.api.editorSession.createSelection({
                 type: 'property',
                 path: args.selection.path,
                 startOffset: args.selection.endOffset - 1,
                 endOffset: args.selection.endOffset
             });
-
 
             // 2. Create citation annotation
             args.annotationType = name;
@@ -52,7 +52,6 @@ class Document {
             args.containerId = surface.getContainerId();
 
             args = createAnnotation(tx, args);
-            newAnno = args.result;
             return args;
         });
     }
@@ -66,8 +65,9 @@ class Document {
      */
     insertBlockNode(name, data) {
 
-        var surface = this.refs.writer.getFocusedSurface(),
-            result;
+        let editorSession = this.api.editorSession;
+        let surface = editorSession.getFocusedSurface();
+        let result;
 
         if (!surface) {
             throw new Error("Trying to insert node with no active surface");
@@ -77,42 +77,45 @@ class Document {
         data.type = !data.type ? name : data.type;
         data.id = !data.id ? idGenerator() : data.id;
 
-        surface.transaction((tx, args) => {
+        editorSession.transaction((tx, args) => {
             args.node = data;
             args.containerId = 'body';
-            result = surface.insertNode(tx, args);
+            result = insertNode(tx, args);
+            // NOTE: need to return result here, so that the selection is set
+            return result
         });
-        return result;
 
+        return result;
     }
+
+
 
     /**
      * Deletes a node from the document.
-     * Triggers a 'data:changed' event to all data:changed listeners except
+     * Triggers a 'document:changed' event to all document:changed listeners except
      * the plugin making the change.
      *
      * @param {string} name Plugin name
      * @param {object} node Node to delete, must contain an id
      * @example this.context.api.deleteNode(this.props.node);
-     * @fires data:changed
+     * @fires document:changed
      */
     deleteNode(name, node) {
+        // TODO: is this actually always a node in the body?
+        // i.e. the surface is always the body editor?
+        const editorSession = this.api.editorSession;
 
-        var docSession = this.refs.writer.getDocumentSession();
-        var surface = this.refs.writer.getFocusedSurface();
+        editorSession.transaction((tx) => {
+            tx.delete(node.id)
+        })
 
-        var beforeSelection = surface.getSelection();
-
-        docSession.transaction((tx, args) => {
-            args.nodeId = node.id;
-            deleteNode(tx, args);
-        });
-
-        surface.setSelection(beforeSelection);
-
-        this.triggerEvent(name, 'data:changed', {});
+        const event = {
+            type: 'document',
+            action: 'delete',
+            data: node.id
+        }
+        this.api.events.documentChanged(name, event);
     }
-
 
     /**
      * Get all nodes in the document
@@ -121,7 +124,7 @@ class Document {
      * @returns {Array}
      */
     getDocumentNodes() {
-        const doc = this.api.documentSession.getDocument()
+        const doc = this.api.editorSession.getDocument()
 
         const docNodes = doc.getNodes()['body'].nodes;
         return docNodes.map((nodeId) => {
@@ -130,35 +133,14 @@ class Document {
     }
 
 
-    /**
-     * Make element/node combination draggable within the writer. At the
-     * moment only a (with href attribute) and img elements are supported.
-     *
-     * @param {object} element
-     * @param {object} node
-     */
-    handleDrag(el, node) {
-        var nodeId = node.id;
-
-        el.attr('draggable', 'true');
-        el.attr('href', '#' + node.id);
-        el.on('click', function (evt) {
-            evt.preventDefault();
-        });
-
-        el.on('dragstart', (evt) => {
-            this.context.surface._draggedSelection = new NodeSelection(nodeId);
-
-            // Necessary for firefox to work
-            evt.dataTransfer.setData('nodeid', nodeId);
-            evt.target.style.opacity = 0.4;
-            evt.stopPropagation();
-        });
-
-        el.on('dragend', function (evt) {
-            evt.target.style.opacity = 1;
-        });
+    _setDocumentStatus(newStatus) {
+        this.status = newStatus
     }
+
+    getDocumentStatus() {
+        return this.status
+    }
+
 }
 
 export default Document

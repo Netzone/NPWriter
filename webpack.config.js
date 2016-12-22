@@ -60,6 +60,10 @@ module.exports = {
                 to: './substance'
             },
             {
+                from: 'node_modules/cropjs/dist',
+                to: './cropjs'
+            },
+            {
                 from: 'node_modules/font-awesome',
                 to: './font-awesome'
             },
@@ -68,8 +72,16 @@ module.exports = {
                 to: "index.html"
             },
             {
+                from: "writer/serviceworker.js",
+                to: "serviceworker.js"
+            },
+            {
                 from: "writer/styles/app.css",
                 to: "styles/app.css"
+            },
+            {
+                from: 'writer/assets',
+                to: 'assets'
             }
         ])
     ]

@@ -16,7 +16,8 @@ module.exports = {
     'expect': true,
     'it': true,
     'describe': true,
-    'beforeEach': true
+    'beforeEach': true,
+    'Uint8Array': true
   },
   "rules": {
     // 0 - off, 1 - warning, 2 - error
@@ -27,7 +28,7 @@ module.exports = {
     "no-console": [2, { allow: ["warn", "info", "error", "assert"] }],
     "no-constant-condition": 2,
     "no-control-regex": 2,
-    "no-debugger": 2,
+    "no-debugger": 1,
     "no-dupe-args": 2,
     "no-dupe-keys": 2,
     "no-duplicate-case": 2,

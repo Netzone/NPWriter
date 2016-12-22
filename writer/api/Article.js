@@ -1,8 +1,5 @@
 /**
- * @class Api.Article
- *
- * Article api class include functions to manipulate the article in various ways.
- * All functions are available through the context.api.article object.
+ * @class Article
  */
 class Article {
     constructor(api) {
@@ -11,6 +8,7 @@ class Article {
 
     /**
      * Clear the article and create a new based on the configured base template.
+     *
      */
     clear() {
         if (!this.api.browser.getHash()) {

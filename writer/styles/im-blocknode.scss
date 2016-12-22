@@ -1,0 +1,71 @@
+.im-blocknode__container {
+    margin-bottom: 10px;
+    display: inline-block;
+    text-decoration: none;
+    width: 100%;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+
+    .header {
+        padding: 0 2px 0 0;
+        margin: 0 0 5px 2px;
+        border-radius: 5px 5px 0 0;
+        font-size: 0.9rem;
+        text-decoration: none !important;
+
+        .fa {
+            color:rgb(32, 121, 220);
+            width:18px;
+        }
+
+        strong {
+            font-weight: 300;
+            color: #444;
+        }
+    }
+
+    .im-blocknode__content {
+        margin-left: 20px;
+
+        &.full-width {
+            margin-left:0;
+        }
+
+        iframe {
+            max-width: 100% !important;
+        }
+    }
+
+
+    & + .se-blocker {
+        &:hover {
+            box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            border: 1px solid #fff;
+            .header {
+                .remove-button {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
+/**
+    Now outline border
+ */
+.sc-isolated-node.sm-default-style.sm-co-selected > .se-container,
+.sc-isolated-node.sm-default-style.sm-selected > .se-container {
+    outline: none;
+}
+
+.sc-isolated-node.sm-selected {
+    .im-blocknode__container {
+        box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px;
+        background: rgba(222, 235, 255, 0.6);
+        margin-bottom:10px;
+        border: 1px solid #fff;
+    }
+}

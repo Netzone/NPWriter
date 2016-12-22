@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><newsItem xmlns="http://iptc.org/std/nar/2006-10-01/" conformance="power" guid="809ed0c6-aa7e-42ad-86a1-917bd4614c04" standard="NewsML-G2" standardversion="2.20" version="1">
+    <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_27.xml"/>
+    <catalogRef href="http://infomaker.se/spec/catalog/catalog.infomaker.g2.1_0.xml"/>
+    <itemMeta>
+        <itemClass qcode="ninat:text"/>
+        <provider literal="InfomakerConfig"/>
+        <versionCreated>2016-10-24T14:14:29Z</versionCreated>
+        <firstCreated>2016-10-24T14:14:29Z</firstCreated>
+        <pubStatus qcode="imext:draft"/>
+        <title>Template 1</title>
+        <links xmlns="http://www.infomaker.se/newsml/1.0"/>
+
+        <itemMetaExtProperty type="imext:uri" value="im://article/809ed0c6-aa7e-42ad-86a1-917bd4614c04"/></itemMeta>
+    <contentMeta>
+        <contentCreated>2016-10-24T14:14:29Z</contentCreated>
+        <contentModified>2016-10-24T14:14:29Z</contentModified>
+        <metadata xmlns="http://www.infomaker.se/newsml/1.0">
+            <object id="RYaudnAJj8gQ" type="x-im/newsvalue">
+                <data>
+                    <score>1</score>
+                    <description>6H</description>
+                    <text>PT6H</text>
+                    <format>lifetimecode</format>
+                    <end/>
+                    <duration>21600</duration>
+                </data>
+            </object>
+
+        </metadata>
+    </contentMeta>
+    <contentSet>
+        <inlineXML>
+            <idf xmlns="http://www.infomaker.se/idf/1.0" xml:lang="sv">
+
+                <group type="body">
+                    <element id="headline-87a9b7bdb0c33f76a923331ffd93a7fc" type="headline">Demo article</element>
+                    <element id="paragraph-e095c1e1a87200d36376f9ceda8e68c0" type="body">This is regular text</element>
+                    <element id="paragraph-6a6269533ea482fdd0821ecea728939d" type="body"/>
+                    <element id="paragraph-166584f0f81502fb14bf3939e8e53a8b" type="body"/>
+                </group>
+            </idf>
+        </inlineXML>
+    </contentSet>
+</newsItem>

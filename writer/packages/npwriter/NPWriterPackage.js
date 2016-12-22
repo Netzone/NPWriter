@@ -1,18 +1,41 @@
 import './scss/_content-menu.scss'
+import './scss/_overlay-menu.scss'
+import './scss/_context-menu.scss'
+import './scss/_isolated-node.scss'
 
 // Base packages
-import {BasePackage, StrongPackage, EmphasisPackage, LinkPackage} from 'substance'
+import {BasePackage,
+    StrongPackage, EmphasisPackage, LinkPackage,
+    SpellCheckPackage
+} from 'substance'
+
+import StrongXmlConverter from '../strong/StrongXMLConverter'
+import StrongCommand from '../strong/StrongCommand'
+
+import EmphasisXmlConverter from '../emphasis/EmphasisXMLConverter'
+import EmphasisCommand from '../emphasis/EmphasisCommand'
+import LinkXMLConverter from '../link/LinkXMLConverter'
+import LinkCommand from '../link/LinkCommand'
 
 import NewsMLArticle from './NewsMLArticle'
 import NewsMLImporter from './NewsMLImporter'
+import NewsMLExporter from './NewsMLExporter'
+import NPFileNode from './NPFileNode'
 
 import BodyPackage from '../body/BodyPackage'
-import HeadlinePackage from '../headline/HeadlinePackage'
-import SubheadlinePackage from '../subheadline/SubheadlinePackage'
-import ParagraphPackage from '../paragraph/ParagraphPackage'
-import BlockquotePackage from '../blockquote/BlockquotePackage'
 import SwitchTextTypePackage from '../switch-text-type/SwitchTextTypePackage'
-// import PreamblePackage from '../preamble/PreamblePackage'
+// import ConfigEditorPackage from '../config-editor/ConfigEditorPackage'
+import DialogPackage from '../dialog/DialogPackage'
+import DialogImagePackage from '../dialog-image/DialogImagePackage'
+import AboutPackage from '../about/AboutPackage'
+import LabelPackage from '../label/LabelPackage'
+import NPWContextMenuPackage from '../npw-context-menu/NPWContextMenuPackage'
+import NPWContentMenuPackage from '../npw-content-menu/NPWContentMenuPackage'
+import NPWOverlayMenuPackage from '../npw-overlay-menu/NPWOverlayMenuPackage'
+import NotificationPackage from '../notification/NotificationPackage'
+import FormSearchPackage from '../form-search/FormSearchPackage'
+
+
 
 
 export default {
@@ -24,22 +47,31 @@ export default {
             defaultTextType: 'paragraph'
         })
 
+        // basics
+        config.import(BasePackage)
+
+        //Content menu, context menu, overlay
+        config.addToolGroup('content-menu')
+        config.addToolGroup('content-top-menu')
+
         // core nodes
-        config.import(StrongPackage, {toolTarget: 'overlay'})
-        config.import(EmphasisPackage, {toolTarget: 'overlay'})
-        config.import(LinkPackage, {toolTarget: 'overlay'})
+        config.import(StrongPackage, {toolGroup: 'overlay'})
+        config.import(EmphasisPackage, {toolGroup: 'overlay'})
+        config.import(LinkPackage, {toolGroup: 'overlay'})
+
+        config.addCommand('strong', StrongCommand, { nodeType: 'strong' })
+        config.addCommand('emphasis', EmphasisCommand, { nodeType: 'emphasis' })
+        config.addCommand('link', LinkCommand, { nodeType: 'link' })
 
         // content-nodes
         config.import(BodyPackage)
-        config.import(HeadlinePackage)
-        config.import(SubheadlinePackage)
-        config.import(ParagraphPackage)
-        config.import(BlockquotePackage)
-        // config.import(PreamblePackage)
 
+        // config.import(ConfigEditorPackage)
 
+        config.import(DialogPackage)
+        config.import(DialogImagePackage)
+        config.import(AboutPackage)
         // general purpose
-        config.import(BasePackage)
         config.import(SwitchTextTypePackage)
 
         config.addIcon('content-menu-open', {'fontawesome': 'fa-pencil'});
@@ -47,6 +79,28 @@ export default {
 
         // Override Importer/Exporter
         config.addImporter('newsml', NewsMLImporter)
-        // config.addExporter('jats', AuthorExporter);
+        config.addExporter('newsml', NewsMLExporter)
+
+        config.addConverter('newsml', LinkXMLConverter)
+        config.addConverter('newsml', StrongXmlConverter)
+        config.addConverter('newsml', EmphasisXmlConverter)
+
+        // File store extensions
+        config.addNode(NPFileNode)
+
+        config.import(SpellCheckPackage)
+
+        // Add a label package overriding and adding swedish translation to substance
+        config.import(LabelPackage)
+
+        //Notification
+        config.import(NotificationPackage)
+
+        // Form search
+        config.import(FormSearchPackage)
+
+        config.import(NPWContentMenuPackage)
+        config.import(NPWContextMenuPackage)
+        config.import(NPWOverlayMenuPackage)
     }
 }

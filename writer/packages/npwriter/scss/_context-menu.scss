@@ -1,0 +1,33 @@
+@import '../../../styles/mixins/popup-tools';
+.sc-context-menu {
+    @include popup-container();
+    .sc-tool-group {
+
+        padding:0;
+        background-color: #fff;
+        button {
+            font-size: 1rem;
+            color: rgba(0, 0, 0, 0.75);
+            padding: 5px 0 5px 10px;
+            cursor: pointer;
+            border-radius: 0;
+            width: 100%;
+            display: block;
+            background-color: #fff;
+            .se-label {
+                font-weight:normal;
+            }
+            &:hover {
+                background-color: darken(#fff, 5%);
+                color: rgba(0, 0, 0, 0.85);
+            }
+            &.active {
+                font-weight: 700;
+            }
+        }
+
+        &.sm-target-context-menu-primary {
+            border-bottom:1px solid #efefef;
+        }
+    }
+}

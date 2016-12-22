@@ -1,28 +1,21 @@
-'use strict';
-
-import { SwitchTextTypeTool } from 'substance'
-import each from 'lodash/each'
+import {SwitchTextTypeTool} from 'substance'
+import ContentMenuItem from './ContextMenuItem'
 
 class NPSwitchTextTypeTool extends SwitchTextTypeTool {
-  render($$) {
-    var el = $$("div").addClass('sc-np-switch-text-type');
-    var Button = this.getComponent('button');
+    render($$) {
+        var el = $$("ul").addClass('context-menu');
 
-    each(this.props.textTypes, function(textType) {
-        var btn = $$(Button, {
-          label: textType.name,
-          hint: 'ctrl+foo',
-          active: textType.name === this.props.currentTextType.name,
-          // disabled: this.props.disabled,
-          style: 'plain-dark'
-        }).on('click', this.handleClick)
-          .attr('data-type', textType.name)
+        const textTypes = this.props.textTypes.map((textType) => {
+            return $$(ContentMenuItem, {
+                label: textType.name,
+                active: textType.name === this.props.currentTextType.name
+            }).on('click', this.handleClick).attr('data-type', textType.name)
+        })
 
-        el.append(btn);
-    }.bind(this));
+        el.append(textTypes)
 
-    return el;
-  }
+        return el;
+    }
 }
 
 export default NPSwitchTextTypeTool

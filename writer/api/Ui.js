@@ -1,10 +1,23 @@
+import Event from '../utils/Event'
 class Ui {
+
+    /**
+     * Constructor takes a reference to the API
+     * @param api
+     */
     constructor(api) {
         this.api = api
     }
 
+    /**
+     * Show a notification
+     *
+     * @param {string} name - The plugin ID
+     * @param title
+     * @param message
+     */
     showNotification(name, title, message) {
-        this.api.triggerEvent('name', 'notification:add', {
+        this.api.events.triggerEvent(name, Event.NOTIFICATION_ADD, {
             plugin: name,
             title: title,
             message: message
@@ -71,7 +84,7 @@ class Ui {
      * @oaram {object} options Options passed to dialog
      */
     showDialog(contentComponent, props, options) {
-        var writer = this.refs.writer;
+        const writer = this.api.refs.writer;
         writer.showDialog(contentComponent, props, options);
     }
 
@@ -118,37 +131,52 @@ class Ui {
             },
             options = {
                 global: true,
-                title: this.refs.writer.i18n.t('Message'),
+                title: this.api.getLabel('message'),
                 primary: false,
                 secondary: false
             };
 
+
+        const cancelLabel = this.api.getLabel('cancel')
+        const continueLabel = this.api.getLabel('continue')
         if (level === 2) {
-            options.primary = this.refs.writer.i18n.t('Cancel');
+            options.primary = cancelLabel
             props.cbPrimary = cbCancel;
         }
         else if (level === 1) {
-            options.primary = this.refs.writer.i18n.t('Cancel');
+            options.primary = cancelLabel
             props.cbPrimary = cbCancel;
 
-            options.secondary = this.refs.writer.i18n.t('Continue');
+            options.secondary = continueLabel
             props.cbSecondary = cbContinue;
         }
         else {
-            options.primary = this.refs.writer.i18n.t('Continue');
+            options.primary = continueLabel
             props.cbPrimary = cbContinue;
 
             if (cbCancel) {
-                options.secondary = this.refs.writer.i18n.t('Cancel');
+                options.secondary = cancelLabel
                 props.cbSecondary = cbCancel;
             }
         }
 
-        this.refs.writer.showMessageDialog(
+        const writer = this.api.writer;
+        writer.showMessageDialog(
             messages,
             props,
             options
         );
+    }
+
+    /**
+     * Returns a registered component from component registry
+     * Can then be used the appending to a existing component
+     *
+     * @param {string} name - The key that component was registered with
+     * @returns {*}
+     */
+    getComponent(name) {
+        return this.api.writer.componentRegistry.get(name)
     }
 
 }

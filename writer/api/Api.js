@@ -1,4 +1,4 @@
-import jxon from '../utils/jxon'
+import jxon from 'jxon'
 import isPlainObject from 'lodash/isPlainObject'
 import isString from 'lodash/isString'
 
@@ -6,14 +6,13 @@ import Events from './Events'
 import Document from './Document'
 import NewsItem from './NewsItem'
 import Exceptions from './Exceptions'
-import Drop from './Drop'
 import Upload from './Upload'
-
-// Namespaced api
 import Article from './Article'
 import Browser from './Browser'
 import Router from './Router'
+import Concept from './Concept'
 import Ui from './Ui'
+import History from './History'
 
 jxon.config({
     autoDate: false,
@@ -21,46 +20,52 @@ jxon.config({
 });
 
 /**
- Api base class
-
- @class
+ * @class Api base class
  */
 class Api {
 
-    constructor(pluginManager, configurator) {
+    constructor(pluginManager, configurator, apiManager) {
         this.pluginManager = pluginManager
         this.eventListeners = []
 
         this.document = new Document(this)
-        this.newsitem = new NewsItem(this)
+        this.newsItem = new NewsItem(this)
         this.events = new Events()
         this.router = new Router()
         this.article = new Article(this)
         this.browser = new Browser(this)
         this.ui = new Ui(this)
-        this.drop = new Drop()
-        this.upload = new Upload()
+        this.upload = new Upload(this)
         this.exceptions = Exceptions
         this.configurator = configurator
-        this.i18n = {}
-
+        this.concept = Concept
+        this.apiManager = apiManager
+        this.history = new History(this)
     }
 
     /**
      * Initialize api and provide it with the current newsItem.
      *
-     * @param {object} newsItem The currently loaded news item
-     * @param {object} doc The currently loaded idf document
+     * @param newsItemArticle
+     * @param editorSession
      * @param {object} refs A reference to Writer Controller
      */
 
-    init(newsItem, documentSession, refs) {
-        this.newsItem = newsItem
-        this.documentSession = documentSession
-        this.doc = documentSession.getDocument()
+    init(newsItemArticle, editorSession, refs) {
+        this.newsItemArticle = newsItemArticle
+        this.editorSession = editorSession
+        this.doc = editorSession.getDocument()
         this.refs = refs
     }
 
+    setWriterReference(writer) {
+        this.refs.writer = writer //TODO: Check if we can remove this and just use Writer
+        this.writer = writer
+    }
+
+    setAppReference(app) {
+        this.app = app
+    }
 
     /**
      * Get configuration value in a plugins local configuration data section.
@@ -84,6 +89,12 @@ class Api {
      */
     getConfigValue(name, path, defaultValue) {
         return this.pluginManager.getConfigValue(name, path, defaultValue);
+    }
+
+    getLabel(name) {
+        var labelProvider = this.configurator.labelProvider
+        if (!labelProvider) { throw new Error('Missing labelProvider.') }
+        return labelProvider.getLabel(name)
     }
 
     /**

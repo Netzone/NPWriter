@@ -1,0 +1,221 @@
+{
+    "newsItemTemplateId": "30eae1c0-c640-4053-b114-05c64e28bbe7",
+    "language": "en_US",
+    "plugins": [
+        {
+            "id": "se.infomaker.publishflow",
+            "name": "publishflow",
+            "url": "http://localhost:5001/index.js",
+            "style": "http://localhost:5001/style.css",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.youtubeembed",
+            "name": "youtubeembed",
+            "url": "http://localhost:5002/youtubeembed.build.js",
+            "enabled": false,
+            "mandatory": false
+        },
+        {
+            "id": "se.infomaker.ximplace",
+            "name": "ximplace",
+            "url": "http://localhost:5001/index.js",
+            "style": "http://localhost:5001/style.css",
+            "enabled": true,
+            "mandatory": true,
+            "data": {
+                "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
+            }
+        },
+        {
+            "id": "se.infomaker.preamble",
+            "name": "preamble",
+            "url": "http://localhost:5001/index.js",
+            "style": "http://localhost:5001/style.css",
+            "enabled": true,
+            "mandatory": true
+        },
+        {
+            "id": "se.infomaker.textanalyzer",
+            "name": "textanalyzer",
+            "url": "http://localhost:5001/index.js",
+            "mandatory": false,
+            "enabled": true
+        },
+        {
+            "id": "se.infomaker.skeleton",
+            "name": "skeleton",
+            "url": "http://localhost:5001/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": "se.infomaker.socialembed",
+            "name": "socialembed",
+            "url": "http://localhost:5001/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": "se.infomaker.ximimage",
+            "name": "ximimage",
+            "url": "http://localhost:5001/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "crops":{
+                     "16:9":[ 16,9 ],
+                     "8:5":[ 8,5 ],
+                     "4:3":[ 4,3 ],
+                     "1:1":[ 1,1 ]
+                },
+                "fields":[
+                    {
+                        "name": "caption",
+                        "label": "Caption",
+                        "type": "text"
+                    },
+                    {
+                        "name": "credit",
+                        "label": "Credit",
+                        "type": "text"
+                    },
+                    {
+                        "name": "alttext",
+                        "label": "Alt text",
+                        "type": "text"
+                    },
+                    {
+                        "name": "alignment",
+                        "label": "Alignment",
+                        "type": "option",
+                        "options": [
+                            {
+                                "name": "auto",
+                                "label": "Automatic",
+                                "icon": "fa-align-center"
+                            },
+                            {
+                                "name": "left",
+                                "label": "Left",
+                                "icon": "fa-align-left"
+                            },
+                            {
+                                "name": "right",
+                                "label": "Right",
+                                "icon": "fa-align-right"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "se.infomaker.ximteaser",
+            "name": "ximteaser",
+            "url": "http://localhost:5001/index.js",
+            "mandatory": false,
+            "enabled": true,
+            "data": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": "se.infomaker.open-modal",
+            "name": "open-modal",
+            "url": "http://localhost:5002/open-modal.build.js",
+            "mandatory": false,
+            "enabled": false,
+            "data": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": "se.infomaker.insertnode",
+            "name": "insertnode",
+            "url": "http://localhost:5002/insertnode.build.js",
+            "mandatory": false,
+            "enabled": false,
+            "data": {
+                "foo": "bar"
+            }
+        },
+        {
+            "id": "se.infomaker.newspriority",
+            "name": "newspriority",
+            "url": "http://localhost:5001/index.js",
+            "mandatory": false,
+            "enabled": false,
+            "data": {
+                "durationKey": "duration",
+                "defaultLifetimesIndex": "1",
+                "defaultScoresIndex": 1,
+                "scores": [
+                    {
+                        "value": 1,
+                        "text": "Breaking news"
+                    },
+                    {
+                        "value": 2,
+                        "text": "Stoppa pressarna"
+                    },
+                    {
+                        "value": 3,
+                        "text": "Värdigt för löpet"
+                    },
+                    {
+                        "value": 4,
+                        "text": "Allmänt intresse"
+                    },
+                    {
+                        "value": 5,
+                        "text": "Liten notis"
+                    },
+                    {
+                        "value": 6,
+                        "text": "Katt i träd"
+                    }
+                ],
+                "lifetimes": [
+                    {
+                        "value": "3600",
+                        "label": "6H",
+                        "text": "6 timmar"
+                    },
+                    {
+                        "value": "84600",
+                        "label": "1D",
+                        "text": "1 dag"
+                    },
+                    {
+                        "value": "592200",
+                        "label": "7D",
+                        "text": "7 dagar"
+                    },
+                    {
+                        "value": "2538000",
+                        "label": "30D",
+                        "text": "30 dagar"
+                    },
+                    {
+                        "value": "",
+                        "label": "∞",
+                        "text": "För evigt"
+                    },
+                    {
+                        "value": "custom",
+                        "label": "Tid",
+                        "text": "Tidsangivelse"
+                    }
+                ]
+            }
+        }
+    ]
+}

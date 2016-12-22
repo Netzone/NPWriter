@@ -4,6 +4,7 @@ var request = require('request');
 var config = require('../models/ConfigurationManager');
 var log = require('../utils/logger').child({model:'Backend'});
 var b64 = require('b64');
+var fs = require('fs');
 let ocSanitize = require('../utils/oc-search-sanitizer');
 
 function Backend() {}
@@ -80,6 +81,7 @@ Backend.call = function(backend, op, cb) { //method, path, contentType, body, cb
  * @param {string} entity Type of entity
  * @param {string} query
  * @param {*} res
+ * @param req
  */
 Backend.search = function(entity, query, res, req) {
     var sanitizedQuery = ocSanitize(query);
@@ -107,7 +109,41 @@ Backend.upload = function(formData, cfg, cb) {
     });
 };
 
-Backend.uploadUrl = function(url, cfg, cb) {
+/**
+ * Upload data using an url.
+ *
+ * @param file          File to upload.
+ * @param contentType   Content type (mimetype) of file.
+ * @param uploadUrl     URL used for upload/POST request.
+ * @param cb            Callback.
+ */
+Backend.uploadByUrl = function (file, contentType, uploadUrl, cb) {
+    fs.stat(file, function (error, stat) {
+        if (error) {
+            cb(error);
+        } else {
+            var options = {
+                method: 'PUT',
+                url: uploadUrl,
+                body: fs.createReadStream(file),
+                headers: {
+                    "Content-Type": contentType,
+                    "Content-Length": stat.size
+                }
+            };
+
+            request(options, function (error, response, body) {
+                if (error) {
+                    cb(error);
+                } else {
+                    cb(null, response, body);
+                }
+            });
+        }
+    });
+};
+
+Backend.uploadUrl = function (url, cfg, cb) {
     request.get({
         url: cfg.protocol + "//" + cfg.host + ":" + cfg.port + "/" + cfg.upload + "?source=" + encodeURIComponent(url),
     }, (err, response, body) => {
@@ -115,7 +151,6 @@ Backend.uploadUrl = function(url, cfg, cb) {
         cb(err, response, body);
     });
 };
-
 
 Backend.defaultHandling = function(res, error, response, body, contentType, req, context) {
     if (error) {
@@ -130,6 +165,22 @@ Backend.defaultHandling = function(res, error, response, body, contentType, req,
             .status(response.statusCode)
             .send(body);
     }
+};
+
+/**
+ * Default error handling for Writer backend.
+ *
+ * @param responseOut       Response sent back to client.
+ * @param error             The actual error message.
+ * @param statusCode        Http status code. If not supplied defaults to 500.
+ * @param responseIn        Response from any external requests made by server.
+ * @param requestHeaders    Client request headers.
+ * @param context           Context used to group log entries.
+ */
+Backend.defaultErrorHandling = function (responseOut, error, statusCode, responseIn, requestHeaders, context) {
+    log.error({err: error, response: responseIn, headers: requestHeaders, statusCode: statusCode, context: context});
+    statusCode = statusCode || 500;
+    responseOut.contentType('application/json').status(statusCode).send({error: error});
 };
 
 

@@ -1,0 +1,87 @@
+/*
+    Using a global button style is dangerous, as it will conflict with the Substance
+    Button component and other button elements
+
+    ATTENTION: I changed `button {` to `.sc-np-btn {`
+*/
+
+.sc-np-bar {
+    .sc-np-btn {
+        border: none;
+    }
+}
+.sc-np-btn {
+    display: inline-block;
+    background: #0098C7;
+    padding: 0.5rem 1.6rem;
+    font-size: 1rem;
+    line-height: 20px;
+    border-radius: 40px;
+    transition: opacity ease-in-out 0.1s;
+    color: #fff;
+    border: 1px solid #ddd;
+
+    &:hover {
+        background-color: lighten(#0098C7, 5%);
+    }
+    a.fa {
+        color: #fff;
+    }
+
+    &.disabled {
+        opacity: 0.7;
+    }
+
+    &.btn-secondary {
+        background: #fff;
+        border: 1px solid #ddd;
+        color: #666;
+        
+        &:hover {
+            background-color: darken(#fff, 5%);
+        }
+        
+        a.fa {
+            color: #666;
+        }
+    }
+}
+
+.sc-np-btn-group,
+.btn-group {
+    transition: opacity ease-in-out 0.1s;
+
+    button {
+        border-radius: 0;
+        text-align: center;
+        border-right: 1px solid #55A2D6;
+
+        &:first-child {
+            border-radius: 40px 0 0 40px;
+        }
+
+        &:last-child {
+            border-radius: 0 40px 40px 0;
+            padding: 0.5rem 1.3rem;
+            border-right: none;
+
+            i {
+                width: 18px;
+                text-align: center;
+            }
+        }
+
+        &.btn-secondary {
+            border-color: #ddd;
+            border-left: none;
+
+            &:first-child {
+                border-left: 1px solid #ddd;
+            }
+        }
+    }
+
+    &.disabled {
+        opacity: 0.7;
+    }
+}

@@ -1,0 +1,68 @@
+
+/**
+ * Left arrow box, ie the content menu
+ */
+.se-l-arrow-box {
+    position: relative;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.se-l-arrow-box:after, .se-l-arrow-box:before {
+    right: 100%;
+    top: 12px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.se-l-arrow-box:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-right-color: #f9f9f9;
+    border-width: 6px;
+    margin-top: -6px;
+}
+
+.se-l-arrow-box:before {
+    border-color: rgba(238, 238, 238, 0);
+    border-right-color: #ddd;
+    border-width: 7px;
+    margin-top: -7px;
+}
+
+
+/**
+ * Bottom arrow box, ie inline context menu/box
+ */
+.se-b-arrow-box {
+    position: relative;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.se-b-arrow-box:after, .se-b-arrow-box:before {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.se-b-arrow-box:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-top-color: #fff;
+    border-width: 6px;
+    margin-left: -6px;
+}
+.se-b-arrow-box:before {
+    border-color: rgba(238, 238, 238, 0);
+    border-top-color: #ddd;
+    border-width: 7px;
+    margin-left: -7px;
+}

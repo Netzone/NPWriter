@@ -5,7 +5,10 @@ class UnsupportedInlineNode extends InlineNode {}
 UnsupportedInlineNode.type = 'unsupported-inline';
 
 UnsupportedInlineNode.define({
-  xml: {type: 'string', default: ''}
+  attributes: { type: 'object', default: {} },
+  xmlContent: {type: 'string', default: ''},
+  tagName: 'string',
+  tagType: { type: 'string', optional: true}
 });
 
 export default UnsupportedInlineNode;
