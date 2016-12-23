@@ -7,9 +7,14 @@ var requestDebug = require('request-debug');
 var log = require('../utils/logger').child({api: 'Router'});
 var config = require('../models/ConfigurationManager');
 
+const bodyParser = require('body-parser')
+const proxyParser = bodyParser.raw({limit: '50Mb', extended: true, type: "*/*"})
+
 /**
  * Proxy for plugins
  * @TODO: Can we remove this?
+ *
+ * @deprecated
  */
 router.get('/proxy', function (req, res) {
     var url = req.query.url;
@@ -34,7 +39,7 @@ router.get('/proxy', function (req, res) {
 /**
  * Fetch remote resource through local proxy
  */
-router.all('/resourceproxy', function (req, res) {
+router.all('/resourceproxy', proxyParser, function (req, res) {
 
     if (config.get('debugProxyCalls') === true) {
         requestDebug(request, function(type, data) {
