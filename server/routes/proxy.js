@@ -8,7 +8,7 @@ var log = require('../utils/logger').child({api: 'Router'});
 var config = require('../models/ConfigurationManager');
 
 const bodyParser = require('body-parser')
-const proxyParser = bodyParser.raw({limit: '50Mb', extended: true, type: "*/*"})
+const proxyParser = bodyParser.raw({limit: '50Mb', extended: true, type: "application/json"})
 
 /**
  * Proxy for plugins
