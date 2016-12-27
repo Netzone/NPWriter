@@ -52,7 +52,7 @@ describe('Router helper methods', () => {
     })
 
 
-    it('Can create a querystring of paramaters', () => {
+    it('Can create a querystring of parameters', () => {
         const parameters = {
             url: 'http://google.com',
             user: 'dummy'
@@ -60,7 +60,7 @@ describe('Router helper methods', () => {
         const router = api.router
         const url = router.getQuerystringFromParameters(parameters)
 
-        expect(url).toBe('?url=http://google.com&user=dummy')
+        expect(url).toBe('?url=http%3A%2F%2Fgoogle.com&user=dummy')
 
     })
 
