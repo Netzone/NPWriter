@@ -28,7 +28,7 @@ class Router {
 
             for (const name in parameters) {
                 if (name !== 'headers' && name !== 'body') { // Dont add the headers key to the querystring
-                    query.push(name + '=' + encodeURI(parameters[name]));
+                    query.push(name + '=' + encodeURIComponent(parameters[name]));
                 }
             }
             return '?' + query.join('&')
