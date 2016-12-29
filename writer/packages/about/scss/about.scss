@@ -20,8 +20,13 @@
     }
 
     p.credits {
-        padding: 10px 20px 1px 23px;
+        padding: 12px 20px 16px 23px;
         background: #fafafa;
+
+        ul.fa-ul {
+            padding: 0;
+            margin: 0 0 0 2.14285714em;
+        }
     }
 
     p li.fa-li {
