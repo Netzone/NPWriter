@@ -12,7 +12,8 @@
     },
     "conceptbackend": {
       "protocol": "http:",
-      "host": "52.212.111.16",
+      "host_old": "52.212.111.16",
+      "host": "52.212.123.122",
       "port": "3000",
       "endpoint": "commands"
     }
