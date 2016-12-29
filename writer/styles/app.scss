@@ -96,9 +96,22 @@ p {
         padding: 0 5px;
         text-align: center;
         border-bottom: 1px solid #ddd;
+        background: #eee;
+        font-size: 80%;
 
         &.sm-active {
-          border-bottom: 1px solid #444;
+          border-bottom: none;
+          border-right: 1px solid #ddd;
+          border-left: 1px solid #ddd;
+          background: #fff;
+
+          &:first-child {
+              border-left: none;
+          }
+
+          &:last-child {
+              border-right: none;
+          }
         }
       }
     }
