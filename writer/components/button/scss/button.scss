@@ -5,11 +5,6 @@
     ATTENTION: I changed `button {` to `.sc-np-btn {`
 */
 
-.sc-np-bar {
-    .sc-np-btn {
-        border: none;
-    }
-}
 .sc-np-btn {
     display: inline-block;
     background: #0098C7;
@@ -19,7 +14,6 @@
     border-radius: 40px;
     transition: opacity ease-in-out 0.1s;
     color: #fff;
-    border: 1px solid #ddd;
 
     &:hover {
         background-color: lighten(#0098C7, 5%);
@@ -36,11 +30,11 @@
         background: #fff;
         border: 1px solid #ddd;
         color: #666;
-        
+
         &:hover {
             background-color: darken(#fff, 5%);
         }
-        
+
         a.fa {
             color: #666;
         }
@@ -57,13 +51,13 @@
         border-right: 1px solid #55A2D6;
 
         &:first-child {
+            border-left: 1px solid #55A2D6;
             border-radius: 40px 0 0 40px;
         }
 
         &:last-child {
             border-radius: 0 40px 40px 0;
             padding: 0.5rem 1.3rem;
-            border-right: none;
 
             i {
                 width: 18px;
@@ -75,8 +69,18 @@
             border-color: #ddd;
             border-left: none;
 
+            &.active {
+                border-color: #ddd;
+                background-color: #ddd;
+            }
+
             &:first-child {
+                border-radius: 3px 0 0 3px;
                 border-left: 1px solid #ddd;
+            }
+
+            &:last-child {
+                border-radius: 0 3px 3px 0;
             }
         }
     }
