@@ -200,6 +200,14 @@
         "mandatory": false
     },
     {
+        "id": "se.infomaker.ximchannel",
+        "name": "ximchannel",
+        "url": "http://localhost:5001/index.js",
+        "style": "http://localhost:5001/style.css",
+        "enabled": true,
+        "mandatory": false
+    },
+    {
       "id": "se.infomaker.youtubeembed",
       "name": "youtubeembed",
       "url": "http://localhost:5001/index.js",
