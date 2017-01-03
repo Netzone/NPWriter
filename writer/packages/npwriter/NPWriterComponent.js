@@ -7,11 +7,15 @@ import BarComponent from './../../components/bar/BarComponent'
 import DialogPlaceholder from '../dialog/DialogPlaceholder'
 import Event from '../../utils/Event'
 import debounce from '../../utils/Debounce'
+import NPResourceManager from './NPResourceManager'
 
 class NPWriter extends AbstractEditor {
 
     _initialize(...args) {
         super._initialize(...args)
+
+        // Override Substance resource manager(anager)
+        this.ResourceManageranager = new NPResourceManager(this.editorSession, this.getChildContext())
 
         this.props.api.setWriterReference(this);
 
@@ -40,7 +44,6 @@ class NPWriter extends AbstractEditor {
         this.handleActions(actionHandlers)
 
         this.props.api.events.on('__internal', Event.DOCUMENT_SAVE_FAILED, (e) => {
-            console.log("Error", e);
             let errorMessages = e.data.errors.map((error) => {
                 return {
                     type: 'error',
@@ -86,19 +89,18 @@ class NPWriter extends AbstractEditor {
 
 
     editorSessionUpdated(data) {
-        if (data._change) {
-            this.addVersion()
-            if (data._info.history === false) {
-                // Don't trigger document change for internal changes that the user cannot undo/redo
-                return
-            }
-
-            this.props.api.events.documentChanged(null, {
-                type: 'edit',
-                action: 'edit',
-                data: data._change
-            })
+        if (!data._change || data._info.history === false) {
+            // Don't trigger document change for internal changes that the user cannot undo/redo
+            return
         }
+
+        this.addVersion()
+
+        this.props.api.events.documentChanged(null, {
+            type: 'edit',
+            action: 'edit',
+            data: data._change
+        })
     }
 
     dispose() {

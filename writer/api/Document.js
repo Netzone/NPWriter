@@ -14,9 +14,9 @@ class Document {
     }
 
 
-    triggerFetchResourceNode(node) {
+    triggerFetchResourceNode(node, info) {
 
-        this.api.writer.ResourceManageranager.triggerFetch(node)
+        this.api.writer.ResourceManageranager.triggerFetch(node, info)
     }
 
     /**
