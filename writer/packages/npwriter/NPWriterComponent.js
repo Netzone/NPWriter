@@ -71,6 +71,12 @@ class NPWriter extends AbstractEditor {
                 return message
             }
         });
+
+        window.addEventListener('unload', () => {
+            this.props.api.history.deleteHistory(
+                this.props.api.newsItem.getIdForArticle()
+            )
+        })
     }
 
 
