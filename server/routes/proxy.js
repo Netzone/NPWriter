@@ -109,7 +109,7 @@ function del(url, req, res) {
                 method: 'DELETE',
                 status: httpStatusCode,
                 url: req.query.url
-            }, "Failed fetching resource through proxy");
+            }, "Failed deleting resource through proxy");
         }
     }), {end: false}).pipe(res)
 }
@@ -132,7 +132,7 @@ function post(url, req, res) {
                 method: 'POST',
                 status: httpStatusCode,
                 url: req.query.url
-            }, "Failed fetching resource through proxy");
+            }, "Failed posting resource through proxy");
         }
     }), {end: false}).pipe(res)
 }
@@ -154,7 +154,7 @@ function put(url, req, res) {
                 method: 'PUT',
                 status: httpStatusCode,
                 url: req.query.url
-            }, "Failed fetching resource through proxy");
+            }, "Failed putting resource through proxy");
         }
     }), {end: false}).pipe(res)
 }
