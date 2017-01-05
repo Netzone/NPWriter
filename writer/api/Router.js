@@ -19,7 +19,6 @@ class Router {
      * @returns {string}
      */
     getQuerystringFromParameters(parameters) {
-
         if (!parameters) return ''
         if (!isObject(parameters)) return parameters
 
@@ -31,7 +30,8 @@ class Router {
                     query.push(name + '=' + encodeURIComponent(parameters[name]));
                 }
             }
-            return '?' + query.join('&')
+
+            return query.length === 0 ? '' : '?' + query.join('&')
         }
 
         throw new Error('Could not convert parameters of type', typeof parameters)

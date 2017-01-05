@@ -88,7 +88,9 @@ Backend.search = function(entity, query, res, req) {
     if (sanitizedQuery.length === 0) {
         res.contentType('application/json').status(200).send([]);
         return;
-    } else {
+    }
+
+    if (sanitizedQuery.charAt(sanitizedQuery.length - 1) !== '*') {
         sanitizedQuery += "*";
     }
 
