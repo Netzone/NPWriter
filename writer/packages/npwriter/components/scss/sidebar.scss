@@ -3,6 +3,10 @@
 
     .plugin {
         margin-bottom: 5px;
+
+        &:last-child {
+            margin-bottom:50px;
+        }
     }
 }
 
