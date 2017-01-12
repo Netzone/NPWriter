@@ -28,8 +28,8 @@ class Events {
      */
     on(name, eventType, func) {
         if (find(this.eventListeners, (obj) => {
-            return obj.name === name && obj.eventType === eventType
-        })) {
+                return obj.name === name && obj.eventType === eventType
+            })) {
             return;
         }
 
@@ -113,7 +113,7 @@ class Events {
             }
         }
 
-        this.triggerEvent(null, Event.DOCUMENT_CHANGED, data);
+        this.triggerEvent(name, Event.DOCUMENT_CHANGED, data);
     }
 
     /**

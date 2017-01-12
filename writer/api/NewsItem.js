@@ -263,6 +263,40 @@ class NewsItem {
     }
 
     /**
+     * Get Sections.
+     * Finds all the service nodes with a qCode containing imsection:
+     *
+     * Renames @qcode to qcode so plugins doesn't have to handle
+     *
+     * @returns {Array}
+     * @return {*}
+     */
+    getSections() {
+        return this._getServices('imsection')
+    }
+
+    /**
+     * Get Section.
+     *
+     * Find section on article if any. If no section null is returned.
+     * Note that by using this function it is presumed that there can
+     * be max one section on an article.
+     *
+     * @return {*}
+     */
+    getSection() {
+        let sections = this.getSections()
+
+        if (sections.length > 1) {
+            throw new Error('Only one section is allowed on an article');
+        } else if (sections.length == 1) {
+            return sections[0]
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Get Channels
      * Finds all the service nodes with a qCode containing imchn:
      *
@@ -272,6 +306,7 @@ class NewsItem {
      */
     getChannels() {
 
+        // TODO: Use internal _getServices('imchn')...
         var nodes = this.api.newsItemArticle.querySelectorAll('itemMeta service[qcode]');
         if (!nodes) {
             console.warn('No services with qcode found');
@@ -296,6 +331,120 @@ class NewsItem {
         return wrapper;
     }
 
+    /**
+     * Get Services.
+     * Finds all the service nodes with a qCode containing qcode prefix sent in as parameter:
+     *
+     * Renames @qcode to qcode so plugins doesn't have to handle
+     *
+     * @qcodePrefix QCode prefix to look for in service elements.
+     *
+     * @returns {Array}
+     * @return {*}
+     */
+    _getServices(qcodePrefix) {
+        var nodes = this.api.newsItemArticle.querySelectorAll('itemMeta service[qcode]');
+        if (!nodes) {
+            console.warn('No services with qcode found');
+            return [{}];
+        }
+
+        var wrapper = [];
+        for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i],
+                qCode = node.getAttribute('qcode');
+
+            if (qCode.indexOf(qcodePrefix) >= 0) {
+                var json = jxon.build(node);
+
+                json['qcode'] = json['@qcode'];
+                delete json['@qcode'];
+
+                wrapper.push(json);
+            }
+        }
+
+        return wrapper;
+    }
+
+    /**
+     * Update Section.
+     * Removes existing section and add new. Note expects article to only allow
+     * one section.
+     * @param name Name of plugin.
+     * @param section Section object to set on article.
+     *
+     * @fires event.DOCUMENT_CHANGED
+     * @throws Error
+     */
+    updateSection(name, section) {
+        if (!isObject(section)) {
+            throw new Error('There can be only one section')
+        }
+
+        // Remove existing section if any
+        let currentSection = this.getSection()
+        if (currentSection) {
+            this.removeSection(name, currentSection)
+        }
+
+        // Update section
+        let itemMetaNode = this.api.newsItemArticle.querySelector('itemMeta'),
+            service = {},
+            serviceNode
+
+        // Create service element
+        service['@qcode'] = section.qcode
+        service.name = section.name
+        serviceNode = jxon.unbuild(service, null, 'service');
+
+        // Add service to itemMeta element
+        itemMetaNode.appendChild(serviceNode.childNodes[0]);
+
+        this.api.events.documentChanged(
+            name,
+            {
+                type: 'section',
+                action: 'update',
+                data: section
+            }
+        );
+    }
+
+    /**
+     * Removes <service>.
+     *
+     * @param {string} name Name of plugin.
+     * @param {string} section Section object to remove.
+     * @param {boolean} muteEvent Optional. Mute event if set to true, only used internally.
+     *
+     * @fires event.DOCUMENT_CHANGED
+     * @throws Error
+     */
+    removeSection(name, section, muteEvent) {
+        let query = 'itemMeta service[qcode="' + section['qcode'] + '"]'
+        let service = this.api.newsItemArticle.querySelector(query);
+
+        if (!service) {
+            // Silently ignore request
+            return;
+        }
+
+        service.parentElement.removeChild(service);
+
+        if (muteEvent === true) {
+            return;
+        }
+
+        this.api.events.documentChanged(
+            name,
+            {
+                type: 'section',
+                action: 'delete',
+                data: section
+            }
+        );
+    }
 
     /**
      * Add a channel as a <service>.

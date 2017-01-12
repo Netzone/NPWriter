@@ -192,20 +192,20 @@
       "mandatory": true
     },
     {
-        "id": "se.infomaker.ximcategory",
-        "name": "ximcategory",
-        "url": "http://localhost:5001/index.js",
-        "style": "http://localhost:5001/style.css",
-        "enabled": true,
-        "mandatory": false
+      "id": "se.infomaker.ximcategory",
+      "name": "ximcategory",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": false
     },
     {
-        "id": "se.infomaker.ximchannel",
-        "name": "ximchannel",
-        "url": "http://localhost:5001/index.js",
-        "style": "http://localhost:5001/style.css",
-        "enabled": true,
-        "mandatory": false
+      "id": "se.infomaker.ximchannel",
+      "name": "ximchannel",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": false
     },
     {
       "id": "se.infomaker.youtubeembed",
@@ -341,55 +341,67 @@
       "mandatory": false,
       "enabled": true,
       "data": {
-          "softcrop": true,
-          "bylinesearch": true,
-          "byline": true,
-          "imageinfo": true,
-          "crops":{
-               "16:9":[ 16,9 ],
-               "8:5":[ 8,5 ],
-               "4:3":[ 4,3 ],
-               "1:1":[ 1,1 ]
-          },
-          "fields":[
-              {
-                  "name": "caption",
-                  "label": "Caption",
-                  "type": "text"
-              },
-              {
-                  "name": "credit",
-                  "label": "Credit",
-                  "type": "text"
-              },
-              {
-                  "name": "alttext",
-                  "label": "Alt text",
-                  "type": "text"
-              },
-              {
-                  "name": "alignment",
-                  "label": "Alignment",
-                  "type": "option",
-                  "options": [
-                      {
-                          "name": "auto",
-                          "label": "Automatic",
-                          "icon": "fa-align-center"
-                      },
-                      {
-                          "name": "left",
-                          "label": "Left",
-                          "icon": "fa-align-left"
-                      },
-                      {
-                          "name": "right",
-                          "label": "Right",
-                          "icon": "fa-align-right"
-                      }
-                  ]
-              }
+        "softcrop": true,
+        "bylinesearch": true,
+        "byline": true,
+        "imageinfo": true,
+        "crops": {
+          "16:9": [
+            16,
+            9
+          ],
+          "8:5": [
+            8,
+            5
+          ],
+          "4:3": [
+            4,
+            3
+          ],
+          "1:1": [
+            1,
+            1
           ]
+        },
+        "fields": [
+          {
+            "name": "caption",
+            "label": "Caption",
+            "type": "text"
+          },
+          {
+            "name": "credit",
+            "label": "Credit",
+            "type": "text"
+          },
+          {
+            "name": "alttext",
+            "label": "Alt text",
+            "type": "text"
+          },
+          {
+            "name": "alignment",
+            "label": "Alignment",
+            "type": "option",
+            "options": [
+              {
+                "name": "auto",
+                "label": "Automatic",
+                "icon": "fa-align-center"
+              },
+              {
+                "name": "left",
+                "label": "Left",
+                "icon": "fa-align-left"
+              },
+              {
+                "name": "right",
+                "label": "Right",
+                "icon": "fa-align-right"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -399,16 +411,28 @@
       "mandatory": false,
       "enabled": true,
       "data": {
-          "softcrop": true,
-          "bylinesearch": false,
-          "byline": false,
-          "imageinfo": true,
-          "crops":{
-               "16:9":[ 16,9 ],
-               "8:5":[ 8,5 ],
-               "4:3":[ 4,3 ],
-               "1:1":[ 1,1 ]
-          },
+        "softcrop": true,
+        "bylinesearch": false,
+        "byline": false,
+        "imageinfo": true,
+        "crops": {
+          "16:9": [
+            16,
+            9
+          ],
+          "8:5": [
+            8,
+            5
+          ],
+          "4:3": [
+            4,
+            3
+          ],
+          "1:1": [
+            1,
+            1
+          ]
+        },
         "teaserPosition": "top",
         "disableUseOfAnnotationToolsForFields": [
           "title"
@@ -572,8 +596,136 @@
       "id": "nl.fdmg.quote",
       "name": "quote",
       "url": "http://localhost:3000/index.js",
-      "enabled": true,
+      "enabled": false,
       "mandatory": false
+    },
+    {
+      "id": "se.infomaker.ximsection",
+      "name": "ximsection",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "sections": [
+          {
+            "qcode": "imsection:debatt",
+            "name": "Debatt"
+          },
+          {
+            "qcode": "imsection:insändare",
+            "name": "Insändare"
+          },
+          {
+            "qcode": "imsection:jobb_pengar",
+            "name": "Jobb Pengar"
+          },
+          {
+            "qcode": "imsection:krönikor",
+            "name": "Krönikor"
+          },
+          {
+            "qcode": "imsection:kultur_nöje",
+            "name": "Kultur Nöje"
+          },
+          {
+            "qcode": "imsection:ledare",
+            "name": "Ledare"
+          },
+          {
+            "qcode": "imsection:nyhetskrönikor",
+            "name": "Nyhetskrönikor"
+          },
+          {
+            "qcode": "imsection:personligt",
+            "name": "Personligt"
+          },
+          {
+            "qcode": "imsection:sport",
+            "name": "Sport"
+          },
+          {
+            "qcode": "imsection:dagsform",
+            "name": "Dagsform",
+            "product": "ekuriren.se"
+          },
+          {
+            "qcode": "imsection:eskilstuna",
+            "name": "Eskilstuna",
+            "product": "ekuriren.se"
+          },
+          {
+            "qcode": "imsection:evelina",
+            "name": "Evelina",
+            "product": "ekuriren.se"
+          },
+          {
+            "qcode": "imsection:flen",
+            "name": "Flen",
+            "product": "ekuriren.se"
+          },
+          {
+            "qcode": "imsection:replik",
+            "name": "Replik",
+            "product": "ekuriren.se"
+          },
+          {
+            "qcode": "imsection:strängnäs",
+            "name": "Strängnäs",
+            "product": "ekuriren.se"
+          },
+          {
+            "qcode": "imsection:sörmland",
+            "name": "Sörmland",
+            "product": "ekuriren.se"
+          },
+          {
+            "qcode": "imsection:flen",
+            "name": "Flen",
+            "product": "kkuriren.se"
+          },
+          {
+            "qcode": "imsection:Katrineholm",
+            "name": "Katrineholm",
+            "product": "kkuriren.se"
+          },
+          {
+            "qcode": "imsection:sörmland",
+            "name": "Sörmland",
+            "product": "kkuriren.se"
+          },
+          {
+            "qcode": "imsection:vingåker",
+            "name": "Vingåker",
+            "product": "kkuriren.se"
+          },
+          {
+            "qcode": "imsection:dagsform",
+            "name": "Dagsform",
+            "product": "sn.se"
+          },
+          {
+            "qcode": "imsection:gnesta",
+            "name": "Gnesta",
+            "product": "sn.se"
+          },
+          {
+            "qcode": "imsection:nyköping",
+            "name": "Nyköping",
+            "product": "sn.se"
+          },
+          {
+            "qcode": "imsection:oxelösund",
+            "name": "Oxelösund",
+            "product": "sn.se"
+          },
+          {
+            "qcode": "imsection:sörmland",
+            "name": "Sörmland",
+            "product": "sn.se"
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,5 +1,5 @@
 import {XMLExporter, DefaultDOMElement} from 'substance'
-
+import {Fragmenter} from 'substance'
 class NewsMLExporter extends XMLExporter {
 
     constructor(...args) {
@@ -122,6 +122,51 @@ class NewsMLExporter extends XMLExporter {
 
         return removeControlCodes(newsItem.documentElement.outerHTML);
     }
+
+    // TODO Remove when/if substance has fixed the double encoding problem
+    /**
+     * This code is copied from DOMExporter.js in substance. This is because
+     * removing the encodeXMLEntities() invocation fixed the double encoding problem (WRIT-255).
+     */
+    _annotatedText(text, annotations) {
+        var self = this
+
+        var annotator = new Fragmenter()
+        annotator.onText = function(context, text) {
+            // context.children.push(encodeXMLEntities(text))
+            context.children.push(text)
+        }
+        annotator.onEnter = function(fragment) {
+            var anno = fragment.node
+            return {
+                annotation: anno,
+                children: []
+            }
+        }
+        annotator.onExit = function(fragment, context, parentContext) {
+            var anno = context.annotation
+            var converter = self.getNodeConverter(anno)
+            if (!converter) {
+                converter = self.getDefaultPropertyAnnotationConverter()
+            }
+            var el
+            if (converter.tagName) {
+                el = this.$$(converter.tagName)
+            } else {
+                el = this.$$('span')
+            }
+            el.attr(this.config.idAttribute, anno.id)
+            el.append(context.children)
+            if (converter.export) {
+                el = converter.export(anno, el, self) || el
+            }
+            parentContext.children.push(el)
+        }.bind(this)
+        var wrapper = { children: [] }
+        annotator.start(wrapper, text, annotations)
+        return wrapper.children
+    }
+
 }
 
 export default NewsMLExporter
