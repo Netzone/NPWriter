@@ -411,10 +411,10 @@
           },
         "teaserPosition": "top",
         "disableUseOfAnnotationToolsForFields": [
-          "title",
-          "subject"
+          "title"
         ],
         "fields": [
+          "title",
           "subject",
           "text"
         ]
