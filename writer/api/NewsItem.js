@@ -343,22 +343,30 @@ class NewsItem {
      * @return {*}
      */
     _getServices(qcodePrefix) {
-        var nodes = this.api.newsItemArticle.querySelectorAll('itemMeta service[qcode]');
+        const nodes = this.api.newsItemArticle.querySelectorAll('itemMeta service[qcode]')
         if (!nodes) {
-            console.warn('No services with qcode found');
-            return [{}];
+            console.warn('No services with qcode found')
+            return [{}]
         }
 
-        var wrapper = [];
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i],
-                qCode = node.getAttribute('qcode');
+        let wrapper = []
+        for (let i = 0; i < nodes.length; i++) {
+            let node = nodes[i],
+                qCode = node.getAttribute('qcode'),
+                pubConstraint = node.getAttribute('pubconstraint')
 
+            // Attribute "qcode" mandatory
             if (qCode.indexOf(qcodePrefix) >= 0) {
-                var json = jxon.build(node);
+                let json = jxon.build(node);
 
                 json['qcode'] = json['@qcode'];
                 delete json['@qcode'];
+
+                // Optional attribute
+                if (pubConstraint) {
+                    json['pubconstraint'] = json['@pubconstraint']
+                    delete json['@pubconstraint']
+                }
 
                 wrapper.push(json);
             }
@@ -395,6 +403,12 @@ class NewsItem {
 
         // Create service element
         service['@qcode'] = section.qcode
+
+        // If product parent exists set attribute to reflect this
+        if (section.product) {
+            service['@pubconstraint'] = section.product
+        }
+
         service.name = section.name
         serviceNode = jxon.unbuild(service, null, 'service');
 

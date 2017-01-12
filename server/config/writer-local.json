@@ -647,82 +647,82 @@
           {
             "qcode": "imsection:dagsform",
             "name": "Dagsform",
-            "product": "ekuriren.se"
+            "product": "imchn:ekuriren.se"
           },
           {
             "qcode": "imsection:eskilstuna",
             "name": "Eskilstuna",
-            "product": "ekuriren.se"
+            "product": "imchn:ekuriren.se"
           },
           {
             "qcode": "imsection:evelina",
             "name": "Evelina",
-            "product": "ekuriren.se"
+            "product": "imchn:ekuriren.se"
           },
           {
             "qcode": "imsection:flen",
             "name": "Flen",
-            "product": "ekuriren.se"
+            "product": "imchn:ekuriren.se"
           },
           {
             "qcode": "imsection:replik",
             "name": "Replik",
-            "product": "ekuriren.se"
+            "product": "imchn:ekuriren.se"
           },
           {
             "qcode": "imsection:strängnäs",
             "name": "Strängnäs",
-            "product": "ekuriren.se"
+            "product": "imchn:ekuriren.se"
           },
           {
             "qcode": "imsection:sörmland",
             "name": "Sörmland",
-            "product": "ekuriren.se"
+            "product": "imchn:ekuriren.se"
           },
           {
             "qcode": "imsection:flen",
             "name": "Flen",
-            "product": "kkuriren.se"
+            "product": "imchn:kkuriren.se"
           },
           {
             "qcode": "imsection:Katrineholm",
             "name": "Katrineholm",
-            "product": "kkuriren.se"
+            "product": "imchn:kkuriren.se"
           },
           {
             "qcode": "imsection:sörmland",
             "name": "Sörmland",
-            "product": "kkuriren.se"
+            "product": "imchn:kkuriren.se"
           },
           {
             "qcode": "imsection:vingåker",
             "name": "Vingåker",
-            "product": "kkuriren.se"
+            "product": "imchn:kkuriren.se"
           },
           {
             "qcode": "imsection:dagsform",
             "name": "Dagsform",
-            "product": "sn.se"
+            "product": "imchn:sn.se"
           },
           {
             "qcode": "imsection:gnesta",
             "name": "Gnesta",
-            "product": "sn.se"
+            "product": "imchn:sn.se"
           },
           {
             "qcode": "imsection:nyköping",
             "name": "Nyköping",
-            "product": "sn.se"
+            "product": "imchn:sn.se"
           },
           {
             "qcode": "imsection:oxelösund",
             "name": "Oxelösund",
-            "product": "sn.se"
+            "product": "imchn:sn.se"
           },
           {
             "qcode": "imsection:sörmland",
             "name": "Sörmland",
-            "product": "sn.se"
+            "product": "imchn:sn.se"
           }
         ]
       }
