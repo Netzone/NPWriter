@@ -1,6 +1,7 @@
 // var Notification = require('./Notification');
 import Event from '../../utils/Event'
 import {Component} from 'substance'
+import moment from 'moment'
 
 class NotificationListComponent extends Component {
 
@@ -16,15 +17,21 @@ class NotificationListComponent extends Component {
             notifications.push({
                 display: true,
                 title: event.data.title || null,
-                message: event.data.message
+                message: event.data.message,
+                timestamp: moment().format('X')
             })
             this.setState({notifications: notifications})
         })
     }
 
+    removeNotification(notification) {
+        notification.display = false
+        this.rerender()
+    }
+
     render($$) {
 
-        var el = $$('div').addClass('imc-notifications light').ref('notification-list');
+        const el = $$('div').addClass('imc-notifications light').ref('notification-list');
 
         let activeNotifications = this.state.notifications.filter((notification) => {
             return notification.display !== false
@@ -32,7 +39,8 @@ class NotificationListComponent extends Component {
             let Notification = this.context.componentRegistry.get('notification')
             return $$(Notification, {
                 sequence: idx,
-                notification: notification
+                notification: notification,
+                hideNotification: this.removeNotification.bind(this)
             }).ref('notification_'+idx)
         })
         el.append(activeNotifications)
