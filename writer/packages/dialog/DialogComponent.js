@@ -93,9 +93,9 @@ class DialogComponent extends Component {
         }
 
         modalBody.append(modalInnerContent)
-        this.addPrimaryButtonIfExist($$, modalFooter, options)
-        this.addSecondaryButtonIfExist($$, modalFooter, options)
         this.addTertiaryButtons($$, modalFooter, options)
+        this.addSecondaryButtonIfExist($$, modalFooter, options)
+        this.addPrimaryButtonIfExist($$, modalFooter, options)
         this.addTitleIfExist($$, modalContent, options)
 
         modalContent.append([modalBody, modalFooter])
