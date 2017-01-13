@@ -11,11 +11,22 @@
         color: rgba(0, 0, 0, 0.75);
         padding: 5px 0 5px 10px;
         cursor: pointer;
+
         &:hover {
             background-color: darken(#fff, 5%);
         }
+
         &.active {
             font-weight: 700;
+            background: #fafafa;
+
+            &:after {
+                font-family: "FontAwesome";
+                font-weight: 300;
+                content: "\f00c";
+                position: absolute;
+                right: 8px;
+            }
         }
     }
 }
@@ -53,7 +64,7 @@
         float: left;
         width: 20px;
         text-align: center;
-        
+
         button {
             background-color: #fff;
             padding:0;
