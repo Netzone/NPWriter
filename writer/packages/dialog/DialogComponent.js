@@ -167,9 +167,9 @@ class DialogComponent extends Component {
         }
     }
 
-    save() {
+    save($$) {
         if (this.state.primaryBtnEnabled) {
-            this.showPrimaryButtonLoader();
+            this.showPrimaryButtonLoader($$);
             if (this.refs.contentComponent.onClose && this.refs.contentComponent.onClose('save') !== false) {
                 this.send(Event.DIALOG_CLOSE) // Send this close to Writer can reset state
                 this.remove();
@@ -184,9 +184,9 @@ class DialogComponent extends Component {
         }
     }
 
-    showPrimaryButtonLoader() {
+    showPrimaryButtonLoader($$) {
         this.refs.primaryButton.el.text("").addClass('disabled');
-        // this.refs.primaryButton.append(this.$$(FontAwesomeIcon, {icon: 'fa-spinner fa-spin'}));
+        this.refs.primaryButton.append($$(FontAwesomeIcon, {icon: 'fa-spinner fa-spin'}));
     }
 
     renderPrimaryButton($$, options) {
@@ -194,7 +194,9 @@ class DialogComponent extends Component {
         let button = $$('button').attr('type', 'button')
             .addClass('btn sc-np-btn btn-primary')
             .append(caption)
-            .on('click', this.save);
+            .on('click', () => {
+                this.save($$)
+            });
 
         if (!this.state.primaryBtnEnabled) {
             button.attr('disabled', true)
