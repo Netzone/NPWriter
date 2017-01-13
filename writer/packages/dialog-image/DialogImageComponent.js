@@ -1,8 +1,7 @@
-import {Component, FontAwesomeIcon} from 'substance'
-import moment from 'moment'
-import FormSearchComponent from '../form-search/FormSearchComponent'
-import jxon from 'jxon'
-import NilUUID from '../../utils/NilUUID'
+import {Component, FontAwesomeIcon} from "substance";
+import moment from "moment";
+import jxon from "jxon";
+import NilUUID from "../../utils/NilUUID";
 
 // var Icon = require('substance/ui/FontAwesomeIcon');
 // var Avatar = require('writer/components/avatar/AvatarComponent');
@@ -47,14 +46,14 @@ class DialogImageComponent extends Component {
             $$('span').addClass('dialog-image-photo-date').append(
                 $$('input').attr('id', 'dialog-image-photo-date').attr('type', 'date').val(
                     !isNaN(dt.getTime()) ? dt.toLocaleDateString() : ''
-                ).on('change', function() {
+                ).on('change', function () {
                     this.syncPhotoDate();
                 }.bind(this))
             ),
             $$('span').addClass('dialog-image-photo-time').append(
                 $$('input').attr('id', 'dialog-image-photo-time').attr('type', 'time').val(
                     !isNaN(dt.getTime()) ? dt.toLocaleTimeString() : ''
-                ).on('change', function() {
+                ).on('change', function () {
                     this.syncPhotoDate();
                 }.bind(this))
             )
@@ -87,7 +86,7 @@ class DialogImageComponent extends Component {
             $$('fieldset').addClass('form-group').append([
                 $$('div').addClass('form-group').append(
                     $$('textarea')
-                        .on('change', function(evt) {
+                        .on('change', function (evt) {
                             this.data.text = evt.target.value;
                         })
                         .attr('id', 'dialog-image-info-caption')
@@ -109,7 +108,7 @@ class DialogImageComponent extends Component {
 
                 $$('div').addClass('form-group flexible-label').append(
                     $$('input')
-                        .on('change', function(evt) {
+                        .on('change', function (evt) {
                             this.data.credit = evt.target.value;
                         })
                         .addClass('form-control')
@@ -129,7 +128,7 @@ class DialogImageComponent extends Component {
 
                 $$('div').addClass('form-group flexible-label').append(
                     $$('input')
-                        .on('change', function(evt) {
+                        .on('change', function (evt) {
                             this.data.instructions = evt.target.value;
                         })
                         .addClass('form-control')
@@ -149,7 +148,7 @@ class DialogImageComponent extends Component {
 
                 $$('div').addClass('form-group flexible-label').append(
                     $$('input')
-                        .on('change', function(evt) {
+                        .on('change', function (evt) {
                             this.data.objectName = evt.target.value;
                         })
                         .addClass('form-control')
@@ -177,26 +176,34 @@ class DialogImageComponent extends Component {
     }
 
     renderAuthorContainer($$) {
-        var el = $$('div')
+        const el = $$('div')
             .ref('authorContainer')
             .addClass('authors dialog-image-info clearfix')
 
-        var searchUrl = null
-        if (this.props.disablebylinesearch !== true) {
-            searchUrl = this.context.api.router.getEndpoint() + '/api/search/concepts/authors?q='
+        let searchComponent
+
+        if (this.props.disablebylinesearch) {
+            const AuthorAddComponent = this.context.componentRegistry.get('form-add')
+
+            searchComponent = $$(AuthorAddComponent, {
+                existingItems: this.authors,
+                onSelect: this.addAuthor.bind(this),
+                onCreate: this.createAuthor.bind(this),
+                createAllowed: true,
+                placeholderText: this.getLabel("Add creator")
+            }).ref('FormSearchComponent')
+
+        } else {
+            const AuthorSearchComponent = this.context.componentRegistry.get('form-search')
+            searchComponent = $$(AuthorSearchComponent, {
+                existingItems: this.authors,
+                searchUrl: '/api/search/concepts/authors?q=',
+                onSelect: this.addAuthor.bind(this),
+                onCreate: this.createAuthor.bind(this),
+                createAllowed: true,
+                placeholderText: this.getLabel("Add creator")
+            }).ref('FormSearchComponent')
         }
-
-        var searchComponent = $$(FormSearchComponent, {
-            existingItems: this.authors,
-            searchUrl: searchUrl,
-            onSelect: this.addAuthor.bind(this),
-            onCreate: function(item) {
-                this.createAuthor(item)
-            }.bind(this),
-            createAllowed: true,
-            placeholderText: this.getLabel("Add creator")
-        }).ref('FormSearchComponent')
-
 
         return el.append([
             searchComponent,
@@ -206,12 +213,12 @@ class DialogImageComponent extends Component {
 
 
     renderAuthors($$) {
-        var authorList = $$('ul')
+        const authorList = $$('ul')
             .addClass('dialog-image-authorlist')
             .attr('contenteditable', false)
 
-        for (var n = 0; n < this.authors.length; n++) {
-            var authorItem = this.renderAuthor($$, this.authors[n])
+        for (let n = 0; n < this.authors.length; n++) {
+            const authorItem = this.renderAuthor($$, this.authors[n])
             if (authorItem) {
                 authorList.append(authorItem)
             }
@@ -227,45 +234,35 @@ class DialogImageComponent extends Component {
     /**
      * TODO: Implement byline search
      */
-    renderAuthor($$/*, author*/) {
-        return ($$('div').append('*Not implemented*'))
-        // var avatar,
-        //     ref
-        //
-        // if (author.uuid && !NilUUID.isNilUUID(author.uuid)) {
-        //     avatar = $$('div')
-        //         .addClass('avatar__container')
-        //         .ref('avatarContainer')
-        //         .append(
-        //             $$(Avatar, {
-        //                 links: author.links
-        //             }).ref('avatar')
-        //         )
-        //     ref = 'item-' + author.uuid
-        // }
-        // else {
-        //     avatar = $$('span')
-        //     ref = 'item-' + author.name
-        // }
-        //
-        // return $$('li').append(
-        //         $$('div').append([
-        //             avatar,
-        //             $$('div').append([
-        //                 $$('strong').append(author.name),
-        //                 $$('em').append(author.data && author.data.email ? author.data.email : '')
-        //             ]),
-        //             $$('span').append(
-        //                 $$('a').append(
-        //                     $$(Icon, {icon: 'fa-times'})
-        //                 )
-        //                 .attr('title', this.getLabel('Remove'))
-        //                 .on('click', function () {
-        //                     this.removeAuthor(author);
-        //                 }.bind(this))
-        //             )
-        //         ])
-        //     ).ref(ref)
+    renderAuthor($$, author) {
+        const avatar = $$('span')
+        let ref
+
+        if (author.uuid && !NilUUID.isNilUUID(author.uuid)) {
+            ref = 'item-' + author.uuid
+        }
+        else {
+            ref = 'item-' + author.name
+        }
+
+        return $$('li').append(
+            $$('div').append([
+                avatar,
+                $$('div').append([
+                    $$('strong').append(author.name),
+                    $$('em').append(author.data && author.data.email ? author.data.email : '')
+                ]),
+                $$('span').append(
+                    $$('a').append(
+                        $$(FontAwesomeIcon, {icon: 'fa-times'})
+                    )
+                        .attr('title', this.getLabel('Remove'))
+                        .on('click', function () {
+                            this.removeAuthor(author);
+                        }.bind(this))
+                )
+            ])
+        ).ref(ref)
     }
 
     renderStatus($$, pubStatus) {
@@ -294,21 +291,21 @@ class DialogImageComponent extends Component {
 
         return $$('div').append(
             $$('strong')
-            .addClass('dialog-image-status')
-            .append(
-                this.getLabel(txtStatus)
-            )
+                .addClass('dialog-image-status')
+                .append(
+                    this.getLabel(txtStatus)
+                )
         )
     }
 
     addAuthor(authorItem) {
-        this.fetchAuthor(authorItem.uuid, function(author) {
+        this.fetchAuthor(authorItem.uuid, function (author) {
             this.authors.push(author)
             this.rerender()
         }.bind(this), true)
     }
 
-    createAuthor(authorItem, rerender) {
+    createAuthor(authorItem, skipRender) {
         var name = authorItem.inputValue ? authorItem.inputValue : authorItem.name
         var author = {
             uuid: NilUUID.getNilUUID(),
@@ -320,13 +317,13 @@ class DialogImageComponent extends Component {
 
         this.authors.push(author)
 
-        if (rerender !== false) {
+        if (!skipRender) {
             this.rerender()
         }
     }
 
     removeAuthor(author) {
-        var ref,
+        let ref,
             id
 
         if (author.uuid && !NilUUID.isNilUUID(author.uuid)) {
@@ -340,12 +337,12 @@ class DialogImageComponent extends Component {
 
 
         // TODO: This must be refactored to remove jQuery dep and still have a nice effect
-        debugger
         // var el = this.refs[ref]
         delete this.refs[ref]
         // $(el.el).fadeOut(300, function() {
-        for(var n = 0; n < this.authors.length; n++) {
+        for (let n = 0; n < this.authors.length; n++) {
             let cmpid
+            let author = this.authors[n]
             if (author.uuid && !NilUUID.isNilUUID(author.uuid)) {
                 cmpid = author.uuid
             }
@@ -358,6 +355,8 @@ class DialogImageComponent extends Component {
             }
         }
         // }.bind(this))
+
+        this.rerender();
     }
 
     /**
@@ -375,7 +374,7 @@ class DialogImageComponent extends Component {
         try {
             this.data.photoDateTime = dt.format()
         }
-        catch(ex) {
+        catch (ex) {
             return null
         }
 
@@ -496,7 +495,7 @@ class DialogImageComponent extends Component {
                 }
 
                 if (NilUUID.isNilUUID(author.uuid)) {
-                    this.createAuthor(author, false)
+                    this.createAuthor(author, true)
                 }
                 else {
                     this.addAuthor(author)
@@ -522,42 +521,43 @@ class DialogImageComponent extends Component {
 
 
     fetchAuthor(uuid, cbDone, fetchOnly) {
-        this.ajaxRequest = this.context.api.router.ajax('GET', 'xml', '/api/newsitem/' + uuid, {imType: 'x-im/author'})
-        this.ajaxRequest.done(function (data) {
-            var conceptXML = data.querySelector('concept')
-            var jsonFormat = jxon.build(conceptXML)
-            var authorLinks = []
+        this.context.api.router.getNewsItem(uuid, 'x-im/author')
+            .then((data) => {
+                var conceptXML = data.querySelector('concept')
+                var jsonFormat = jxon.build(conceptXML)
+                var authorLinks = []
 
-            try {
-                authorLinks = jxon.build(data.querySelector('itemMeta links'))
-            } catch(e) {}
+                try {
+                    authorLinks = jxon.build(data.querySelector('itemMeta links'))
+                } catch (e) {
+                }
 
-            var author = {
-                uuid: uuid,
-                name: jsonFormat.name,
-                data: jsonFormat.metadata.object.data,
-                json: jsonFormat,
-                links: authorLinks
-            }
+                var author = {
+                    uuid: uuid,
+                    name: jsonFormat.name,
+                    data: jsonFormat.metadata.object.data,
+                    json: jsonFormat,
+                    links: authorLinks
+                }
 
-            if (fetchOnly === true) {
-                cbDone(author)
-            }
-            else {
-                // Check that we don't already have this
-                for(var n = 0; n < this.authors.length; n++) {
-                    if (this.authors[n].uuid === uuid) {
-                        return
+                if (fetchOnly === true) {
+                    cbDone(author)
+                }
+                else {
+                    // Check that we don't already have this
+                    for (var n = 0; n < this.authors.length; n++) {
+                        if (this.authors[n].uuid === uuid) {
+                            return
+                        }
                     }
-                }
 
-                this.authors.push(author)
-                if (cbDone) {
-                    cbDone(this.authors)
+                    this.authors.push(author)
+                    if (cbDone) {
+                        cbDone(this.authors)
+                    }
+                    this.rerender()
                 }
-                this.rerender()
-            }
-        }.bind(this))
+            })
     }
 
     /**

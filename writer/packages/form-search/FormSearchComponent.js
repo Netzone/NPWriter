@@ -250,7 +250,7 @@ class FormSearchComponent extends Component {
             return;
         }
         if (this.props.onCreate && this.props.createAllowed && item.uuid === '__create-new') {
-            this.props.onCreate(item, this.itemAlreadyExists(this.state.items, item));
+            this.props.onCreate(item, true);
         } else {
             this.props.onSelect(item);
         }
