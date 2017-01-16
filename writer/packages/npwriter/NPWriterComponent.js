@@ -24,7 +24,6 @@ class NPWriter extends AbstractEditor {
             this.addVersion()
         })
 
-        this.exporter = this._getExporter();
         this.spellCheckManager = new SpellCheckManager(this.editorSession, {
             wait: 400,
             // same URL as configured in /server/routes/spellcheck.js
@@ -62,6 +61,7 @@ class NPWriter extends AbstractEditor {
 
         this.props.api.events.on('__internal', Event.DOCUMENT_SAVED, () => {
             this.promptUserBeforeUnload = false
+            this.updateTitle()
         })
 
         window.addEventListener('beforeunload', (e) => {
@@ -72,14 +72,14 @@ class NPWriter extends AbstractEditor {
             }
         });
 
+        this.updateTitle()
+
         // window.addEventListener('unload', () => {
         //     this.props.api.history.deleteHistory(
         //         this.props.api.newsItem.getIdForArticle()
         //     )
         // })
     }
-
-
 
 
     didMount() {
@@ -187,7 +187,7 @@ class NPWriter extends AbstractEditor {
         let textEditors = textEditComponents.map((editTextComponent) => {
 
             let node = doc.get(editTextComponent.nodeType)
-            if(!node) {
+            if (!node) {
                 return null
             }
             let component = this.getComponent(editTextComponent.nodeType)
@@ -248,7 +248,7 @@ class NPWriter extends AbstractEditor {
 
 
     hideDialog() {
-        if(this.refs.modalPlaceholder) {
+        if (this.refs.modalPlaceholder) {
             this.refs.modalPlaceholder.setProps({
                 showModal: false
             })
@@ -304,12 +304,38 @@ class NPWriter extends AbstractEditor {
 
     }
 
-    _getExporter() {
-        return {}
-        // return this.props.configurator.createExporter('newsml')
+    /**
+     * Uses the document nodes to set the browser tab/window title
+     * Uses an array to specify which nodeType that should be used as title
+     * Uses only the first nodeType in the array and omits the others
+     *
+     * If no nodeType is found the title should be "Newspilot Writer"
+     */
+    updateTitle() {
+        const documentNodes =  this.props.api.document.getDocumentNodes()
+        const nodeTypeToUseForTitle = [
+            'headline',
+            'preamble',
+            'paragraph'
+        ]
+
+        let nodeToUse
+        nodeTypeToUseForTitle.some((nodeType) => {
+            const docNode = documentNodes.find((node) => {
+                return node.type === nodeType ? node : false
+            })
+
+            if(docNode) {
+                nodeToUse = docNode
+                return true
+            }
+        })
+        let title = 'Newspilot Writer'
+        if(nodeToUse) {
+            title = nodeToUse.content.substr(0, 100)
+        }
+        this.props.api.browser.setTitle(title)
     }
-
-
 }
 
 export default NPWriter
