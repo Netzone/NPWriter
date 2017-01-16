@@ -89,6 +89,27 @@ class Document {
     }
 
 
+    /**
+     * Retrieve the previous node.
+     * Uses the focused surface to get all nodes in that surface/container and
+     * then returns the previous node from the one sent in
+     * @param {string} nodeId
+     * @returns {*}
+     */
+    getPreviousNode(nodeId) {
+        const editorSession = this.api.editorSession;
+        const surface = editorSession.surfaceManager.getFocusedSurface()
+        const doc = editorSession.getDocument()
+        const surfaceNode = doc.get(surface.id)
+        const surfaceNodes = surfaceNode.nodes
+        const currentNodeIndex = surfaceNodes.indexOf(nodeId)
+        const previousNodeId = surfaceNodes[currentNodeIndex - 1]
+
+        if (currentNodeIndex === 0 || currentNodeIndex === -1) {
+            return undefined
+        }
+        return doc.get(previousNodeId)
+    }
 
     /**
      * Deletes a node from the document.
@@ -106,7 +127,9 @@ class Document {
         const editorSession = this.api.editorSession;
 
         editorSession.transaction((tx) => {
+            const surface = tx.get(tx.surfaceId)
             tx.delete(node.id)
+            surface.hide(node.id)
         })
 
         const event = {
