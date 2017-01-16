@@ -12,7 +12,8 @@ var log = require('../utils/logger').child({api: 'BinaryProcessor'});
 var config = require('../models/ConfigurationManager');
 var Backend = require('../models/Backend.js');
 
-function BinaryProcessor() { }
+function BinaryProcessor() {
+}
 
 /**
  * Returns max size in bytes for upload.
@@ -39,6 +40,8 @@ BinaryProcessor.getMaxUploadByteSize = function (imType) {
 BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
     async.waterfall([
         function extractInfo(next) {
+            log.info('Extracting metadata from binary...');
+
             BinaryProcessor.extractInfo(file, (error, binaryInfo) => {
                 if (error) {
                     log.error('Error extracting info from binary.', error);
@@ -48,6 +51,8 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
             });
         },
         function getNewsItem(binaryInfo, next) {
+            log.info('Checking if binary already exists (i.e. has been uploaded before)...');
+
             BinaryProcessor._getNewsItemByFileName(binaryInfo.hashedName, imType, (error, newsItem, response) => {
                 if (error) {
                     log.error('Error getting newsItem.', error, response);
@@ -63,8 +68,12 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
         function getUploadUrl(binaryInfo, newsItem, next) {
             if (newsItem) {
                 // Already found newsItem, skip this function call
+                log.info('Binary already exists! No duplication of binary, returning existing newsItem for binary');
+
                 next(null, null, null, newsItem);
             } else {
+                log.info('New binary detected. Getting upload URL from Editor Service...');
+
                 BinaryProcessor._getUploadUrl(binaryInfo.hashedName, imType, binaryInfo.mimetype,
                     (error, uploadUrl, response) => {
                         if (error) {
@@ -80,6 +89,8 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
                 // Already found newsItem, skip this function call
                 next(null, null, newsItem);
             } else {
+                log.info('Uploading binary to S3 and create newsItem...');
+
                 BinaryProcessor._uploadByUrl(uploadUrl, file, binaryInfo.mimetype, binaryInfo.hashedName,
                     objectName, imType, (error) => {
                         if (error) {
