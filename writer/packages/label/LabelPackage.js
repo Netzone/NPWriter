@@ -43,6 +43,10 @@ export default {
             sv: 'Fortsätt'
         })
 
+        config.addLabel('Meta', {
+            en: 'Meta',
+            sv: 'Meta'
+        })
 
 
     }

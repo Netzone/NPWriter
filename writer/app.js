@@ -291,7 +291,18 @@ class App extends Component {
         // Adds package for unsupported elements in document
         this.configurator.import(UnsupportedPackage)
 
-        this.configurator.addSidebarTab('main', 'Meta')
+        // This is a HACK to get labels for the metadata tab
+        // The API and LabelProvider is not quite finished in this situation
+        // So the read directly from the labels property in the configurator
+        let tabLabel = 'Meta'
+        const labelLanguage = this.configurator.config.writerConfigFile.labelLanguage
+        if(labelLanguage) {
+            if(this.configurator.config.labels[labelLanguage]['Meta']) {
+             tabLabel = this.configurator.config.labels[labelLanguage]['Meta']
+            }
+        }
+
+        this.configurator.addSidebarTab('main', tabLabel)
 
     }
 }
