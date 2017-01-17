@@ -62,6 +62,7 @@ router.all('/resourceproxy', function (req, res) {
                 break
             case 'GET': {
                 get(url, req, res)
+                break;
             }
             default:
                 log.info({method: method, url: url}, `Trying to make request with unknown method ${method}`);
