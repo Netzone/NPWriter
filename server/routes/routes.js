@@ -24,7 +24,8 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
-// Proxy routes must be above general bodyParsers below
+// ATTENTION: Proxy routes must be above general bodyParsers below
+// so we don't parse any incoming body
 router.use(ProxyRoutes)
 
 router.use(bodyParser.json({limit: '50Mb', extended: true, type: "application/json"}));
