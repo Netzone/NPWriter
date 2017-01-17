@@ -153,17 +153,6 @@ class App extends Component {
                         // Locale for moment
                         moment.locale(this.configurator.config.writerConfigFile.language)
 
-                        if (this.editorSession) this.editorSession.dispose()
-                        this.editorSession = new EditorSession(result.idfDocument, {
-                            configurator: this.configurator,
-                            lang: this.configurator.config.writerConfigFile.language,
-                            context: {
-                                api: this.api
-                            }
-                        })
-                        // ATTENTION: we need to update the API as well to use the fresh editorSession
-                        api.editorSession = this.editorSession
-
                         this.replaceDoc(result);
 
                         // Clear guid if hash is empty
@@ -243,6 +232,8 @@ class App extends Component {
                 api: this.api
             }
         })
+        this.api.editorSession = this.editorSession
+
         this.editorSession.saveHandler = this.getSaveHandler()
         this.api.init(newsItemArticle, this.editorSession, this.refs)
         // Rerender from scratch
