@@ -1,4 +1,4 @@
-import { createAnnotation, insertText, NodeSelection, deleteNode, insertNode } from 'substance'
+import {createAnnotation, insertText, NodeSelection, deleteNode, insertNode} from 'substance'
 import idGenerator from '../utils/IdGenerator'
 
 /**
@@ -126,10 +126,30 @@ class Document {
         // i.e. the surface is always the body editor?
         const editorSession = this.api.editorSession;
 
+        // Select previous node before we delete the node
+        // So we dont get any issues with SwitchTextTypeTool
+        editorSession.selectNode(node.id)
+
+
         editorSession.transaction((tx) => {
-            const surface = tx.get(tx.surfaceId)
-            tx.delete(node.id)
-            surface.hide(node.id)
+            const sel = tx.selection
+
+            const nodeId = sel.getNodeId()
+            const container = tx.get(sel.containerId)
+            const nodePos = container.getPosition(nodeId)
+            const contentPath = container.getContentPath()
+            tx.update(contentPath, {delete: {offset: nodePos}})
+            tx.delete(nodeId)
+            const newNode = tx.createDefaultTextNode()
+            tx.update(contentPath, {type: 'insert', pos: nodePos, value: newNode.id})
+            tx.selection = tx.createSelection({
+                type: 'property',
+                path: newNode.getTextPath(),
+                startOffset: 0,
+                containerId: container.id,
+            })
+
+
         })
 
         const event = {
