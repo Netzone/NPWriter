@@ -65,7 +65,7 @@ class PluginManager {
         if (pluginRegisterFunction) {
             pluginRegisterFunction(pluginPackage);
         } else {
-            console.info("Trying to call register on a plugin that's not registered with the writer", pluginPackage.id);
+            console.info(pluginPackage.id, ' is not registered in the Writer client config file, writer-client.json');
         }
     }
 
