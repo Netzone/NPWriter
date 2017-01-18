@@ -20,6 +20,8 @@ class NPFileProxy extends FileProxy {
         // If a file upload is in progress
         this.uploadPromise = null
 
+        this.hasLoadingErrors = false
+
         // When an url (String) is given as the data an uri needs to be 'uploaded'
         if (fileNode.sourceUrl) {
             this.sourceUrl = fileNode.sourceUrl
@@ -37,6 +39,11 @@ class NPFileProxy extends FileProxy {
         }
     }
 
+    /**
+     *
+     * @throws Error - When there is an error
+     * @returns {*}
+     */
     getUrl() {
         // if we have fetched the url already, just serve it here
         if (this.url) {
@@ -49,6 +56,9 @@ class NPFileProxy extends FileProxy {
         if (this._fileUrl) {
             return this._fileUrl
         }
+        if(this.hasLoadingErrors) {
+            throw new Error('Error fetching url for UUID ' + this.fileNode.uuid)
+        }
         // no URL available
         return ""
     }
@@ -57,6 +67,10 @@ class NPFileProxy extends FileProxy {
         this.fileService.getUrl(this.fileNode.uuid, this.fileNode.imType)
             .then((url) => {
                 this.url = url
+                this.triggerUpdate()
+            })
+            .catch((error, xhr, text) => {
+                this.hasLoadingErrors = true
                 this.triggerUpdate()
             })
     }
