@@ -249,7 +249,6 @@ class App extends Component {
         }
         this.empty()
         this.rerender()
-
     }
 
     setTemporaryId() {

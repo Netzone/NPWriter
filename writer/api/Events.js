@@ -117,16 +117,6 @@ class Events {
     }
 
     /**
-     * Event when document becomes unsaved. Only triggers one time when there's unsaved changes
-     * (document:isunsaved)
-     *
-     * @param {object} originalEvent Data that originally triggered the document is unsaved event
-     */
-    documentIsUnsaved(originalEvent) {
-        this.triggerEvent(null, 'document:isunsaved', originalEvent);
-    }
-
-    /**
      * Triggers a document saved event (document:saved)
      */
     documentSaved() {
@@ -158,4 +148,3 @@ class Events {
 
 }
 export default Events
-

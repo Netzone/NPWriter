@@ -55,7 +55,8 @@ class NewsItem {
 
     /**
      * Set the NewsML source. Will effectively replace the current article with
-     * anything in the incoming NewsML and set the document in an unsaved state.
+     * anything in the incoming NewsML. Should normally always be followed by sending
+     * Event.DOCUMENT_CHANGED event as this is not done automatically.
      *
      * @param {string} newsML The NewsML source
      * @param {object} writerConfig Optional, explicit writer config used internally only, should be empty.
