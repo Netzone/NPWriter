@@ -55,6 +55,10 @@ class NPWriter extends AbstractEditor {
         // Warn user before navigating away from unsaved article
         this.promptUserBeforeUnload = false
 
+        this.props.api.events.on('__internal', Event.DISABLE_UNLOAD_WARNING, () => {
+            this.promptUserBeforeUnload = false
+        })
+
         this.props.api.events.on('__internal', Event.DOCUMENT_CHANGED, () => {
             this.promptUserBeforeUnload = true
         })
