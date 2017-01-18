@@ -40,10 +40,10 @@ module.exports = {
                     'babel?presets[]=es2015-node6,presets[]=stage-3'
                 ]
             }
-        ],
-        preLoaders: [
-            { test: /\.js?$/, loader: 'eslint', exclude: /node_modules/ },
         ]
+        // preLoaders: [
+        //     { test: /\.js?$/, loader: 'eslint', exclude: /node_modules/ },
+        // ]
     },
     cssLoader: {
         // True enables local scoped css
@@ -52,10 +52,10 @@ module.exports = {
         importLoaders: 1,
         sourceMap: true
     },
-    eslint: {
-        failOnWarning: false,
-        failOnError: true
-    },
+    // eslint: {
+    //     failOnWarning: false,
+    //     failOnError: true
+    // },
     plugins: [
         function()
         {
