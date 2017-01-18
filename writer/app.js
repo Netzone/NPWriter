@@ -23,6 +23,7 @@ import NPWriterCommand from './packages/npwriter/NPWriterCommand'
 import NPFileProxy from './packages/npwriter/NPFileProxy'
 import uuidv5 from 'uuidv5'
 
+
 import NPWriterAnnotationCommand from './packages/npwriter/NPWriterAnnotationCommand'
 
 const STATUS_ISREADY = 'isReady',
@@ -48,6 +49,8 @@ class App extends Component {
             }, //this.save,
             replacedoc: this.replaceDoc
         });
+
+        console.info("Running writer in environment: ", process.env.NODE_ENV);
     }
 
     getInitialState() {
@@ -167,13 +170,13 @@ class App extends Component {
                     })
 
                 // Don't catch errors during development as we loose the stacktrace
-                if (window.PRODUCTION) {
+                if (process.env && process.env.NODE_ENV === 'production') {
                     promise.catch(this.handleError.bind(this));
                 }
             })
 
         // Don't catch errors during development as we loose the stacktrace
-        if (window.PRODUCTION) {
+        if (process.env && process.env.NODE_ENV === 'production') {
             promise.catch(this.handleError.bind(this));
         }
 
