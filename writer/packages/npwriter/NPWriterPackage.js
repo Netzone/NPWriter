@@ -36,7 +36,7 @@ import NotificationPackage from '../notification/NotificationPackage'
 import FormSearchPackage from '../form-search/FormSearchPackage'
 import FormAddPackage from '../form-add/FormAddPackage'
 
-
+import AvatarPackage from '../avatar/AvatarPackage'
 
 
 export default {
@@ -68,7 +68,7 @@ export default {
         config.import(BodyPackage)
 
         // config.import(ConfigEditorPackage)
-
+        config.import(AvatarPackage)
         config.import(DialogPackage)
         config.import(DialogImagePackage)
         config.import(AboutPackage)

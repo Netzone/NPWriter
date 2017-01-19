@@ -98,7 +98,7 @@ class App extends Component {
      * @returns {SaveHandler}
      */
     getSaveHandler() {
-        if(!this.saveHandler) {
+        if (!this.saveHandler) {
             this.saveHandler = new SaveHandler({
                 configurator: this.configurator,
                 api: this.api
@@ -203,10 +203,15 @@ class App extends Component {
             handled = true;
         } else if (e.keyCode === 85 && (e.metaKey || e.ctrlKey) && !e.altKey) {
             const xml = this.getSaveHandler().getExportedDocument()
-            this.api.ui.showDialog(SourceComponent, {message: xml}, {title: 'Source', primary: 'Ok', secondary: false, takeover: true})
+            this.api.ui.showDialog(SourceComponent, {message: xml}, {
+                title: 'Source',
+                primary: 'Ok',
+                secondary: false,
+                takeover: true
+            })
 
             handled = true;
-        } else if(e.keyCode === keys.ESCAPE) {
+        } else if (e.keyCode === keys.ESCAPE) {
             this.api.events.triggerEvent(null, Event.USERACTION_KEY_ESCAPE, {})
         }
 
@@ -242,7 +247,7 @@ class App extends Component {
         // Rerender from scratch
         // NOTE: emptying the component here makes sure that no component survives connected to the old document
 
-        if(this.refs.writer) { // First load we have to reference to writer so we know it's the initial load
+        if (this.refs.writer) { // First load we have to reference to writer so we know it's the initial load
             this.api.document._setDocumentStatus(HAS_DOCUMENT)
         } else {
             this.api.document._setDocumentStatus(HAS_NO_DOCUMENT)
@@ -267,7 +272,7 @@ class App extends Component {
 
             case STATUS_ISREADY:
 
-                if(!this.api.browser.getHash()) {
+                if (!this.api.browser.getHash()) {
                     this.setTemporaryId();
                 }
 
@@ -298,9 +303,9 @@ class App extends Component {
         // So the read directly from the labels property in the configurator
         let tabLabel = 'Meta'
         const labelLanguage = this.configurator.config.writerConfigFile.labelLanguage
-        if(labelLanguage) {
-            if(this.configurator.config.labels[labelLanguage]['Meta']) {
-             tabLabel = this.configurator.config.labels[labelLanguage]['Meta']
+        if (labelLanguage) {
+            if (this.configurator.config.labels[labelLanguage]['Meta']) {
+                tabLabel = this.configurator.config.labels[labelLanguage]['Meta']
             }
         }
 
@@ -324,19 +329,19 @@ window.onload = () => {
     //                 console.log("Registrsation of serviceworker failed")
     //             })
     //     }
-     // }
+    // }
 
 
     //
-/*    function showNotification() {
-        Notification.requestPermission(function (result) {
-            if (result === 'granted') {
-                navigator.serviceWorker.ready.then(function (registration) {
-                    registration.showNotification('Service worker is installed and ready to use');
-                });
-            }
-        });
-    }
-*/
+    /*    function showNotification() {
+     Notification.requestPermission(function (result) {
+     if (result === 'granted') {
+     navigator.serviceWorker.ready.then(function (registration) {
+     registration.showNotification('Service worker is installed and ready to use');
+     });
+     }
+     });
+     }
+     */
     App.mount({}, document.body)
 }

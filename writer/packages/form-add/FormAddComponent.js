@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 
 import {Component} from 'substance'
 import clone from 'lodash/clone'
