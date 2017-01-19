@@ -42,7 +42,7 @@ class Article {
         this.api.ui.showNotification(
             'publish',
             null,
-            'Copy created. You are now working on a new unsaved copy of the article.'
+            this.api.getLabel('Copy created. You are now working on a new unsaved copy of the original article.')
         );
     }
 }
