@@ -29,6 +29,10 @@ class NPWriter extends AbstractEditor {
             // same URL as configured in /server/routes/spellcheck.js
             apiURL: '/api/spellcheck'
         })
+
+        this.addVersion = debounce(() => {
+            this.props.api.history.snapshot();
+        }, 7000)
     }
 
     constructor(...args) {
@@ -91,10 +95,6 @@ class NPWriter extends AbstractEditor {
 
         this.spellCheckManager.runGlobalCheck()
         this.editorSession.onUpdate(this.editorSessionUpdated, this)
-
-        this.addVersion = debounce(() => {
-            this.props.api.history.snapshot();
-        }, 7000)
     }
 
 
