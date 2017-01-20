@@ -818,6 +818,7 @@ class NewsItem {
         authorLinkNode.setAttribute('uuid', author.uuid);
         authorLinkNode.setAttribute('rel', 'author');
         authorLinkNode.setAttribute('type', 'x-im/author');
+
         linksNode.appendChild(authorLinkNode);
 
         this.api.events.documentChanged(name, {
@@ -851,6 +852,47 @@ class NewsItem {
             action: 'add',
             data: authorName
         });
+    }
+
+
+    /**
+     * Updates name and email (if exist) for an author with specified uuid
+     * 
+     * @param {string} name - Plugin name
+     * @param {string} uuid - The uuid for the author in the newsItem
+     * @param {object} author - Object containing name and/or email
+     */
+    updateAuthorWithUUID(name, uuid, author) {
+        const newsItem = this.api.newsItemArticle
+        var authorNode = newsItem.querySelector('itemMeta links link[type="x-im/author"][uuid="' + uuid + '"]')
+
+        authorNode.setAttribute('title', author.name);
+
+        if (author.email) {
+            // Check if a data -> email node exists
+            const emailNode = authorNode.querySelector('data email')
+            if (emailNode) {
+                emailNode.textContent = author.email
+                //Check for email node
+            } else {
+                // Create data and email node
+                try {
+                    const authorDataNode = newsItem.createElement('data')
+                    const authorEmailNode = newsItem.createElement('email')
+                    authorEmailNode.textContent = author.email
+
+                    // Append data and email node
+                    authorDataNode.appendChild(authorEmailNode)
+
+                    authorNode.appendChild(authorDataNode)    
+                }
+                catch (e) {
+                    console.log(e)
+                }
+
+            }
+
+        }
     }
 
     /**
@@ -1689,11 +1731,11 @@ class NewsItem {
             throw new Error('Undefined value')
         }
 
-        if (typeof(jxonObject['@id']) === 'undefined') {
+        if (typeof (jxonObject['@id']) === 'undefined') {
             throw new Error('Jxon object missing @id attribute')
         }
 
-        if (typeof(jxonObject['@type']) === 'undefined') {
+        if (typeof (jxonObject['@type']) === 'undefined') {
             throw new Error('Jxon object missing @type attribute')
         }
 
