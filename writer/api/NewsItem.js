@@ -857,41 +857,41 @@ class NewsItem {
 
     /**
      * Updates name and email (if exist) for an author with specified uuid
-     * 
+     *
      * @param {string} name - Plugin name
      * @param {string} uuid - The uuid for the author in the newsItem
      * @param {object} author - Object containing name and/or email
      */
     updateAuthorWithUUID(name, uuid, author) {
         const newsItem = this.api.newsItemArticle
-        var authorNode = newsItem.querySelector('itemMeta links link[type="x-im/author"][uuid="' + uuid + '"]')
+        let authorNode = newsItem.querySelector('itemMeta links link[type="x-im/author"][uuid="' + uuid + '"]')
 
         authorNode.setAttribute('title', author.name);
 
         if (author.email) {
-            // Check if a data -> email node exists
-            const emailNode = authorNode.querySelector('data email')
+            let dataNode = authorNode.querySelector('data')
+            if (!dataNode) {
+                dataNode = newsItem.createElement('data')
+                authorNode.appendChild(dataNode)
+            }
+
+            let emailNode = dataNode.querySelector('email')
             if (emailNode) {
+                // Update existing email
                 emailNode.textContent = author.email
-                //Check for email node
             } else {
-                // Create data and email node
+                // Create email
                 try {
-                    const authorDataNode = newsItem.createElement('data')
-                    const authorEmailNode = newsItem.createElement('email')
-                    authorEmailNode.textContent = author.email
+                    emailNode = newsItem.createElement('email')
+                    emailNode.textContent = author.email
 
-                    // Append data and email node
-                    authorDataNode.appendChild(authorEmailNode)
-
-                    authorNode.appendChild(authorDataNode)    
+                    // Append email node
+                    dataNode.appendChild(emailNode);
                 }
                 catch (e) {
                     console.log(e)
                 }
-
             }
-
         }
     }
 
