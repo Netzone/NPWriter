@@ -13,7 +13,7 @@ class SaveHandler {
      * @returns {*|String}
      */
     getExportedDocument() {
-        const exporter = this.configurator.createExporter('newsml', {api: this.api})
+        const exporter = this.configurator.createExporter('newsml', { api: this.api })
         return exporter.exportDocument(this.api.editorSession.getDocument(), this.api.newsItemArticle)
     }
 
@@ -63,7 +63,7 @@ class SaveHandler {
         return new Promise((resolve, reject) => {
             const messages = this.runValidatorsForDocument(this.api.configurator.getValidators(), document)
 
-            if(messages.length === 0) {
+            if (messages.length === 0) {
                 resolve(document)
                 return
             }
@@ -104,27 +104,28 @@ class SaveHandler {
             })
             .catch((error) => {
 
-                if(error instanceof ValidationError) {
+                if (error.name === 'ValidationError') {
                     // User canceled the save when on validation errors
                     this.api.events.userActionCancelSave()
-                } else if (error instanceof FileUploadError) {
-                    this.api.events.documentSaveFailed(error)
+                } else if (error.name === 'FileUploadError') {
+                    this.api.router.get('/api/err?error=' + error.message)
+                    this.api.router.get('/api/err?error=' + JSON.stringify(error.message))
                 } else {
-                    this.api.events.documentSaveFailed(error)
+                    this.api.router.get('/api/err?error=' + JSON.stringify(error.message))
                 }
-                console.error(error)
+
             })
     }
 
     createNewsItem(newsItemXmlString) {
-        return this.api.router.post('/api/newsitem', {body: newsItemXmlString})
+        return this.api.router.post('/api/newsitem', { body: newsItemXmlString })
             .then(response => response.text())
             .then((uuid) => {
 
                 // When creating a new article, fetch the newly created article from the
                 // backend and replace the document
 
-                this.api.router.get('/api/newsitem/' + uuid, {imType: 'x-im/article'})
+                this.api.router.get('/api/newsitem/' + uuid, { imType: 'x-im/article' })
                     .then(response => this.api.router.checkForOKStatus(response))
                     .then(response => response.text())
                     .then((xmlString) => {
@@ -141,7 +142,7 @@ class SaveHandler {
     }
 
     updateNewsItem(uuid, newsItemXmlString) {
-        return this.api.router.put('/api/newsitem/' + uuid, {body: newsItemXmlString})
+        return this.api.router.put('/api/newsitem/' + uuid, { body: newsItemXmlString })
             .then((response) => this.api.router.checkForOKStatus(response))
             .then(() => {
                 this.api.events.documentSaved();
