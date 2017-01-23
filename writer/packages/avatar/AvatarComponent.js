@@ -1,5 +1,5 @@
 import { Component, FontAwesomeIcon } from 'substance'
-
+import { isObject, isArray } from 'lodash'
 
 class AvatarComponent extends Component {
 
@@ -15,7 +15,12 @@ class AvatarComponent extends Component {
         const avatarId = this.props.avatarId
         const avatarSource = this.props.avatarSource
 
-        const el = $$('span')
+        const el = $$('span').addClass('avatar__container')
+
+        if(!avatarId) {
+            return el.append(this._getDummyAvatarComponent($$))
+        }
+
         let contentElement = this._getDummyAvatarComponent($$)
         switch (avatarSource) {
             case 'twitter':
@@ -40,7 +45,7 @@ class AvatarComponent extends Component {
      * @returns {Component} A substance FontAwesomeIcon
      */
     _getDummyAvatarComponent($$) {
-        return $$(FontAwesomeIcon, { icon: 'fa-user' })
+        return $$(FontAwesomeIcon, { icon: 'fa-user' }).addClass('avatar--simple')
     }
 
     /**
@@ -60,7 +65,7 @@ class AvatarComponent extends Component {
             })
         }
 
-        var path = '/api/concepts/author/' + avatarId + '/thumbnail';
+        const path = '/api/concepts/author/' + avatarId + '/thumbnail';
 
         this.context.api.router.get(path)
             .then((response) => {
@@ -86,5 +91,61 @@ class AvatarComponent extends Component {
             })
     }
 
+    /**
+     * Fetches the Twitter url for an author
+     * @returns {string|undefined}
+     */
+    static _getTwitterUrlFromAuhtorLink(link) {
+        return AvatarComponent.findAttribute(link, '@url')
+    }
+
+    /**
+     * Finds a links object for a specific type.
+     * Checks if it's array or and object.
+     */
+    static _getLinkForType(links, type) {
+        // const links = this.state.loadedAuhtorLinks.link
+        if (!links) {
+            return undefined
+        }
+        if (isObject(links) && links['@type'] === type) {
+            return links
+        } else if (isArray(links)) {
+            return links.find((link) => {
+                return link['@type'] === type
+            })
+        }
+
+    }
+
+    /**
+     * Returns the Twitter handle from an URL
+     */
+    static _getTwitterHandleFromTwitterUrl(url) {
+
+        const twitter = url.match(/twitter\.com\/(\w+)/);
+        if (twitter === null) {
+            return undefined
+        }
+        return twitter[1]
+    }
+
+    static findAttribute(object, attribute) {
+        var match;
+
+        function iterateObject(target, name) {
+            Object.keys(target).forEach(function (key) {
+                if (isObject(target[key])) {
+                    iterateObject(target[key], name);
+                } else if (key === name) {
+                    match = target[key];
+                }
+            })
+        }
+
+        iterateObject(object, attribute)
+
+        return match ? match : undefined;
+    }
 }
 export default AvatarComponent
