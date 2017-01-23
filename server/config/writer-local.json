@@ -726,6 +726,15 @@
           }
         ]
       }
+    },
+    {
+      "id": "se.infomaker.newspilot.job",
+      "name": "npjob",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": false,
+      "mandatory": false,
+      "data": {}
     }
   ]
 }
