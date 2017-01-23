@@ -2,9 +2,10 @@
 
 var _ = require('lodash');
 
-import SpinnerComponent from './SpinnerComponent'
-import {Component} from 'substance'
-import clone from 'lodash/clone'
+import SpinnerComponent from "./SpinnerComponent";
+import {Component} from "substance";
+import clone from "lodash/clone";
+import debounce from "../../utils/Debounce";
 
 /**
  * Props to pass:
@@ -116,7 +117,7 @@ class FormSearchComponent extends Component {
                 this.hide();
                 break;
             default:
-                this.lookup();
+                debounce(() => this.lookup(), 500)
         }
     }
 
@@ -136,9 +137,6 @@ class FormSearchComponent extends Component {
 
     lookup() {
         var input = this.refs.searchInput.val();
-        this.extendState({
-            isSearching: true
-        });
 
         if (input.length === 0) {
             this.extendState({
@@ -148,6 +146,10 @@ class FormSearchComponent extends Component {
             });
             return;
         }
+
+        this.extendState({
+            isSearching: true
+        });
 
         // Might pass a boolean from parent to search with wildcard?
         var wildcardSearch = true;
@@ -170,7 +172,10 @@ class FormSearchComponent extends Component {
                 .then(response => this.context.api.router.checkForOKStatus(response))
                 .then(response => this.context.api.router.toJson(response))
                 .then((json) => {
-                    this.handleSearchResult(json);
+                    if (input === this.refs.searchInput.val()) {
+                        // User has not written new text in search input
+                        this.handleSearchResult(json);
+                    }
                 })
                 .catch((e) => {
                     console.error(e)
