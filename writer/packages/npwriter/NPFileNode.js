@@ -2,7 +2,7 @@ import {FileNode} from 'substance'
 
 class NPFileNode extends FileNode {
 
-    handleDocument(xmlString) {
+    handleDocument(xmlString, context) {
         return new Promise((resolve, reject) => {
             try {
                 let doc = this.document
@@ -25,7 +25,7 @@ class NPFileNode extends FileNode {
                 // Get parentNode
                 const parentNode = doc.get(this.parentNodeId)
                 if(parentNode.handleDOMDocument) {
-                    parentNode.handleDOMDocument(newsItemDOM)
+                    parentNode.handleDOMDocument(newsItemDOM, context)
                 }
 
 
