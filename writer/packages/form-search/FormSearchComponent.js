@@ -121,14 +121,17 @@ class FormSearchComponent extends Component {
         }
     }
 
-    hide() {
-        this.refs.searchInput.val("");
+    clearItems() {
         this.extendState({
             items: [],
             isSearching: false,
             currentSelectedIndex: 0
         })
+    }
 
+    hide() {
+        this.refs.searchInput.val("");
+        this.clearItems()
     }
 
     select() {
@@ -140,11 +143,7 @@ class FormSearchComponent extends Component {
             originalInput = input;
 
         if (input.length === 0) {
-            this.extendState({
-                items: [],
-                isSearching: false,
-                currentSelectedIndex: 0
-            });
+            this.clearItems()
             return;
         }
 
@@ -174,9 +173,10 @@ class FormSearchComponent extends Component {
                 .then(response => this.context.api.router.toJson(response))
                 .then((json) => {
                     if (originalInput === this.refs.searchInput.val()) {
-                        // User has not written new text in search input
+                        // Search should be handled, it is the same input as when the request was sent
                         this.handleSearchResult(json);
                     } else {
+                        // input differs from search request, skip it.
                         this.extendState({
                             isSearching: false
                         });
