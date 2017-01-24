@@ -117,7 +117,7 @@ class FormSearchComponent extends Component {
                 this.hide();
                 break;
             default:
-                debounce(() => this.lookup(), 500)()
+                debounce(() => this.lookup(), 300)()
         }
     }
 
