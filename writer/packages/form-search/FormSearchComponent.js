@@ -2,9 +2,10 @@
 
 var _ = require('lodash');
 
-import SpinnerComponent from './SpinnerComponent'
-import {Component} from 'substance'
-import clone from 'lodash/clone'
+import SpinnerComponent from "./SpinnerComponent";
+import {Component} from "substance";
+import clone from "lodash/clone";
+import debounce from "../../utils/Debounce";
 
 /**
  * Props to pass:
@@ -116,18 +117,21 @@ class FormSearchComponent extends Component {
                 this.hide();
                 break;
             default:
-                this.lookup();
+                debounce(() => this.lookup(), 300)()
         }
     }
 
-    hide() {
-        this.refs.searchInput.val("");
+    clearItems() {
         this.extendState({
             items: [],
             isSearching: false,
             currentSelectedIndex: 0
         })
+    }
 
+    hide() {
+        this.refs.searchInput.val("");
+        this.clearItems()
     }
 
     select() {
@@ -135,19 +139,17 @@ class FormSearchComponent extends Component {
     }
 
     lookup() {
-        var input = this.refs.searchInput.val();
+        var input = this.refs.searchInput.val(),
+            originalInput = input;
+
+        if (input.length === 0) {
+            this.clearItems()
+            return;
+        }
+
         this.extendState({
             isSearching: true
         });
-
-        if (input.length === 0) {
-            this.extendState({
-                items: [],
-                isSearching: false,
-                currentSelectedIndex: 0
-            });
-            return;
-        }
 
         // Might pass a boolean from parent to search with wildcard?
         var wildcardSearch = true;
@@ -170,10 +172,21 @@ class FormSearchComponent extends Component {
                 .then(response => this.context.api.router.checkForOKStatus(response))
                 .then(response => this.context.api.router.toJson(response))
                 .then((json) => {
-                    this.handleSearchResult(json);
+                    if (originalInput === this.refs.searchInput.val()) {
+                        // Search should be handled, it is the same input as when the request was sent
+                        this.handleSearchResult(json);
+                    } else {
+                        // input differs from search request, skip it.
+                        this.extendState({
+                            isSearching: false
+                        });
+                    }
                 })
                 .catch((e) => {
                     console.error(e)
+                    this.extendState({
+                        isSearching: false
+                    });
                 })
         }
     }
