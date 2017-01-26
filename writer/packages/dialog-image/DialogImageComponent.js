@@ -199,7 +199,9 @@ class DialogImageComponent extends Component {
                 existingItems: this.authors,
                 searchUrl: '/api/search/concepts/authors?q=',
                 onSelect: this.addAuthor.bind(this),
-                onCreate: this.createAuthor.bind(this),
+                onCreate: (authorItem) => {
+                    this.createAuthor(authorItem, false)
+                },
                 createAllowed: true,
                 placeholderText: this.getLabel("Add creator")
             }).ref('FormSearchComponent')
@@ -429,9 +431,10 @@ class DialogImageComponent extends Component {
             var link = dom.createElement('link')
             link.setAttribute('rel', 'author')
             link.setAttribute('title', this.authors[n].name)
+            link.setAttribute('type', 'x-im/author')
 
             if (this.authors[n].uuid && !NilUUID.isNilUUID(this.authors[n].uuid)) {
-                link.setAttribute('type', 'x-im/author')
+
                 link.setAttribute('uuid', this.authors[n].uuid)
             }
             else {
