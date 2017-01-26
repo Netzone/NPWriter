@@ -1,0 +1,16 @@
+.avatar__container {
+
+    .avatar--simple {
+        margin-right:5px;
+    }
+    .avatar {
+        
+        width: 24px;
+        height: 24px;
+        vertical-align: text-bottom;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        -ms-border-radius: 12px;
+        border-radius: 12px;
+    }
+}

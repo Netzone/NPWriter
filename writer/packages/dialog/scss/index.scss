@@ -14,7 +14,7 @@
     bottom:0;
     left:0;
     right:0;
-    z-index: 1000;
+    z-index: 999999;
 
     &.global{
         position: fixed;
@@ -36,6 +36,9 @@
         margin: 100px auto;
         background-color: #fff;
         border-radius: 0.3rem;
+        p {
+            font-size: 1rem;
+        }
         &.small-screen {
             margin: 20px auto;
         }
@@ -73,7 +76,7 @@
         padding: 1rem 0 0 0;
 
         textarea {
-            font-size: 0.8rem;
+            font-size: 1rem;
         }
 
         div.message {

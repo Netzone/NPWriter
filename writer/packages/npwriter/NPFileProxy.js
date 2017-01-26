@@ -7,6 +7,7 @@ class NPFileProxy extends FileProxy {
     constructor(fileNode, context) {
         super(fileNode, context)
 
+        this.context = context
 
         // 1. A file is considered upstream if it has a uuid set
         // 2. If no uuid but a local file is present, the file needs to be sync'd
@@ -19,6 +20,8 @@ class NPFileProxy extends FileProxy {
 
         // If a file upload is in progress
         this.uploadPromise = null
+
+        this.hasLoadingErrors = false
 
         // When an url (String) is given as the data an uri needs to be 'uploaded'
         if (fileNode.sourceUrl) {
@@ -37,6 +40,11 @@ class NPFileProxy extends FileProxy {
         }
     }
 
+    /**
+     *
+     * @throws Error - When there is an error
+     * @returns {*}
+     */
     getUrl() {
         // if we have fetched the url already, just serve it here
         if (this.url) {
@@ -49,6 +57,9 @@ class NPFileProxy extends FileProxy {
         if (this._fileUrl) {
             return this._fileUrl
         }
+        if(this.hasLoadingErrors) {
+            throw new Error('Error fetching url for UUID ' + this.fileNode.uuid)
+        }
         // no URL available
         return ""
     }
@@ -57,6 +68,10 @@ class NPFileProxy extends FileProxy {
         this.fileService.getUrl(this.fileNode.uuid, this.fileNode.imType)
             .then((url) => {
                 this.url = url
+                this.triggerUpdate()
+            })
+            .catch((error, xhr, text) => {
+                this.hasLoadingErrors = true
                 this.triggerUpdate()
             })
     }
@@ -79,7 +94,7 @@ class NPFileProxy extends FileProxy {
 
                 this.fileService.uploadFile(this.sourceFile, params)
                     .then((xmlString) => {
-                        this.fileNode.handleDocument(xmlString)
+                        this.fileNode.handleDocument(xmlString, this.context)
                         this.uploadPromise = null
                         this.fetchUrl()
                         resolve()
@@ -101,7 +116,7 @@ class NPFileProxy extends FileProxy {
                 this.fileService.uploadURL(this.sourceUrl, this.fileNode.imType)
 
                     .then((xmlString) => {
-                        this.fileNode.handleDocument(xmlString);
+                        this.fileNode.handleDocument(xmlString, this.context);
                         this.uploadPromise = null
                         this.fetchUrl()
                         resolve()

@@ -34,6 +34,14 @@ class Browser {
 
 
     /**
+     * Sets the title in the browsers tab/window
+     * @param {string} title - The title to be displayed
+     */
+    setTitle(title) {
+        document.title = title;
+    }
+
+    /**
      * Trigger a reload of the writer based on current hash held internally in the api
      */
     reload() {

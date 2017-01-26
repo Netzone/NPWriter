@@ -18,27 +18,55 @@ if (isProduction) {
     var publicPath = path.resolve(__dirname, 'writer');
 }
 
-const configurationLoader = new ConfigurationLoader(environment, environmentVariables)
+switch (environment) {
+    case 'standby':
+        startStandbyServer()
+        break
+    default:
+        startServer()
+}
 
-configurationLoader.load().then((configurationManager) => {
+/**
+ * When Newspilot Writer environment is setup by CloudWatch we a missing some configuration etc
+ * so we need to start this server so the docker container doesn't crash,
+ */
+function startStandbyServer() {
+	app.get('/', function(req, res){
+		res.send('Newspilot Writer is in standby mode');
+	})
+	app.listen(5000, function () {
+		log.info({
+			env: environment
+		}, "Writer started in standby mode without config ")
+	})
+}
 
-    const host = configurationManager.get('server.host', '127.0.0.1'),
-        protocol = configurationManager.get('server.protocol', 'http')
-    port = configurationManager.get('server.port', 'http')
+/**
+ * Load configuration either locally or from S3 and then start the server
+ */
+function startServer() {
+	const configurationLoader = new ConfigurationLoader(environment, environmentVariables)
 
-    app.use('/', express.static(publicPath));
-    app.use('/api', routes);
-    app.use(express.static(path.join(__dirname)));
+	configurationLoader.load().then((configurationManager) => {
 
-    app.listen(port, function () {
-        log.info({
-            env: environment
-        }, "Writer running @ " + protocol + '://' + host + ':' + port)
-    });
+		const host = configurationManager.get('server.host', '127.0.0.1'),
+			  protocol = configurationManager.get('server.protocol', 'http')
+		      port = configurationManager.get('server.port', 'http')
 
-}).catch((error) => {
-    log.error({
-        msg: error.message
-    }, error.message)
-    console.error('Could not start Writer', error.message)
-})
+		app.use('/', express.static(publicPath));
+		app.use('/api', routes);
+		app.use(express.static(path.join(__dirname)));
+
+		app.listen(port, function () {
+			log.info({
+				env: environment
+			}, "Writer running @ " + protocol + '://' + host + ':' + port)
+		});
+
+	}).catch((error) => {
+		log.error({
+			msg: error.message
+		}, error.message)
+		console.error('Could not start Writer', error.message)
+	})
+}

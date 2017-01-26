@@ -55,7 +55,8 @@ class NewsItem {
 
     /**
      * Set the NewsML source. Will effectively replace the current article with
-     * anything in the incoming NewsML and set the document in an unsaved state.
+     * anything in the incoming NewsML. Should normally always be followed by sending
+     * Event.DOCUMENT_CHANGED event as this is not done automatically.
      *
      * @param {string} newsML The NewsML source
      * @param {object} writerConfig Optional, explicit writer config used internally only, should be empty.
@@ -263,6 +264,40 @@ class NewsItem {
     }
 
     /**
+     * Get Sections.
+     * Finds all the service nodes with a qCode containing imsection:
+     *
+     * Renames @qcode to qcode so plugins doesn't have to handle
+     *
+     * @returns {Array}
+     * @return {*}
+     */
+    getSections() {
+        return this._getServices('imsection')
+    }
+
+    /**
+     * Get Section.
+     *
+     * Find section on article if any. If no section null is returned.
+     * Note that by using this function it is presumed that there can
+     * be max one section on an article.
+     *
+     * @return {*}
+     */
+    getSection() {
+        let sections = this.getSections()
+
+        if (sections.length > 1) {
+            throw new Error('Only one section is allowed on an article');
+        } else if (sections.length == 1) {
+            return sections[0]
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Get Channels
      * Finds all the service nodes with a qCode containing imchn:
      *
@@ -272,6 +307,7 @@ class NewsItem {
      */
     getChannels() {
 
+        // TODO: Use internal _getServices('imchn')...
         var nodes = this.api.newsItemArticle.querySelectorAll('itemMeta service[qcode]');
         if (!nodes) {
             console.warn('No services with qcode found');
@@ -296,6 +332,134 @@ class NewsItem {
         return wrapper;
     }
 
+    /**
+     * Get Services.
+     * Finds all the service nodes with a qCode containing qcode prefix sent in as parameter:
+     *
+     * Renames @qcode to qcode so plugins doesn't have to handle
+     *
+     * @qcodePrefix QCode prefix to look for in service elements.
+     *
+     * @returns {Array}
+     * @return {*}
+     */
+    _getServices(qcodePrefix) {
+        const nodes = this.api.newsItemArticle.querySelectorAll('itemMeta service[qcode]')
+        if (!nodes) {
+            console.warn('No services with qcode found')
+            return [{}]
+        }
+
+        let wrapper = []
+        for (let i = 0; i < nodes.length; i++) {
+            let node = nodes[i],
+                qCode = node.getAttribute('qcode'),
+                pubConstraint = node.getAttribute('pubconstraint')
+
+            // Attribute "qcode" mandatory
+            if (qCode.indexOf(qcodePrefix) >= 0) {
+                let json = jxon.build(node);
+
+                json['qcode'] = json['@qcode'];
+                delete json['@qcode'];
+
+                // Optional attribute
+                if (pubConstraint) {
+                    json['pubconstraint'] = json['@pubconstraint']
+                    delete json['@pubconstraint']
+                }
+
+                wrapper.push(json);
+            }
+        }
+
+        return wrapper;
+    }
+
+    /**
+     * Update Section.
+     * Removes existing section and add new. Note expects article to only allow
+     * one section.
+     * @param name Name of plugin.
+     * @param section Section object to set on article.
+     *
+     * @fires event.DOCUMENT_CHANGED
+     * @throws Error
+     */
+    updateSection(name, section) {
+        if (!isObject(section)) {
+            throw new Error('There can be only one section')
+        }
+
+        // Remove existing section if any
+        let currentSection = this.getSection()
+        if (currentSection) {
+            this.removeSection(name, currentSection)
+        }
+
+        // Update section
+        let itemMetaNode = this.api.newsItemArticle.querySelector('itemMeta'),
+            service = {},
+            serviceNode
+
+        // Create service element
+        service['@qcode'] = section.qcode
+
+        // If product parent exists set attribute to reflect this
+        if (section.product) {
+            service['@pubconstraint'] = section.product
+        }
+
+        service.name = section.name
+        serviceNode = jxon.unbuild(service, null, 'service');
+
+        // Add service to itemMeta element
+        itemMetaNode.appendChild(serviceNode.childNodes[0]);
+
+        this.api.events.documentChanged(
+            name,
+            {
+                type: 'section',
+                action: 'update',
+                data: section
+            }
+        );
+    }
+
+    /**
+     * Removes <service>.
+     *
+     * @param {string} name Name of plugin.
+     * @param {string} section Section object to remove.
+     * @param {boolean} muteEvent Optional. Mute event if set to true, only used internally.
+     *
+     * @fires event.DOCUMENT_CHANGED
+     * @throws Error
+     */
+    removeSection(name, section, muteEvent) {
+        let query = 'itemMeta service[qcode="' + section['qcode'] + '"]'
+        let service = this.api.newsItemArticle.querySelector(query);
+
+        if (!service) {
+            // Silently ignore request
+            return;
+        }
+
+        service.parentElement.removeChild(service);
+
+        if (muteEvent === true) {
+            return;
+        }
+
+        this.api.events.documentChanged(
+            name,
+            {
+                type: 'section',
+                action: 'delete',
+                data: section
+            }
+        );
+    }
 
     /**
      * Add a channel as a <service>.
@@ -654,6 +818,7 @@ class NewsItem {
         authorLinkNode.setAttribute('uuid', author.uuid);
         authorLinkNode.setAttribute('rel', 'author');
         authorLinkNode.setAttribute('type', 'x-im/author');
+
         linksNode.appendChild(authorLinkNode);
 
         this.api.events.documentChanged(name, {
@@ -687,6 +852,47 @@ class NewsItem {
             action: 'add',
             data: authorName
         });
+    }
+
+
+    /**
+     * Updates name and email (if exist) for an author with specified uuid
+     *
+     * @param {string} name - Plugin name
+     * @param {string} uuid - The uuid for the author in the newsItem
+     * @param {object} author - Object containing name and/or email
+     */
+    updateAuthorWithUUID(name, uuid, author) {
+        const newsItem = this.api.newsItemArticle
+        let authorNode = newsItem.querySelector('itemMeta links link[type="x-im/author"][uuid="' + uuid + '"]')
+
+        authorNode.setAttribute('title', author.name);
+
+        if (author.email) {
+            let dataNode = authorNode.querySelector('data')
+            if (!dataNode) {
+                dataNode = newsItem.createElement('data')
+                authorNode.appendChild(dataNode)
+            }
+
+            let emailNode = dataNode.querySelector('email')
+            if (emailNode) {
+                // Update existing email
+                emailNode.textContent = author.email
+            } else {
+                // Create email
+                try {
+                    emailNode = newsItem.createElement('email')
+                    emailNode.textContent = author.email
+
+                    // Append email node
+                    dataNode.appendChild(emailNode);
+                }
+                catch (e) {
+                    console.log(e)
+                }
+            }
+        }
     }
 
     /**
@@ -1525,11 +1731,11 @@ class NewsItem {
             throw new Error('Undefined value')
         }
 
-        if (typeof(jxonObject['@id']) === 'undefined') {
+        if (typeof (jxonObject['@id']) === 'undefined') {
             throw new Error('Jxon object missing @id attribute')
         }
 
-        if (typeof(jxonObject['@type']) === 'undefined') {
+        if (typeof (jxonObject['@type']) === 'undefined') {
             throw new Error('Jxon object missing @type attribute')
         }
 

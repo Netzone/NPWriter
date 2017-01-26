@@ -8,13 +8,11 @@ class FileService {
     getUrl(uuid, imType) {
 
         return this.api.router.get('/api/binary/url/' + uuid+'?imType='+imType)
+            .then(response => this.api.router.checkForOKStatus(response))
+            .then(response => {
+                return response.text()
+            })
 
-            .then(response => response.text())
-
-            .catch(function (error, xhr, text) {
-                // TODO: Display error message
-                console.error(error, xhr, text);
-            });
         // return promise
 
     }

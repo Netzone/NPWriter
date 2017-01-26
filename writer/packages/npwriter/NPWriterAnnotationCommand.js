@@ -16,7 +16,6 @@ class NPWriterAnnotationCommand extends AnnotationCommand {
         // Find the plugin with that name
         // Check if there is a disableUseOfAnnotationTools parameter in the config
         if(sel.surfaceId.indexOf('body/') >= 0) {
-            console.time("Timing");
             const doc = sel.getDocument()
             const nodeId = sel.getNodeId()
             const path = sel.path

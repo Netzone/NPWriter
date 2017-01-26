@@ -1,6 +1,13 @@
 .se-tab-content {
-  padding: 15px;
+    padding: 0 15px;
 
+    .plugin {
+        margin-bottom: 5px;
+
+        &:last-child {
+            margin-bottom:50px;
+        }
+    }
 }
 
 .plugin {

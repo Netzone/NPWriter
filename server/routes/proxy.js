@@ -7,9 +7,12 @@ var requestDebug = require('request-debug');
 var log = require('../utils/logger').child({api: 'Router'});
 var config = require('../models/ConfigurationManager');
 
+
 /**
  * Proxy for plugins
  * @TODO: Can we remove this?
+ *
+ * @deprecated
  */
 router.get('/proxy', function (req, res) {
     var url = req.query.url;
@@ -37,37 +40,75 @@ router.get('/proxy', function (req, res) {
 router.all('/resourceproxy', function (req, res) {
 
     if (config.get('debugProxyCalls') === true) {
-        requestDebug(request, function(type, data) {
+        requestDebug(request, function (type, data) {
             log.error({proxyEvent: type, data: data})
         });
+    }
+    const url = req.query.url
+    if (!url) {
+        errorResponse(res, 422, 'Missing parameter url')
+        return
     }
 
     // Check which method that is used
     const method = req.method.toUpperCase()
 
-    switch (method) {
+    try {
+        switch (method) {
+            case 'POST':
+            case 'PUT':
+            case 'DELETE':
+                makeRequest(url, method.toLowerCase(), req, res)
+                break
+            case 'GET': {
+                get(url, req, res)
+                break;
+            }
+            default:
+                log.info({method: method, url: url}, `Trying to make request with unknown method ${method}`);
+                errorResponse(res, 400, `Unsupported method ${method}`)
+        }
 
-        case 'POST':
-            post(req.query.url, req, res)
-            break
-
-        case 'GET':
-            get(req.query.url, req, res)
-            break
-
-        case 'PUT':
-            put(req.query.url, req, res)
-            break
-
-        case 'DELETE':
-            del(req.query.url, req, res)
-            break
-
-        default:
-            res.status(404).contentType('application/json').send({error: 'Method not allowed ' + method})
+    } catch (e) {
+        log.error({method: method, error: e, url: url}, `Error, METHOD: ${method} in resourceproxy`);
+        errorResponse(res, 500, e.message)
     }
 
 });
+
+/**
+ * Return a JSON response containing an message
+ * @param res
+ * @param {int} status  HTTP Status code
+ * @param {string} message - The message to show for the user
+ */
+function errorResponse(res, status, message) {
+    res.status(status).contentType('application/json').send({error: message})
+}
+
+
+/**
+ * Generic method to make POST, PUT, DELETE requests to other
+ * resources
+ * @param {string} url - The url to fetch
+ * @param {string} method - Which method to use
+ * @param req
+ * @param res
+ */
+function makeRequest(url, method, req, res) {
+    req.pipe(request[method](url, (error, httpStatusCode, body) => {
+        if (error) {
+            log.error({
+                error: error,
+                method: method,
+                status: httpStatusCode,
+                url: req.query.url
+            }, "Failed making resource request through proxy");
+
+            throw new Error(error)
+        }
+    }), {end: false}).pipe(res)
+}
 
 /**
  * Making a GET request to specified URL
@@ -79,7 +120,11 @@ function get(url, req, res) {
     req.pipe(request(url)
         .on('response', (response) => {
             if (response.statusCode !== 200) {
-                log.error({method: 'GET', status: response.statusCode, url: url}, "Failed fetching resource through proxy");
+                log.error({
+                    method: 'GET',
+                    status: response.statusCode,
+                    url: url
+                }, "Failed fetching resource through proxy");
             }
         })
         .on('error', (error) => {
@@ -88,70 +133,7 @@ function get(url, req, res) {
 }
 
 
-/**
- * Make a DELETE request to specified URL
- * @param url
- * @param req
- * @param res
- */
-function del(url, req, res) {
-    let options = {
-        body: req.body
-    }
-    req.pipe(request.delete(url, options, (error, httpStatusCode, body) => {
-        if (error) {
-            log.error({
-                method: 'DELETE',
-                status: httpStatusCode,
-                url: req.query.url
-            }, "Failed fetching resource through proxy");
-        }
-    }), {end: false}).pipe(res)
-}
 
 
-/**
- * Make a POST request to specified URL
- * @param url
- * @param req
- * @param res
- */
-function post(url, req, res) {
-
-    let options = {
-        body: req.body
-    }
-    req.pipe(request.post(url, options, (error, httpStatusCode, body) => {
-        if (error) {
-            log.error({
-                method: 'POST',
-                status: httpStatusCode,
-                url: req.query.url
-            }, "Failed fetching resource through proxy");
-        }
-    }), {end: false}).pipe(res)
-}
-
-/**
- * Make a PUT request to specified URL
- * @param url
- * @param req
- * @param res
- */
-function put(url, req, res) {
-
-    let options = {
-        body: req.body
-    }
-    req.pipe(request.put(url, options, (error, httpStatusCode, body) => {
-        if (error) {
-            log.error({
-                method: 'PUT',
-                status: httpStatusCode,
-                url: req.query.url
-            }, "Failed fetching resource through proxy");
-        }
-    }), {end: false}).pipe(res)
-}
 
 module.exports = router;

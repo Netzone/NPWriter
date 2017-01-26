@@ -11,7 +11,13 @@ class Notification extends Component {
         this.setState({visible: 0});
     }
 
+    dispose() {
+        window.clearTimeout(this.timeout);
+    }
+
+
     updateState(visibleValue) {
+        this.props.hideNotification(this.props.notification)
         this.setState({
             visible: visibleValue
         })
@@ -44,7 +50,7 @@ class Notification extends Component {
                 });
 
             if (!this.props.sticky) {
-                setTimeout(() => {
+                this.timeout = setTimeout(() => {
                     outer.addClass('imc-disposed')
                     this.updateState(2)
                 }, 5500)

@@ -28,8 +28,8 @@ class Events {
      */
     on(name, eventType, func) {
         if (find(this.eventListeners, (obj) => {
-            return obj.name === name && obj.eventType === eventType
-        })) {
+                return obj.name === name && obj.eventType === eventType
+            })) {
             return;
         }
 
@@ -113,17 +113,7 @@ class Events {
             }
         }
 
-        this.triggerEvent(null, Event.DOCUMENT_CHANGED, data);
-    }
-
-    /**
-     * Event when document becomes unsaved. Only triggers one time when there's unsaved changes
-     * (document:isunsaved)
-     *
-     * @param {object} originalEvent Data that originally triggered the document is unsaved event
-     */
-    documentIsUnsaved(originalEvent) {
-        this.triggerEvent(null, 'document:isunsaved', originalEvent);
+        this.triggerEvent(name, Event.DOCUMENT_CHANGED, data);
     }
 
     /**
@@ -158,4 +148,3 @@ class Events {
 
 }
 export default Events
-

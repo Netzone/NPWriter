@@ -23,6 +23,7 @@ import NPWriterCommand from './packages/npwriter/NPWriterCommand'
 import NPFileProxy from './packages/npwriter/NPFileProxy'
 import uuidv5 from 'uuidv5'
 
+
 import NPWriterAnnotationCommand from './packages/npwriter/NPWriterAnnotationCommand'
 
 const STATUS_ISREADY = 'isReady',
@@ -48,6 +49,8 @@ class App extends Component {
             }, //this.save,
             replacedoc: this.replaceDoc
         });
+
+        console.info("Running writer in environment: ", process.env.NODE_ENV);
     }
 
     getInitialState() {
@@ -95,7 +98,7 @@ class App extends Component {
      * @returns {SaveHandler}
      */
     getSaveHandler() {
-        if(!this.saveHandler) {
+        if (!this.saveHandler) {
             this.saveHandler = new SaveHandler({
                 configurator: this.configurator,
                 api: this.api
@@ -153,17 +156,6 @@ class App extends Component {
                         // Locale for moment
                         moment.locale(this.configurator.config.writerConfigFile.language)
 
-                        if (this.editorSession) this.editorSession.dispose()
-                        this.editorSession = new EditorSession(result.idfDocument, {
-                            configurator: this.configurator,
-                            lang: this.configurator.config.writerConfigFile.language,
-                            context: {
-                                api: this.api
-                            }
-                        })
-                        // ATTENTION: we need to update the API as well to use the fresh editorSession
-                        api.editorSession = this.editorSession
-
                         this.replaceDoc(result);
 
                         // Clear guid if hash is empty
@@ -178,13 +170,13 @@ class App extends Component {
                     })
 
                 // Don't catch errors during development as we loose the stacktrace
-                if (window.PRODUCTION) {
+                if (process.env && process.env.NODE_ENV === 'production') {
                     promise.catch(this.handleError.bind(this));
                 }
             })
 
         // Don't catch errors during development as we loose the stacktrace
-        if (window.PRODUCTION) {
+        if (process.env && process.env.NODE_ENV === 'production') {
             promise.catch(this.handleError.bind(this));
         }
 
@@ -196,7 +188,6 @@ class App extends Component {
      * @param error
      */
     handleError(error) {
-        console.error(error)
         this.setState({
             status: STATUS_HAS_ERROR,
             statusMessage: error
@@ -211,10 +202,15 @@ class App extends Component {
             handled = true;
         } else if (e.keyCode === 85 && (e.metaKey || e.ctrlKey) && !e.altKey) {
             const xml = this.getSaveHandler().getExportedDocument()
-            this.api.ui.showDialog(SourceComponent, {message: xml}, {title: 'Source', primary: 'Ok', secondary: false, takeover: true})
+            this.api.ui.showDialog(SourceComponent, {message: xml}, {
+                title: 'Source',
+                primary: 'Ok',
+                secondary: false,
+                takeover: true
+            })
 
             handled = true;
-        } else if(e.keyCode === keys.ESCAPE) {
+        } else if (e.keyCode === keys.ESCAPE) {
             this.api.events.triggerEvent(null, Event.USERACTION_KEY_ESCAPE, {})
         }
 
@@ -243,19 +239,20 @@ class App extends Component {
                 api: this.api
             }
         })
+        this.api.editorSession = this.editorSession
+
         this.editorSession.saveHandler = this.getSaveHandler()
         this.api.init(newsItemArticle, this.editorSession, this.refs)
         // Rerender from scratch
         // NOTE: emptying the component here makes sure that no component survives connected to the old document
 
-        if(this.refs.writer) { // First load we have to reference to writer so we know it's the initial load
+        if (this.refs.writer) { // First load we have to reference to writer so we know it's the initial load
             this.api.document._setDocumentStatus(HAS_DOCUMENT)
         } else {
             this.api.document._setDocumentStatus(HAS_NO_DOCUMENT)
         }
         this.empty()
         this.rerender()
-
     }
 
     setTemporaryId() {
@@ -269,12 +266,12 @@ class App extends Component {
         switch (this.state.status) {
 
             case STATUS_HAS_ERROR:
-                el.append($$(Error, {error: this.state.statusMessage}))
+                el.append($$(Error, {error: this.state.statusMessage, getLabel: this.getLabel.bind(this)}))
                 break
 
             case STATUS_ISREADY:
 
-                if(!this.api.browser.getHash()) {
+                if (!this.api.browser.getHash()) {
                     this.setTemporaryId();
                 }
 
@@ -293,6 +290,17 @@ class App extends Component {
         return el
     }
 
+
+    getLabel(label) {
+        const labelLanguage = this.configurator.config.writerConfigFile.labelLanguage
+        if (labelLanguage) {
+            if (this.configurator.config.labels[labelLanguage][label]) {
+                label = this.configurator.config.labels[labelLanguage][label]
+            }
+        }
+
+        return label
+    }
     /**
      * Adds a couple of defaults component to our configurator
      */
@@ -300,7 +308,13 @@ class App extends Component {
         // Adds package for unsupported elements in document
         this.configurator.import(UnsupportedPackage)
 
-        this.configurator.addSidebarTab('main', 'Meta')
+        // This is a HACK to get labels for the metadata tab
+        // The API and LabelProvider is not quite finished in this situation
+        // So the read directly from the labels property in the configurator
+
+
+
+        this.configurator.addSidebarTab('main', this.getLabel('Meta'))
 
     }
 }
@@ -320,19 +334,19 @@ window.onload = () => {
     //                 console.log("Registrsation of serviceworker failed")
     //             })
     //     }
-     // }
+    // }
 
 
     //
-/*    function showNotification() {
-        Notification.requestPermission(function (result) {
-            if (result === 'granted') {
-                navigator.serviceWorker.ready.then(function (registration) {
-                    registration.showNotification('Service worker is installed and ready to use');
-                });
-            }
-        });
-    }
-*/
+    /*    function showNotification() {
+     Notification.requestPermission(function (result) {
+     if (result === 'granted') {
+     navigator.serviceWorker.ready.then(function (registration) {
+     registration.showNotification('Service worker is installed and ready to use');
+     });
+     }
+     });
+     }
+     */
     App.mount({}, document.body)
 }

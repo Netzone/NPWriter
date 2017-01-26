@@ -1,5 +1,5 @@
 import {XMLExporter, DefaultDOMElement} from 'substance'
-
+import {Fragmenter} from 'substance'
 class NewsMLExporter extends XMLExporter {
 
     constructor(...args) {
@@ -64,11 +64,13 @@ class NewsMLExporter extends XMLExporter {
 
         // Reinsert the body group
         let parser = new DOMParser()
-        var articleDomElement = parser.parseFromString(removeControlCodes(bodyGroup.outerHTML), 'application/xml');
+        // var articleDomElement = parser.parseFromString(removeControlCodes(bodyGroup.outerHTML), 'application/xml');
+
+        const articleDomElement = DefaultDOMElement.parseXML(removeControlCodes(bodyGroup.outerHTML))
 
         groupContainer.removeChild(idfBodyGroupNode);
         // Append body group
-        groupContainer.appendChild(articleDomElement.documentElement);
+        groupContainer.appendChild(articleDomElement.el)
 
 
     }
@@ -122,6 +124,51 @@ class NewsMLExporter extends XMLExporter {
 
         return removeControlCodes(newsItem.documentElement.outerHTML);
     }
+
+    // TODO Remove when/if substance has fixed the double encoding problem
+    /**
+     * This code is copied from DOMExporter.js in substance. This is because
+     * removing the encodeXMLEntities() invocation fixed the double encoding problem (WRIT-255).
+     */
+    _annotatedText(text, annotations) {
+        var self = this
+
+        var annotator = new Fragmenter()
+        annotator.onText = function(context, text) {
+            // context.children.push(encodeXMLEntities(text))
+            context.children.push(text)
+        }
+        annotator.onEnter = function(fragment) {
+            var anno = fragment.node
+            return {
+                annotation: anno,
+                children: []
+            }
+        }
+        annotator.onExit = function(fragment, context, parentContext) {
+            var anno = context.annotation
+            var converter = self.getNodeConverter(anno)
+            if (!converter) {
+                converter = self.getDefaultPropertyAnnotationConverter()
+            }
+            var el
+            if (converter.tagName) {
+                el = this.$$(converter.tagName)
+            } else {
+                el = this.$$('span')
+            }
+            el.attr(this.config.idAttribute, anno.id)
+            el.append(context.children)
+            if (converter.export) {
+                el = converter.export(anno, el, self) || el
+            }
+            parentContext.children.push(el)
+        }.bind(this)
+        var wrapper = { children: [] }
+        annotator.start(wrapper, text, annotations)
+        return wrapper.children
+    }
+
 }
 
 export default NewsMLExporter
@@ -134,7 +181,7 @@ export default NewsMLExporter
  * @return {string} Text without control codes
  */
 function removeControlCodes(text) {
-    var regex = new RegExp("[\x00-\x08\x0b\x0c\x0e-\x1f]", "g");
+    var regex = new RegExp("[\x00-\x08\x0b\x0c\x0e-\x1f]|(\&nbsp\;{1})", "g");
     if (text !== undefined) {
         if (regex.exec(text) != null) {
             console.log("Removing illegal XML character in content");

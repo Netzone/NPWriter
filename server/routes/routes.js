@@ -24,6 +24,10 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
+// ATTENTION: Proxy routes must be above general bodyParsers below
+// so we don't parse any incoming body
+router.use(ProxyRoutes)
+
 router.use(bodyParser.json({limit: '50Mb', extended: true, type: "application/json"}));
 router.use(bodyParser.raw({limit: '50Mb', extended: true, type: "*/*"}));
 
@@ -34,7 +38,6 @@ router.use(NewsItemRoutes)
 router.use(ConceptItemRoutes)
 router.use(ErrorRoutes)
 router.use(HealthCheckRoutes)
-router.use(ProxyRoutes)
 if (SpellCheckRoutes) {
   router.use(SpellCheckRoutes)
 }

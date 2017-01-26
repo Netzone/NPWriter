@@ -1,4 +1,4 @@
-import { createAnnotation, insertText, NodeSelection, deleteNode, insertNode } from 'substance'
+import {createAnnotation, insertText, NodeSelection, deleteNode, insertNode} from 'substance'
 import idGenerator from '../utils/IdGenerator'
 
 /**
@@ -14,9 +14,9 @@ class Document {
     }
 
 
-    triggerFetchResourceNode(node) {
+    triggerFetchResourceNode(node, info) {
 
-        this.api.writer.ResourceManageranager.triggerFetch(node)
+        this.api.writer.ResourceManageranager.triggerFetch(node, info)
     }
 
     /**
@@ -89,6 +89,27 @@ class Document {
     }
 
 
+    /**
+     * Retrieve the previous node.
+     * Uses the focused surface to get all nodes in that surface/container and
+     * then returns the previous node from the one sent in
+     * @param {string} nodeId
+     * @returns {*}
+     */
+    getPreviousNode(nodeId) {
+        const editorSession = this.api.editorSession;
+        const surface = editorSession.surfaceManager.getFocusedSurface()
+        const doc = editorSession.getDocument()
+        const surfaceNode = doc.get(surface.id)
+        const surfaceNodes = surfaceNode.nodes
+        const currentNodeIndex = surfaceNodes.indexOf(nodeId)
+        const previousNodeId = surfaceNodes[currentNodeIndex - 1]
+
+        if (currentNodeIndex === 0 || currentNodeIndex === -1) {
+            return undefined
+        }
+        return doc.get(previousNodeId)
+    }
 
     /**
      * Deletes a node from the document.
@@ -105,8 +126,30 @@ class Document {
         // i.e. the surface is always the body editor?
         const editorSession = this.api.editorSession;
 
+        // Select previous node before we delete the node
+        // So we dont get any issues with SwitchTextTypeTool
+        editorSession.selectNode(node.id)
+
+
         editorSession.transaction((tx) => {
-            tx.delete(node.id)
+            const sel = tx.selection
+
+            const nodeId = sel.getNodeId()
+            const container = tx.get(sel.containerId)
+            const nodePos = container.getPosition(nodeId)
+            const contentPath = container.getContentPath()
+            tx.update(contentPath, {delete: {offset: nodePos}})
+            tx.delete(nodeId)
+            const newNode = tx.createDefaultTextNode()
+            tx.update(contentPath, {type: 'insert', pos: nodePos, value: newNode.id})
+            tx.selection = tx.createSelection({
+                type: 'property',
+                path: newNode.getTextPath(),
+                startOffset: 0,
+                containerId: container.id,
+            })
+
+
         })
 
         const event = {

@@ -19,7 +19,6 @@ class Router {
      * @returns {string}
      */
     getQuerystringFromParameters(parameters) {
-
         if (!parameters) return ''
         if (!isObject(parameters)) return parameters
 
@@ -28,10 +27,11 @@ class Router {
 
             for (const name in parameters) {
                 if (name !== 'headers' && name !== 'body') { // Dont add the headers key to the querystring
-                    query.push(name + '=' + encodeURI(parameters[name]));
+                    query.push(name + '=' + encodeURIComponent(parameters[name]));
                 }
             }
-            return '?' + query.join('&')
+
+            return query.length === 0 ? '' : '?' + query.join('&')
         }
 
         throw new Error('Could not convert parameters of type', typeof parameters)
@@ -280,11 +280,18 @@ class Router {
                                 reject(text)
                             }
                         } else {
-                            return (reject(text));
+                            if(text.length === 0) {
+                                reject(response);
+                            } else {
+                                reject(text)
+                            }
+
                         }
                     })
                     .then(message => reject(message))
-                    .catch(e => reject(response.statusText))
+                    .catch(e => {
+                        reject(response.statusText)
+                    })
             })
         }
     }
