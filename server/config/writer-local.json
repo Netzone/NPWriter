@@ -345,6 +345,12 @@
         "bylinesearch": true,
         "byline": true,
         "imageinfo": true,
+        "imageFileExtension": [
+          ".jpg",
+          ".jpeg",
+          ".png",
+          ".gif"
+        ],
         "crops": {
           "16:9": [
             16,
