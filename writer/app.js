@@ -188,7 +188,6 @@ class App extends Component {
      * @param error
      */
     handleError(error) {
-        console.error(error)
         this.setState({
             status: STATUS_HAS_ERROR,
             statusMessage: error
@@ -267,7 +266,7 @@ class App extends Component {
         switch (this.state.status) {
 
             case STATUS_HAS_ERROR:
-                el.append($$(Error, {error: this.state.statusMessage}))
+                el.append($$(Error, {error: this.state.statusMessage, getLabel: this.getLabel.bind(this)}))
                 break
 
             case STATUS_ISREADY:
@@ -291,6 +290,17 @@ class App extends Component {
         return el
     }
 
+
+    getLabel(label) {
+        const labelLanguage = this.configurator.config.writerConfigFile.labelLanguage
+        if (labelLanguage) {
+            if (this.configurator.config.labels[labelLanguage][label]) {
+                label = this.configurator.config.labels[labelLanguage][label]
+            }
+        }
+
+        return label
+    }
     /**
      * Adds a couple of defaults component to our configurator
      */
@@ -301,15 +311,10 @@ class App extends Component {
         // This is a HACK to get labels for the metadata tab
         // The API and LabelProvider is not quite finished in this situation
         // So the read directly from the labels property in the configurator
-        let tabLabel = 'Meta'
-        const labelLanguage = this.configurator.config.writerConfigFile.labelLanguage
-        if (labelLanguage) {
-            if (this.configurator.config.labels[labelLanguage]['Meta']) {
-                tabLabel = this.configurator.config.labels[labelLanguage]['Meta']
-            }
-        }
 
-        this.configurator.addSidebarTab('main', tabLabel)
+
+
+        this.configurator.addSidebarTab('main', this.getLabel('Meta'))
 
     }
 }

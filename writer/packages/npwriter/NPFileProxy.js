@@ -7,6 +7,7 @@ class NPFileProxy extends FileProxy {
     constructor(fileNode, context) {
         super(fileNode, context)
 
+        this.context = context
 
         // 1. A file is considered upstream if it has a uuid set
         // 2. If no uuid but a local file is present, the file needs to be sync'd
@@ -93,7 +94,7 @@ class NPFileProxy extends FileProxy {
 
                 this.fileService.uploadFile(this.sourceFile, params)
                     .then((xmlString) => {
-                        this.fileNode.handleDocument(xmlString)
+                        this.fileNode.handleDocument(xmlString, this.context)
                         this.uploadPromise = null
                         this.fetchUrl()
                         resolve()
@@ -115,7 +116,7 @@ class NPFileProxy extends FileProxy {
                 this.fileService.uploadURL(this.sourceUrl, this.fileNode.imType)
 
                     .then((xmlString) => {
-                        this.fileNode.handleDocument(xmlString);
+                        this.fileNode.handleDocument(xmlString, this.context);
                         this.uploadPromise = null
                         this.fetchUrl()
                         resolve()

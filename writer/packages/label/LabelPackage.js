@@ -24,6 +24,36 @@ export default {
             sv: 'Brödtext'
         })
 
+
+        // --------------------------------------
+        // Labels In Error and start loading pages
+        // --------------------------------------
+
+        config.addLabel('error-page-Error', {
+            en: 'An error occured',
+            sv: 'Något gick fel'
+        })
+
+        config.addLabel('error-page-error-description', {
+            en: 'Error description',
+            sv: 'Felbeskrivning'
+        })
+
+        config.addLabel('error-page-status-code', {
+            en: 'Error status code',
+            sv: 'Felmeddelandekod'
+        })
+
+        config.addLabel('error-page-status-url', {
+            en: 'Requested URL',
+            sv: 'Efterfrågad URL'
+        })
+
+        config.addLabel('error-page-human-readable-404', {
+            en: 'The requested article could not be found',
+            sv: 'Artikeln du försökte öppna kunde inte hittas.'
+        })
+
         // --------------------------------------
         // Labels specified in API
         // --------------------------------------

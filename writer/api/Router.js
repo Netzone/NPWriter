@@ -280,11 +280,18 @@ class Router {
                                 reject(text)
                             }
                         } else {
-                            return (reject(text));
+                            if(text.length === 0) {
+                                reject(response);
+                            } else {
+                                reject(text)
+                            }
+
                         }
                     })
                     .then(message => reject(message))
-                    .catch(e => reject(response.statusText))
+                    .catch(e => {
+                        reject(response.statusText)
+                    })
             })
         }
     }
