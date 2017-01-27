@@ -735,8 +735,8 @@
       "enabled": true,
       "mandatory": false,
       "data": {
-        "imageProxyHost" : "https://services.dev.np.infomaker.io",
-        "newspilotHost" : "http://newspilot.dev.np.infomaker.io:8080"
+        "imageProxyServer" : "https://services.dev.np.infomaker.io",
+        "newspilotServer" : "http://newspilot.dev.np.infomaker.io:8080"
       }
     }
   ]
