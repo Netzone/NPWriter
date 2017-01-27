@@ -34,6 +34,63 @@ router.get('/proxy', function (req, res) {
     });
 });
 
+router.all('/imageproxy', function (req, res) {
+    // TODO: get url
+    // TODO: add basic auth (which is fetched from config)
+    // TODO: make get request
+
+    const url = req.query.url
+    if (!url) {
+        errorResponse(res, 422, 'Missing parameter url')
+        return
+    }
+
+    getHeaders(url, function (error, headers) {
+        if (error) {
+            errorResponse(res, 500, 'Error parsing configuration for url ' + url)
+        } else {
+            request
+                .get({
+                    url: url,
+                    headers: headers
+                })
+                .on('response', function (response) {
+                    if (response.statusCode != 200) {
+                        log.error({method: 'GET', error: response.statusCode, url: url}, `Error in imageproxy`)
+                    }
+                })
+                .on('error', function (error) {
+                    log.error({method: 'GET', error: 'Failed to get image', url: url}, `Error in imageproxy`, error)
+                })
+                .pipe(res)
+        }
+    })
+
+
+    // log.info('URL WAS', url)
+    //
+    // const username = "infomaker",
+    //     password = "newspilot",
+    //     auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
+    //
+    // request
+    //     .get({
+    //         url: url,
+    //         headers: {
+    //             "Authorization": auth
+    //         }
+    //     })
+    //     .on('response', function (response) {
+    //         if (response.statusCode != 200) {
+    //             log.error({method: 'GET', error: response.statusCode, url: url}, `Error in npimageproxy`)
+    //         }
+    //     })
+    //     .on('error', function (error) {
+    //         log.error({method: 'GET', error: 'Failed to get image', url: url}, `Error in npimageproxy`, error)
+    //     })
+    //     .pipe(res)
+});
+
 /**
  * Fetch remote resource through local proxy
  */
@@ -75,6 +132,7 @@ router.all('/resourceproxy', function (req, res) {
     }
 
 });
+
 
 /**
  * Return a JSON response containing an message
@@ -132,8 +190,14 @@ function get(url, req, res) {
         })).pipe(res)
 }
 
+function getHeaders(url, callback) {
+    // TODO: Try to match url with configuration and lookup headers to set
+    const username = "infomaker",
+        password = "newspilot",
+        auth = "Basic " + new Buffer(username + ":" + password).toString("base64");
 
-
+    callback(null, {"Authorization": auth})
+}
 
 
 module.exports = router;

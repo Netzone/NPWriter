@@ -735,6 +735,21 @@ class NewsItem {
         });
     }
 
+    /**
+     * Get Newspilot article id (if any).
+     *
+     * @return {*}
+     */
+    getNewspilotArticleId() {
+        let articleIdNode = this._getItemMetaExtPropertyByType('npext:articleid')
+
+        if (articleIdNode) {
+            return articleIdNode.getAttribute('value')
+        }
+
+        return null;
+    }
+
 
     /**
      * Get all author links in itemMeta links
