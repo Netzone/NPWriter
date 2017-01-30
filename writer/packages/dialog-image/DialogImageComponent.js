@@ -188,7 +188,9 @@ class DialogImageComponent extends Component {
             searchComponent = $$(AuthorAddComponent, {
                 existingItems: this.authors,
                 onSelect: this.addAuthor.bind(this),
-                onCreate: this.createAuthor.bind(this),
+                onCreate: (authorItem) => {
+                    this.createAuthor(authorItem, false)
+                },
                 createAllowed: true,
                 placeholderText: this.getLabel("Add creator")
             }).ref('FormSearchComponent')

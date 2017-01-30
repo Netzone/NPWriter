@@ -212,14 +212,28 @@
       "name": "youtubeembed",
       "url": "http://localhost:5001/index.js",
       "enabled": true,
-      "mandatory": false
+      "mandatory": false,
+      "data": {
+        "disableUseOfAnnotationTools": true
+      }
+    },
+    {
+      "id": "se.infomaker.ximplace",
+      "name": "ximplace",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": true,
+      "data": {
+        "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
+      }
     },
     {
       "id": "se.infomaker.ximplace-position",
       "name": "ximplace",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": true,
+      "enabled": false,
       "mandatory": true,
       "data": {
         "features": "position",
@@ -231,7 +245,7 @@
       "name": "ximplace",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": true,
+      "enabled": false,
       "mandatory": true,
       "data": {
         "features": "polygon",
@@ -288,6 +302,7 @@
       "enabled": true,
       "mandatory": true
     },
+
     {
       "id": "se.infomaker.preleadin",
       "name": "preleadin",
@@ -345,6 +360,12 @@
         "bylinesearch": true,
         "byline": true,
         "imageinfo": true,
+        "imageFileExtension": [
+          ".jpg",
+          ".jpeg",
+          ".png",
+          ".gif"
+        ],
         "crops": {
           "16:9": [
             16,
@@ -438,7 +459,6 @@
           "title"
         ],
         "fields": [
-          "title",
           "subject",
           "text"
         ]
