@@ -752,7 +752,7 @@
       "name": "npjob",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": true,
+      "enabled": false,
       "mandatory": false,
       "data": {
         "imageProxyServer" : "https://services.dev.np.infomaker.io",
