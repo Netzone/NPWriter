@@ -754,7 +754,10 @@
       "style": "http://localhost:5001/style.css",
       "enabled": false,
       "mandatory": false,
-      "data": {}
+      "data": {
+        "imageProxyServer" : "https://services.dev.np.infomaker.io",
+        "newspilotServer" : "http://newspilot.dev.np.infomaker.io:8080"
+      }
     }
   ]
 }
