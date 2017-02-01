@@ -42,8 +42,12 @@ class TooltipComponent extends Component {
             el.addClass('active')
 
             const width = this.el.width // Width of the tooltip
+            const height = this.el.height // Width of the tooltip
+
+            const parentHeight = parent.el.offsetHeight
             const left = (parent.width / 2) - (width / 2) // Calculate left position by the tooltip width and parent width
             el.css('left', left + 'px')
+            el.css('top', -((height)+(parentHeight) + 'px'))
         }
         return el
     }

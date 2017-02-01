@@ -13,11 +13,9 @@
     color: #fff;
     font-size: 0.8rem;
     line-height: 20px;
-
+    white-space: nowrap;
     border-radius: 3px;
     visibility: hidden;
-    height: 0;
-
     &.active {
         visibility: visible;
         height: auto;
