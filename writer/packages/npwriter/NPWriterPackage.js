@@ -35,7 +35,7 @@ import NPWOverlayMenuPackage from '../npw-overlay-menu/NPWOverlayMenuPackage'
 import NotificationPackage from '../notification/NotificationPackage'
 import FormSearchPackage from '../form-search/FormSearchPackage'
 import FormAddPackage from '../form-add/FormAddPackage'
-
+import TooltipPackage from '../tooltip/TooltipPackage'
 import AvatarPackage from '../avatar/AvatarPackage'
 
 
@@ -71,6 +71,7 @@ export default {
         config.import(AvatarPackage)
         config.import(DialogPackage)
         config.import(DialogImagePackage)
+        config.import(TooltipPackage)
         config.import(AboutPackage)
         // general purpose
         config.import(SwitchTextTypePackage)
