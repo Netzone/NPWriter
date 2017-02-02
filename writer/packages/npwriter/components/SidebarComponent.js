@@ -9,6 +9,8 @@ class SidebarComponent extends Component {
         this.handleActions({
             switchTab: this.switchContext
         })
+        this.nodes = {}
+
     }
 
     getInitialState() {
@@ -17,12 +19,30 @@ class SidebarComponent extends Component {
         }
     }
 
+    didMount() {
+
+        this.context.editorSession.onRender('document', this.rerender, this)
+    }
+
+    rerender() {
+        console.log("Rerender");
+        Object.keys(this.nodes).forEach((pluginId) => {
+            this.nodes[pluginId].forEach((node) => {
+                this.refs['plugin-' + pluginId].extendProps({nodes: this.getNodesForPlugin(pluginId)})
+            })
+        })
+
+        // super.rerender()
+    }
+
+
     getTabs() {
         const tabs = this.context.configurator.config.sidebarTabs
         const sidebarTabs = tabs.slice(0) // Create of copy of the array to not reverse the original tabs array
         return sidebarTabs.reverse()
 
     }
+
     render($$) {
 
         const el = $$('div').addClass('se-context-section').ref('sidebar');
@@ -61,6 +81,20 @@ class SidebarComponent extends Component {
         })
     }
 
+    getNodesForPlugin(pluginId) {
+        const nodes = this.context.doc.getNodes()
+
+        // get nodes for plugin
+        const pluginNodes = Object.keys(nodes).map((nodeKey) => {
+            if (nodes[nodeKey].type === pluginId) {
+                return nodes[nodeKey]
+            }
+        }).filter((node) => {
+            return node !== undefined
+        })
+
+        return pluginNodes
+    }
     /**
      * Get alll registered sidebar panels and then filter by the current tab id
      *
@@ -72,9 +106,14 @@ class SidebarComponent extends Component {
         return this.context.configurator.getSidebarPanels().filter((plugin) => {
             return plugin.tabId === tabId
         }).map((plugin) => {
+
+
+            const pluginNodes = this.getNodesForPlugin(plugin.id)
+            this.nodes[plugin.id] = pluginNodes
+
             return $$('div')
                 .addClass('plugin plugin-' + plugin.getCSSFriendlyName())
-                .append($$(plugin.component, {pluginConfigObject: plugin}))
+                .append($$(plugin.component, {pluginConfigObject: plugin, nodes: pluginNodes}).ref('plugin-' + plugin.id))
         })
     }
 }

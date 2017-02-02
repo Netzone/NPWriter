@@ -29,6 +29,17 @@ class NewsMLImporter extends XMLImporter {
 
     convertDocument(newsItemEl) {
         const newsItemElement = this.getFirstElementWithTypeElement(newsItemEl);
+
+        //convert authors
+        // DOMImporter - _nodeData()
+        //
+        const authors = newsItemElement.findAll('itemMeta > links > link[rel="author"]')
+        console.log("Authors", authors);
+        authors.forEach((authorsEl) => {
+            this.convertElement(authorsEl)
+        })
+
+
         const groups = newsItemElement.findAll('idf > group[type="body"]');
         const headerGroup = newsItemElement.find('idf > group[type="header"]');
 

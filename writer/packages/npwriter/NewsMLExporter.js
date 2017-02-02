@@ -91,12 +91,46 @@ class NewsMLExporter extends XMLExporter {
         }
     }
 
+    getNodesForPlugin(pluginId) {
+        const nodes = this.state.doc.getNodes()
+
+        // get nodes for plugin
+        const pluginNodes = Object.keys(nodes).map((nodeKey) => {
+            if (nodes[nodeKey].type === pluginId) {
+                return nodes[nodeKey]
+            }
+        }).filter((node) => {
+            return node !== undefined
+        })
+
+        return pluginNodes
+    }
 
     exportDocument(doc, newsItemArticle) {
 
         this.state.doc = doc
         const $$ = this.$$
-        var groupContainer = newsItemArticle.querySelector('idf');
+
+        const auhtorNodes = this.getNodesForPlugin('ximauthor')
+
+        const authorsLinks = auhtorNodes.map((node) => {
+            return this.convertNode(node)
+        })
+
+
+        const groupContainer = newsItemArticle.querySelector('idf');
+
+        const itemMetaLinks = newsItemArticle.querySelector('itemMeta > links')
+        const itemMetaAuthorLinks = newsItemArticle.querySelectorAll('itemMeta > links link[rel="author"]')
+
+        Array.prototype.forEach.call(itemMetaAuthorLinks, (author) => {
+            author.parentElement.removeChild(author)
+        })
+
+        authorsLinks.forEach((authorEl) => {
+            itemMetaLinks.appendChild(authorEl.el)
+        })
+
 
         this.addHeaderGroup(doc, newsItemArticle, $$, groupContainer);
         this.addBodyGroup(doc, newsItemArticle, groupContainer);
