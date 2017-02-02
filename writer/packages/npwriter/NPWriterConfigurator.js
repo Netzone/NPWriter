@@ -95,8 +95,8 @@ class NPWriterConfigurator extends Configurator {
      * @param {object} pluginConfigObject Pass the plugin config object
      */
     addComponentToSidebarWithTabId(id, tabId, component, pluginConfigObject) {
-        if (!component instanceof Component) {
-            throw new Error('Ui must be an instance of Component')
+        if (typeof component.render !== 'function') {
+            throw new Error('Ui must be an instance of Component and have a render function')
         }
 
         this.addComponent(id + "-tab", component)
