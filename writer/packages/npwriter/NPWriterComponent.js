@@ -80,6 +80,20 @@ class NPWriter extends AbstractEditor {
             }
         });
 
+        let resizeTimeout
+        window.addEventListener(
+            "resize",
+            (ev) => {
+                if (!resizeTimeout) {
+                    resizeTimeout = setTimeout(() => {
+                        resizeTimeout = null;
+                        this.props.api.events.triggerEvent('__internal', Event.BROWSER_RESIZE, ev);
+                    }, 66); // About 15 fps
+                }
+            },
+            false
+        )
+
         this.updateTitle()
 
         // window.addEventListener('unload', () => {
