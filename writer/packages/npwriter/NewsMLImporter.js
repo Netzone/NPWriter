@@ -33,10 +33,10 @@ class NewsMLImporter extends XMLImporter {
         //convert authors
         // DOMImporter - _nodeData()
         //
-        const authors = newsItemElement.findAll('itemMeta > links > link[rel="author"]')
-        console.log("Authors", authors);
-        authors.forEach((authorsEl) => {
-            this.convertElement(authorsEl)
+        const links = newsItemElement.findAll('itemMeta > links > link')
+        links.forEach((linkel) => {
+            this.convertElement(linkel) // If no authors is found we convert it to unsupported
+
         })
 
 

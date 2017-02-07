@@ -17,6 +17,15 @@ export default {
             node.tagType = el.attr('type')
         }
 
+        let element = el
+        let path = []
+        while(element.parentNode) {
+            element = element.parentNode;
+            if(element.nodeName !== undefined) {
+                path.push(element.nodeName)
+            }
+        }
+        node.newsMLPath = path.reverse().join(' > ')
     },
 
     export: function (node, el) {
