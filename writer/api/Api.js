@@ -31,7 +31,7 @@ class Api {
         this.document = new Document(this)
         this.newsItem = new NewsItem(this)
         this.events = new Events()
-        this.router = new Router()
+        this.router = new Router(this)
         this.article = new Article(this)
         this.browser = new Browser(this)
         this.ui = new Ui(this)

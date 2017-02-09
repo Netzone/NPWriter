@@ -127,6 +127,7 @@ class SaveHandler {
 
                 this.api.router.get('/api/newsitem/' + uuid, { imType: 'x-im/article' })
                     .then(response => this.api.router.checkForOKStatus(response))
+                    .then(response => this.api.router.handleEtag(response, uuid))
                     .then(response => response.text())
                     .then((xmlString) => {
                         const result = this.api.newsItem.setSource(xmlString, {})
@@ -142,8 +143,9 @@ class SaveHandler {
     }
 
     updateNewsItem(uuid, newsItemXmlString) {
-        return this.api.router.put('/api/newsitem/' + uuid, { body: newsItemXmlString })
-            .then((response) => this.api.router.checkForOKStatus(response))
+        return this.api.router.put('/api/newsitem/' + uuid, { body: newsItemXmlString, uuid: uuid })
+            .then(response => this.api.router.checkForOKStatus(response))
+            .then(response => this.api.router.handleEtag(response, uuid))
             .then(() => {
                 this.api.events.documentSaved();
             })

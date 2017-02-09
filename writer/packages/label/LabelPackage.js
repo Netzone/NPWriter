@@ -1,6 +1,6 @@
 export default {
     name: 'label',
-    configure: function(config) {
+    configure: function (config) {
         config.addLabel('undo', {
             en: 'Undo',
             sv: 'Ångra'
@@ -81,6 +81,11 @@ export default {
         config.addLabel('Copy created. You are now working on a new unsaved copy of the original article.', {
             en: 'Copy created. You are now working on a new unsaved copy of the original article.',
             sv: 'En kopia har skapats. Du arbetar nu med en osparad kopia av den ursprungliga artikeln.'
+        })
+
+        config.addLabel('error-human-readable-409-conflict', {
+            en: 'The article has been updated. Please save your work and reload the article to get latest changes.',
+            sv: 'Artikeln har uppdaterats. Vänligen spara dina ändringar och ladda om artikeln för att få de senaste ändringarna.'
         })
 
     }
