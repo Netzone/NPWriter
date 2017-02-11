@@ -10,16 +10,6 @@ try {
     Nodehun = NodehunDummy
 }
 
-function NodehunDummy() {
-
-}
-
-NodehunDummy.prototype.isCorrect = function() {
-    return true;
-}
-
-
-
 /**
  *  @param {String|ByteArray} dict loaded dict file
  *  @param {String|ByteArray} aff loaded affix file
@@ -160,6 +150,32 @@ function _getFrags(lang) {
         lang: frags[0],
         country: frags[1]
     }
+}
+
+const DUMMY_CORRECTIONS = {
+    "Lorem": ['loren'],
+    "volutpat": ['volute', 'voluntativ'],
+    "sapien": ['sapiens', 'spien', 'sapient']
+}
+
+function NodehunDummy() {
+
+}
+
+NodehunDummy.prototype.isCorrect = function(word, cb) {
+    let isCorrect = !DUMMY_CORRECTIONS[word]
+    if (cb) cb(null, isCorrect)
+    return isCorrect
+}
+
+NodehunDummy.prototype.spellSuggestions = function(word, cb) {
+    const suggestions = DUMMY_CORRECTIONS[word]
+    if (suggestions) {
+        if (cb) cb(null, false, suggestions.slice())
+    } else {
+        if (cb) cb(null, true)
+    }
+    return suggestions
 }
 
 
