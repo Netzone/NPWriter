@@ -8,7 +8,7 @@ class OverlayMenu extends Toolbox {
         if (!this.context.scrollPane) {
             throw new Error('Requires scrollPane context')
         }
-        this.context.scrollPane.on('overlay:position', this._position, this)
+        this.context.scrollPane.on('dom-selection:rendered', this._position, this)
     }
 
     dispose() {
@@ -53,7 +53,6 @@ class OverlayMenu extends Toolbox {
     }
 
     _position(hints) {
-
 
         if (this.hasActiveTools()) {
 
