@@ -7,7 +7,10 @@ class ContextMenu extends Toolbox {
         if (!this.context.scrollPane) {
             throw new Error('Requires a scrollPane context')
         }
-        this.context.scrollPane.on('context-menu:position', this._position, this)
+        this.context.scrollPane.on('context-menu:opened', this._position, this)
+        // just make sure that any time the selection is changed we hide the
+        // context menu
+        this.context.editorSession.onPreRender('selection', this.hide, this)
     }
 
     dispose() {
