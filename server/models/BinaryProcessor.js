@@ -207,7 +207,8 @@ BinaryProcessor.extractInfo = function (file, callback) {
 BinaryProcessor._getNewsItemByFileName = function (hashedFileName, imType, callback) {
     Backend.exec(
         '{"action":"get_binary_by_filename", "data": {"filename":"' + hashedFileName + '", "imType":"' + imType + '"}}',
-        config.get('external.contentrepository'), (error, response, body) => {
+        config.get('external.contentrepository'),
+        (error, response, body) => {
             if (error) {
                 callback('Error from backend', null, response);
             } else if (response.statusCode === 200) {
@@ -235,7 +236,8 @@ BinaryProcessor._getUploadUrl = function (hashedFileName, imType, mimeType, call
     Backend.exec(
         '{"action":"get_upload_url_for_binary", "data": {"filename":"' + hashedFileName +
         '", "imType":"' + imType + '", "mimeType":"' + mimeType + '"}}',
-        config.get('external.contentrepository'), (error, response, body) => {
+        config.get('external.contentrepository'),
+        (error, response, body) => {
             if (error || response.statusCode !== 200) {
                 callback('Error from backend', null, response);
             } else {

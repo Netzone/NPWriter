@@ -146,6 +146,7 @@ class App extends Component {
 
                 var promise = api.router.get('/api/newsitem/' + this.getHash(), {imType: 'x-im/article'}) // Make request to fetch article
                     .then(response => api.router.checkForOKStatus(response))                // Check if the status is between 200 and 300
+                    .then(response => api.router.handleEtag(response, this.getHash()))      // "Save" ETag from response (used for update)
                     .then(response => response.text())                                      // Gets the text/xml in the response
                     .then((xmlStr) => {
 

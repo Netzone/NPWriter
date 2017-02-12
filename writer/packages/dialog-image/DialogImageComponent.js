@@ -569,7 +569,7 @@ class DialogImageComponent extends Component {
      * Save image news item, called from image archive dialog
      */
     saveImageData(uuid, xml) {
-        this.context.api.router.put('/api/newsitem/' + uuid, {body: xml})
+        this.context.api.router.put('/api/newsitem/' + uuid, {body: xml, uuid: uuid})
             .then((response) => this.context.api.router.checkForOKStatus(response))
             .then(() => {
                 this.context.api.ui.showNotification('', '', this.getLabel('Image data saved to archive'))
