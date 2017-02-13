@@ -100,6 +100,15 @@ function startServer() {
         app.use('/api', routes);
         app.use(express.static(path.join(__dirname)));
 
+        // HACK: only for demoing purposes, seeding should not
+        // be done on server start up
+        console.info('Seeding database ...')
+        let changeStore = cfg.getChangeStore()
+        let snapshotStore = cfg.getSnapshotStore()
+        seed(changeStore, snapshotStore, function() {
+            console.info('successfully seeded.')
+        })
+
         httpServer.listen(cfg.getPort(), cfg.getHost(), function() {
             log.info({
                 env: environment

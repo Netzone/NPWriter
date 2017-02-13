@@ -8,3 +8,4 @@ clover.xml
 coverage
 __docs__
 .idea*
+seed.cjs.*
