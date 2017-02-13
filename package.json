@@ -14,6 +14,7 @@
     "express": "^4.14.0",
     "file-type": "^3.9.0",
     "http-proxy": "^1.15.1",
+    "js-md5": "^0.4.2",
     "libhoney": "^1.0.0-beta.1",
     "lodash": "^4.14.1",
     "moment": "^2.15.1",
@@ -69,7 +70,6 @@
     "webpack": "webpack --watch",
     "dev": "npm-run-all --parallel start webpack",
     "build": "cd node_modules/substance/ && npm install && node make && cd ../.. && webpack --config webpack.config.production.js && ./node_modules/uglify-js/bin/uglifyjs dist/writer/substance/substance.js -o dist/writer/substance/substance.js",
-
     "build-substance": "cd node_modules/substance/ && npm install && node make",
     "build-dep": "cd node_modules/substance/ && npm install && node make",
     "reset": "rm -rf node_modules/; yarn cache clean; yarn install",
