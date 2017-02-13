@@ -7,7 +7,7 @@ class ContentMenu extends Toolbox {
 
     didMount() {
         super.didMount()
-        this.context.scrollPane.on('overlay:position', this._position, this)
+        this.context.scrollPane.on('dom-selection:rendered', this._position, this)
     }
 
     dispose() {
@@ -100,12 +100,13 @@ class ContentMenu extends Toolbox {
             if (hints) {
                 // let contentWidth = this.el.htmlProp('offsetWidth')
                 let selRect = hints.selectionRect
-                let innerContentRect = hints.innerContentRect
+                let contentRect = hints.contentRect
 
                 // By default, gutter is centered (y-axis) and left of the scrollPane content (x-axis)
                 this._top = selRect.top
                 this.el.css('top', this._top)
-                this._left = innerContentRect.left - 30 - 15 // 15 = margin
+                const MARGIN = 15
+                this._left = contentRect.left + MARGIN
                 this.el.css('left', this._left)
             }
         } else {
