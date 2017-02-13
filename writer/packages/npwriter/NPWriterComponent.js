@@ -1,13 +1,11 @@
-import {SplitPane, ScrollPane, SpellCheckManager} from 'substance'
-import {AbstractEditor} from 'substance'
-
-import SidebarComponent from './components/SidebarComponent'
-import DialogMessageComponent from '../dialog/DialogMessageComponent'
-import BarComponent from './../../components/bar/BarComponent'
-import DialogPlaceholder from '../dialog/DialogPlaceholder'
-import Event from '../../utils/Event'
-import debounce from '../../utils/Debounce'
-import NPResourceManager from './NPResourceManager'
+import {SplitPane, ScrollPane, SpellCheckManager, AbstractEditor} from "substance";
+import SidebarComponent from "./components/SidebarComponent";
+import DialogMessageComponent from "../dialog/DialogMessageComponent";
+import BarComponent from "./../../components/bar/BarComponent";
+import DialogPlaceholder from "../dialog/DialogPlaceholder";
+import Event from "../../utils/Event";
+import debounce from "../../utils/Debounce";
+import NPResourceManager from "./NPResourceManager";
 
 class NPWriter extends AbstractEditor {
 
@@ -47,13 +45,25 @@ class NPWriter extends AbstractEditor {
         this.handleActions(actionHandlers)
 
         this.props.api.events.on('__internal', Event.DOCUMENT_SAVE_FAILED, (e) => {
-            let errorMessages = e.data.errors.map((error) => {
-                return {
-                    type: 'error',
-                    message: error.error
-                }
-            })
-            this.props.api.ui.showMessageDialog(errorMessages)
+
+            const resolverClass = this.props.api.configurator.getConflictHandler(e.reason)
+
+            if (resolverClass) {
+                let resolver = new resolverClass(e.uuid)
+                this.props.api.ui.showMessageDialog(
+                    resolver.messages,
+                    resolver.continueFunction,
+                    resolver.cancelFunction
+                )
+            } else {
+                const errorMessages = e.data.errors.map((error) => {
+                    return {
+                        type: 'error',
+                        message: error.error
+                    }
+                })
+                this.props.api.ui.showMessageDialog(errorMessages)
+            }
         })
 
         // Warn user before navigating away from unsaved article
@@ -330,7 +340,7 @@ class NPWriter extends AbstractEditor {
      * If no nodeType is found the title should be "Newspilot Writer"
      */
     updateTitle() {
-        const documentNodes =  this.props.api.document.getDocumentNodes()
+        const documentNodes = this.props.api.document.getDocumentNodes()
         const nodeTypeToUseForTitle = [
             'headline',
             'preamble',
@@ -343,13 +353,13 @@ class NPWriter extends AbstractEditor {
                 return node.type === nodeType ? node : false
             })
 
-            if(docNode) {
+            if (docNode) {
                 nodeToUse = docNode
                 return true
             }
         })
         let title = 'Newspilot Writer'
-        if(nodeToUse) {
+        if (nodeToUse) {
             title = nodeToUse.content.substr(0, 100)
         }
         this.props.api.browser.setTitle(title)

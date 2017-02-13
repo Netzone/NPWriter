@@ -1,5 +1,5 @@
-import 'whatwg-fetch'
-import isObject from 'lodash/isObject'
+import "whatwg-fetch";
+import isObject from "lodash/isObject";
 
 /**
  * @class Api.Router
@@ -297,7 +297,13 @@ class Router {
             return new Promise((resolve, reject) => {
                 response.text()
                     .then(() => {
-                        reject(JSON.parse('{"errors": [{"error": "' + this.api.getLabel('error-human-readable-409-conflict') + '"}]}'))
+                        reject({
+                            errors: [
+                                {"error": "' + this.api.getLabel('error-human-readable-409-conflict') + '"}
+                            ],
+                            status: response.status,
+                            reason: "server.conflict"
+                        })
                     })
                     .catch(e => {
                         reject(response.statusText)

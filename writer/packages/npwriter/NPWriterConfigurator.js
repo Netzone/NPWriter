@@ -16,6 +16,7 @@ class NPWriterConfigurator extends Configurator {
         this.config.sidebarPanels = []
         this.config.uis = new Map()
 
+        this.config.conflictResolvers = new Map();
     }
 
     /**
@@ -142,6 +143,19 @@ class NPWriterConfigurator extends Configurator {
         return this.config.validators
     }
 
+    /**
+     * Register a conflict resolver in the writer.
+     * The conflict resolver will be called when the server responds with <pre>409 Conflict</pre>
+     * when an article is saved.
+     * @param resolver The resolver
+     */
+    registerConflictHandler(reason, resolver) {
+        this.config.conflictResolvers.set(reason, resolver)
+    }
+
+    getConfigHandler(reason) {
+        return this.config.conflictResolvers.get(reason)
+    }
 
     /**
      * Loads /api/config endpoint and stores it in configurator
