@@ -15,28 +15,15 @@
         <contentCreated>2016-10-24T14:14:29Z</contentCreated>
         <contentModified>2016-10-24T14:14:29Z</contentModified>
         <metadata xmlns="http://www.infomaker.se/newsml/1.0">
-            <object id="RYaudnAJj8gQ" type="x-im/newsvalue">
-                <data>
-                    <score>1</score>
-                    <description>6H</description>
-                    <text>PT6H</text>
-                    <format>lifetimecode</format>
-                    <end/>
-                    <duration>21600</duration>
-                </data>
-            </object>
-
         </metadata>
     </contentMeta>
     <contentSet>
         <inlineXML>
             <idf xmlns="http://www.infomaker.se/idf/1.0" xml:lang="sv">
-
                 <group type="body">
-                    <element id="headline-87a9b7bdb0c33f76a923331ffd93a7fc" type="headline">Demo article</element>
-                    <element id="paragraph-e095c1e1a87200d36376f9ceda8e68c0" type="body">This is regular text</element>
-                    <element id="paragraph-6a6269533ea482fdd0821ecea728939d" type="body"/>
-                    <element id="paragraph-166584f0f81502fb14bf3939e8e53a8b" type="body"/>
+                    <element id="paragraph-1" type="body">This is regular text</element>
+                    <element id="paragraph-2" type="body">Some more text</element>
+                    <element id="paragraph-3" type="body">And even more</element>
                 </group>
             </idf>
         </inlineXML>

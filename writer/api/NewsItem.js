@@ -63,7 +63,7 @@ class NewsItem {
      *
      * @return {object | null}
      */
-    setSource(newsML, writerConfig) {
+    setSource(newsML, writerConfig, documentId, version) {
         var newsMLImporter = this.api.configurator.createImporter('newsml', {
             api: this.api
         })
@@ -75,7 +75,9 @@ class NewsItem {
         if (writerConfig) {
             return {
                 newsItemArticle: newsItemArticle,
-                idfDocument: idfDocument
+                idfDocument: idfDocument,
+                documentId: documentId,
+                version: version
             };
         }
 

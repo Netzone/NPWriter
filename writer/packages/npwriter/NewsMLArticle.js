@@ -7,7 +7,6 @@ class NewsMLArticle extends Document {
 
     constructor(...args) {
         super(...args)
-
         this.pluginManager = null
         this.xmlDocument = null
     }

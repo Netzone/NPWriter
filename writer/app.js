@@ -1,6 +1,6 @@
 import './styles/app.scss'
 
-import {Component, EditorSession, keys} from 'substance'
+import { Component, CollabSession, keys } from 'substance'
 import NPWriterComponent from './packages/npwriter/NPWriterComponent'
 import NPWriterConfigurator from './packages/npwriter/NPWriterConfigurator'
 import AppPackage from './AppPackage'
@@ -24,13 +24,15 @@ import NPFileProxy from './packages/npwriter/NPFileProxy'
 import uuidv5 from 'uuidv5'
 
 
+
 import NPWriterAnnotationCommand from './packages/npwriter/NPWriterAnnotationCommand'
 
 const STATUS_ISREADY = 'isReady',
     STATUS_LOADING = 'loading',
     STATUS_HAS_ERROR = 'hasErrors',
     HAS_DOCUMENT = 'writerHasDocument',
-    HAS_NO_DOCUMENT = 'writerHasNoDocument'
+    HAS_NO_DOCUMENT = 'writerHasNoDocument',
+    DOCUMENT_ID = 'example-doc'
 
 class App extends Component {
 
@@ -144,15 +146,18 @@ class App extends Component {
                 this.pluginManager.importPluginPackagesSortedByIndex()
 
 
-                var promise = api.router.get('/api/newsitem/' + this.getHash(), {imType: 'x-im/article'}) // Make request to fetch article
+                var promise = api.router.get('/api/documents/'+DOCUMENT_ID, {imType: 'x-im/article'}) // Make request to fetch article
                     .then(response => api.router.checkForOKStatus(response))                // Check if the status is between 200 and 300
                     .then(response => api.router.handleEtag(response, this.getHash()))      // "Save" ETag from response (used for update)
                     .then(response => response.text())                                      // Gets the text/xml in the response
-                    .then((xmlStr) => {
+                    .then((response) => {
+                        let xmlStr = response.data
+                        let version = response.version
 
                         this.addDefaultConfiguratorComponent()
 
-                        var result = api.newsItem.setSource(xmlStr, {});
+                        // documentId, version,
+                        var result = api.newsItem.setSource(xmlStr, {}, DOCUMENT_ID, version);
 
                         // Locale for moment
                         moment.locale(this.configurator.config.writerConfigFile.language)
@@ -227,19 +232,22 @@ class App extends Component {
      * @param newsItem
      * @param idfDocument
      */
-    replaceDoc({newsItemArticle, idfDocument}) {
+    replaceDoc({newsItemArticle, idfDocument, documentId, version }) {
 
         this.newsItemArticle = newsItemArticle
         if (this.editorSession) this.editorSession.dispose()
         this.saveHandler = null
 
-        this.editorSession = new EditorSession(idfDocument, {
+        this.editorSession = new CollabSession(idfDocument, {
             configurator: this.configurator,
+            documentId: documentId,
+            version: version,
             lang: this.configurator.config.writerConfigFile.language,
             context: {
                 api: this.api
             }
         })
+
         this.api.editorSession = this.editorSession
 
         this.editorSession.saveHandler = this.getSaveHandler()
