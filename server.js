@@ -7,6 +7,8 @@ var log = require('./server/utils/logger');
 var { DocumentServer, CollabServer, CollabServerPackage, CollabServerConfigurator } = require('substance')
 var http = require('http')
 var ws = require('ws')
+require('source-map-support').install()
+
 var WebSocketServer = ws.Server
 
 const ConfigurationLoader = require('./server/models/ConfigurationLoader')
@@ -31,6 +33,7 @@ cfg.import(CollabServerPackage)
 cfg.setHost(process.env.HOST || 'localhost')
 cfg.setPort(isProduction ? process.env.PORT : 5000)
 
+var seed = require('./seed.cjs.js')
 
 var httpServer = http.createServer()
 let wss = new WebSocketServer({ server: httpServer })

@@ -8,7 +8,7 @@ let configurator = new NPWriterConfigurator()
 .import(NPWriterPackage)
 .import(ParagraphPackage)
 
-var exampleXML = fs.readFileSync('./data/newsml-empty.xml', 'utf8')
+var exampleXML = fs.readFileSync('./data/newsitem-empty.xml', 'utf8')
 
 let newsmlImporter = configurator.createImporter('newsml')
 let doc = newsmlImporter.importDocument(exampleXML)
