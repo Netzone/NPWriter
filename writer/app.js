@@ -1,6 +1,6 @@
 import './styles/app.scss'
 
-import { Component, CollabSession, keys } from 'substance'
+import { Component, CollabSession, keys, WebSocketConnection, CollabClient } from 'substance'
 import NPWriterComponent from './packages/npwriter/NPWriterComponent'
 import NPWriterConfigurator from './packages/npwriter/NPWriterConfigurator'
 import AppPackage from './AppPackage'
@@ -22,9 +22,6 @@ import Validator from './packages/npwriter/Validator'
 import NPWriterCommand from './packages/npwriter/NPWriterCommand'
 import NPFileProxy from './packages/npwriter/NPFileProxy'
 import uuidv5 from 'uuidv5'
-
-
-
 import NPWriterAnnotationCommand from './packages/npwriter/NPWriterAnnotationCommand'
 
 const STATUS_ISREADY = 'isReady',
@@ -32,13 +29,28 @@ const STATUS_ISREADY = 'isReady',
     STATUS_HAS_ERROR = 'hasErrors',
     HAS_DOCUMENT = 'writerHasDocument',
     HAS_NO_DOCUMENT = 'writerHasNoDocument',
-    DOCUMENT_ID = 'example-doc'
+    DOCUMENT_ID = 'example-doc',
+    WEBSOCKET_URL = 'ws://localhost:5000'
+
+/*
+  Collab engine endpoint
+*/
+let websocketConnection = new WebSocketConnection({
+    wsUrl: WEBSOCKET_URL
+})
+
+/*
+  CollabClient abstraction using a websocketConnection
+*/
+let collabClient = new CollabClient({
+    connection: websocketConnection
+})
+
 
 class App extends Component {
 
     constructor(...args) {
         super(...args)
-
         this.pluginManager = null
         this.api = null
 
@@ -73,7 +85,6 @@ class App extends Component {
             api: this.api
         });
     }
-
 
     /**
      * If no ID is available in browser hash,
@@ -144,12 +155,10 @@ class App extends Component {
             .then(() => {
 
                 this.pluginManager.importPluginPackagesSortedByIndex()
-
-
                 var promise = api.router.get('/api/documents/'+DOCUMENT_ID, {imType: 'x-im/article'}) // Make request to fetch article
                     .then(response => api.router.checkForOKStatus(response))                // Check if the status is between 200 and 300
                     .then(response => api.router.handleEtag(response, this.getHash()))      // "Save" ETag from response (used for update)
-                    .then(response => response.text())                                      // Gets the text/xml in the response
+                    .then(response => response.json())                                      // Gets the text/xml in the response
                     .then((response) => {
                         let xmlStr = response.data
                         let version = response.version
@@ -240,8 +249,9 @@ class App extends Component {
 
         this.editorSession = new CollabSession(idfDocument, {
             configurator: this.configurator,
-            documentId: documentId,
-            version: version,
+            documentId,
+            version,
+            collabClient,
             lang: this.configurator.config.writerConfigFile.language,
             context: {
                 api: this.api
