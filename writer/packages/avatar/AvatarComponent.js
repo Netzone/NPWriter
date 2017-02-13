@@ -1,5 +1,6 @@
 import { Component, FontAwesomeIcon } from 'substance'
-import { isObject, isArray } from 'lodash'
+import isObject from 'lodash/isObject'
+import isArray from 'lodash/isArray'
 import md5 from 'js-md5'
 
 class AvatarComponent extends Component {
@@ -62,7 +63,7 @@ class AvatarComponent extends Component {
      * for a avatarId through the concepts backend server
      * If it success it sets the url in the state.
      * If failes if sets the state with error message and error status
-     * 
+     *
      * @param {string} avatarId - The Twitter handle
      */
     loadAvatarUrlForAvatarId(avatarId) {
