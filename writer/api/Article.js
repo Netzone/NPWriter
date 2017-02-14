@@ -1,4 +1,4 @@
-import Event from '../utils/Event'
+import Event from "../utils/Event";
 
 /**
  * @class Article
@@ -44,6 +44,10 @@ class Article {
             null,
             this.api.getLabel('Copy created. You are now working on a new unsaved copy of the original article.')
         );
+    }
+
+    openInNewWindow(uuid) {
+        this.api.browser.openInNewWindow({hash: uuid, url: 'current'});
     }
 }
 

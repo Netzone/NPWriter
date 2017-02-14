@@ -1800,5 +1800,14 @@ class NewsItem {
             })
         }
     }
+
+    invalidate() {
+        this.api.ui.showNotification(
+            'invalidate',
+            "Article is invalid",
+            "This article is no longer valid"
+        );
+
+    }
 }
 export default NewsItem

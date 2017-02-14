@@ -46,24 +46,43 @@ class NPWriter extends AbstractEditor {
 
         this.props.api.events.on('__internal', Event.DOCUMENT_SAVE_FAILED, (e) => {
 
-            const resolverClass = this.props.api.configurator.getConflictHandler(e.reason)
+            try {
+                const reason = (e.data && e.data.reason) ? e.data.reason : undefined
+                const resolverClass = this.props.api.configurator.getConflictHandler(reason)
 
-            if (resolverClass) {
-                let resolver = new resolverClass(e.uuid)
-                this.props.api.ui.showMessageDialog(
-                    resolver.messages,
-                    resolver.continueFunction,
-                    resolver.cancelFunction
-                )
-            } else {
-                const errorMessages = e.data.errors.map((error) => {
-                    return {
-                        type: 'error',
-                        message: error.error
-                    }
-                })
-                this.props.api.ui.showMessageDialog(errorMessages)
+                if (resolverClass) {
+                    const uuid = (e.data && e.data.uuid) ? e.data.uuid : undefined
+
+                    this.props.api.ui.showDialog(
+                        resolverClass,
+                        {
+                            uuid: uuid,
+                            error: e
+                        },
+                        {
+                            title: "Conflict detected while saving article",
+                            primary: false,
+                            secondary: "Abort",
+                            global: true
+                        }
+                    )
+                    return;
+                }
+
+            } catch (e) {
+                // Got error when resolving resolver, continuing
+                console.log("Error resolving conflict handler", e)
             }
+
+            // Default behavior
+            const errorMessages = e.data.errors.map((error) => {
+                return {
+                    type: 'error',
+                    message: error.error
+                }
+            })
+            this.props.api.ui.showMessageDialog(errorMessages)
+
         })
 
         // Warn user before navigating away from unsaved article
@@ -297,7 +316,6 @@ class NPWriter extends AbstractEditor {
             props: props,
             options: options
         })
-
     }
 
     showMessageDialog(messages, props, options) {

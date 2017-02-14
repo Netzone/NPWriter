@@ -472,6 +472,13 @@
       "enabled": true
     },
     {
+      "id": "se.infomaker.defaultconflicthandler",
+      "name": "defaultconflicthandler",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true
+    },
+    {
       "id": "se.infomaker.headereditor",
       "name": "headereditor",
       "url": "http://localhost:5001/index.js",

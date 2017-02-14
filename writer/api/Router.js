@@ -299,13 +299,13 @@ class Router {
                     .then(() => {
                         reject({
                             errors: [
-                                {"error": "' + this.api.getLabel('error-human-readable-409-conflict') + '"}
+                                {error: this.api.getLabel('error-human-readable-409-conflict')}
                             ],
                             status: response.status,
                             reason: "server.conflict"
                         })
                     })
-                    .catch(e => {
+                    .catch(() => {
                         reject(response.statusText)
                     })
             })

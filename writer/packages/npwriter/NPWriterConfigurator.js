@@ -153,7 +153,7 @@ class NPWriterConfigurator extends Configurator {
         this.config.conflictResolvers.set(reason, resolver)
     }
 
-    getConfigHandler(reason) {
+    getConflictHandler(reason) {
         return this.config.conflictResolvers.get(reason)
     }
 
