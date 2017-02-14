@@ -30,7 +30,7 @@ const STATUS_ISREADY = 'isReady',
     HAS_DOCUMENT = 'writerHasDocument',
     HAS_NO_DOCUMENT = 'writerHasNoDocument',
     DOCUMENT_ID = 'example-doc',
-    WEBSOCKET_URL = 'ws://192.168.15.105:5000'
+    WEBSOCKET_URL = 'ws://127.0.0.1:5000'
 
 /*
   Collab engine endpoint
