@@ -8,7 +8,7 @@ class NewsMLExporter extends XMLExporter {
 
     removeElementIfExists(textEditElement, existingChildren) {
         existingChildren.forEach((child) => {
-            if (textEditElement.el.tagName === child.nodeName && textEditElement.el.getAttribute('type') === child.getAttribute('type')) {
+            if (textEditElement.tagName === child.tagName && textEditElement.getAttribute('type') === child.getAttribute('type')) {
                 child.remove()
             }
         })
@@ -16,7 +16,7 @@ class NewsMLExporter extends XMLExporter {
 
     addHeaderGroup(doc, newsItem) {
 
-        const idfHeaderGroup = newsItem.querySelector('idf group[type="header"]')
+        const idfHeaderGroup = newsItem.find('idf group[type="header"]')
         if(!idfHeaderGroup) {
             return
         }
@@ -36,7 +36,7 @@ class NewsMLExporter extends XMLExporter {
             headerElements.forEach((elements) => {
                 elements.forEach(element => {
                     this.removeElementIfExists(element, idfHeaderGroup.childNodes)
-                    idfHeaderGroup.appendChild(element.el)
+                    idfHeaderGroup.appendChild(element)
                 })
             })
         }
@@ -44,7 +44,7 @@ class NewsMLExporter extends XMLExporter {
 
     addBodyGroup(doc, newsItem, groupContainer) {
         // Get the first group with type body in IDF section
-        var idfBodyGroupNode = newsItem.querySelector('idf group[type="body"]');
+        var idfBodyGroupNode = newsItem.find('idf group[type="body"]');
         if (!idfBodyGroupNode) {
             throw new Error('IDF node not found!');
         }
@@ -52,33 +52,28 @@ class NewsMLExporter extends XMLExporter {
         // Export article body with substance convert container function
         // Create a substance group element to make life easier
         var bodyElements = this.convertContainer(doc.get('body'));
-        var bodyGroup = document.createElement('group')
+        var bodyGroup = newsItem.createElement('group')
         bodyGroup.setAttribute('type', 'body');
 
-        for (var node of bodyElements) {
-            bodyGroup.appendChild(node.el);
-        }
+        bodyGroup.append(bodyElements)
 
         // Reinsert the body group
-        let parser = new DOMParser()
-        // var articleDomElement = parser.parseFromString(removeControlCodes(bodyGroup.outerHTML), 'application/xml');
-
         const articleDomElement = DefaultDOMElement.parseXML(removeControlCodes(bodyGroup.outerHTML))
 
         groupContainer.removeChild(idfBodyGroupNode);
         // Append body group
-        groupContainer.appendChild(articleDomElement.el)
+        groupContainer.appendChild(articleDomElement)
     }
 
     addTeaser(newsItem, groupContainer) {
         // Extract x-im/teaser object and move it to its correct position if it exists
-        var oldTeaser = newsItem.querySelector('contentMeta > metadata > object[type="x-im/teaser"]');
-        var metadata = newsItem.querySelector('contentMeta > metadata');
+        var oldTeaser = newsItem.find('contentMeta > metadata > object[type="x-im/teaser"]');
+        var metadata = newsItem.find('contentMeta > metadata');
         if (oldTeaser) {
             metadata.removeChild(oldTeaser);
         }
 
-        var newTeaser = groupContainer.querySelector('object[type="x-im/teaser"]');
+        var newTeaser = groupContainer.find('object[type="x-im/teaser"]');
 
         if (newTeaser) {
             newTeaser.parentElement.removeChild(newTeaser);
@@ -90,13 +85,13 @@ class NewsMLExporter extends XMLExporter {
     exportDocument(doc, newsItemArticle) {
 
         this.state.doc = doc
-        var groupContainer = newsItemArticle.querySelector('idf');
+        var groupContainer = newsItemArticle.find('idf');
 
         this.addHeaderGroup(doc, newsItemArticle);
         this.addBodyGroup(doc, newsItemArticle, groupContainer);
         this.addTeaser(newsItemArticle, groupContainer);
 
-        return removeControlCodes(newsItemArticle.documentElement.outerHTML);
+        return removeControlCodes(newsItemArticle.outerHTML);
     }
 
     /**

@@ -24,14 +24,14 @@ class NPWriter extends AbstractEditor {
             this.addVersion()
         })
 
-        this.spellCheckManager = new SpellCheckManager(this.editorSession, {
-            wait: 400,
-            // same URL as configured in /server/routes/spellcheck.js
-            apiURL: '/api/spellcheck'
-        })
+        // this.spellCheckManager = new SpellCheckManager(this.editorSession, {
+        //     wait: 400,
+        //     same URL as configured in /server/routes/spellcheck.js
+            // apiURL: '/api/spellcheck'
+        // })
 
         this.addVersion = debounce(() => {
-            this.props.api.history.snapshot();
+            // this.props.api.history.snapshot();
         }, 7000)
     }
 
@@ -107,7 +107,7 @@ class NPWriter extends AbstractEditor {
     didMount() {
         super.didMount()
 
-        this.spellCheckManager.runGlobalCheck()
+        // this.spellCheckManager.runGlobalCheck()
         this.editorSession.onUpdate(this.editorSessionUpdated, this)
     }
 

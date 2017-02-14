@@ -6,10 +6,15 @@ var routes = require('./server/routes/routes')
 var log = require('./server/utils/logger');
 var { DocumentServer, CollabServer, CollabServerPackage, CollabServerConfigurator } = require('substance')
 var http = require('http')
+// TODO: check how to use a different websocket impl
 var ws = require('ws')
-require('source-map-support').install()
+var seedLib = require('./seed.cjs.js')
 
 var WebSocketServer = ws.Server
+var seed = seedLib.seed
+var buildSnapshot = seedLib.buildSnapshot
+
+require('source-map-support').install()
 
 const ConfigurationLoader = require('./server/models/ConfigurationLoader')
 const environmentVariables = process.env
@@ -32,8 +37,7 @@ let cfg = new CollabServerConfigurator()
 cfg.import(CollabServerPackage)
 cfg.setHost(process.env.HOST || 'localhost')
 cfg.setPort(isProduction ? process.env.PORT : 5000)
-
-var seed = require('./seed.cjs.js')
+cfg.setSnapshotBuilder(buildSnapshot)
 
 var httpServer = http.createServer()
 let wss = new WebSocketServer({ server: httpServer })
@@ -106,7 +110,7 @@ function startServer() {
         let changeStore = cfg.getChangeStore()
         let snapshotStore = cfg.getSnapshotStore()
         seed(changeStore, snapshotStore, function() {
-            console.info('successfully seeded.')
+            console.info('successfully seeded.', snapshotStore)
         })
 
         httpServer.listen(cfg.getPort(), cfg.getHost(), function() {
@@ -119,6 +123,6 @@ function startServer() {
         log.error({
             msg: error.message
         }, error.message)
-        console.error('Could not start Writer', error.message)
+        console.error('Could not start Writer', error)
     })
 }
