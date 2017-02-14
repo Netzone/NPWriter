@@ -14,12 +14,11 @@ class NewsMLExporter extends XMLExporter {
         })
     }
 
-    addHeaderGroup(doc, newsItem) {
-
-        const idfHeaderGroup = newsItem.find('idf group[type="header"]')
-        if(!idfHeaderGroup) {
-            return
-        }
+    addHeaderGroup(doc, idfEl) {
+        const headereditor = doc.get('headereditor')
+        if (!headereditor) return
+        const $$ = this.$$
+        let idfHeaderGroup = $$('group').attr('type', 'header')
 
         const textEditComponents = this.context.api.configurator.getTextEditComponents()
 
@@ -32,7 +31,7 @@ class NewsMLExporter extends XMLExporter {
             }
         })
 
-        if (headerElements && headerElements.length > 0) {
+        if (headerElements.length > 0) {
             headerElements.forEach((elements) => {
                 elements.forEach(element => {
                     this.removeElementIfExists(element, idfHeaderGroup.childNodes)
@@ -40,29 +39,18 @@ class NewsMLExporter extends XMLExporter {
                 })
             })
         }
+        idfEl.append(idfHeaderGroup)
     }
 
-    addBodyGroup(doc, newsItem, groupContainer) {
+    addBodyGroup(doc, idfEl) {
+        const $$ = this.$$
         // Get the first group with type body in IDF section
-        var idfBodyGroupNode = newsItem.find('idf group[type="body"]');
-        if (!idfBodyGroupNode) {
-            throw new Error('IDF node not found!');
-        }
-
+        let bodyGroup = $$('group').attr('type', 'body')
         // Export article body with substance convert container function
         // Create a substance group element to make life easier
         var bodyElements = this.convertContainer(doc.get('body'));
-        var bodyGroup = newsItem.createElement('group')
-        bodyGroup.setAttribute('type', 'body');
-
         bodyGroup.append(bodyElements)
-
-        // Reinsert the body group
-        const articleDomElement = DefaultDOMElement.parseXML(removeControlCodes(bodyGroup.outerHTML))
-
-        groupContainer.removeChild(idfBodyGroupNode);
-        // Append body group
-        groupContainer.appendChild(articleDomElement)
+        idfEl.append(bodyGroup)
     }
 
     addTeaser(newsItem, groupContainer) {
@@ -82,16 +70,52 @@ class NewsMLExporter extends XMLExporter {
     }
 
 
-    exportDocument(doc, newsItemArticle) {
-
+    exportDocument(doc) {
+        const $$ = this.$$
         this.state.doc = doc
-        var groupContainer = newsItemArticle.find('idf');
+        let newsItem = doc.get('newsItem')
+        let newsItemEl = $$('newsItem').attr({
+            xmlns: "http://iptc.org/std/nar/2006-10-01/",
+            version: "1",
+            conformance: "power",
+            standardversion: "2.20",
+            standard: "NewsML-G2",
+            guid: newsItem.guid
+        })
+        newsItemEl.append(
+            $$('catalogRef').attr({
+                href: "http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_27.xml"
+            }),
+            $$('catalogRef').attr({
+                href: "http://infomaker.se/spec/catalog/catalog.infomaker.g2.1_0.xml"
+            })
+        )
 
-        this.addHeaderGroup(doc, newsItemArticle);
-        this.addBodyGroup(doc, newsItemArticle, groupContainer);
-        this.addTeaser(newsItemArticle, groupContainer);
+        let itemMeta = doc.get('itemMeta')
+        let itemMetaEl = $$('itemMeta')
+        itemMeta.getNodes().forEach((childNode) => {
+            itemMetaEl.append(this.convertNode(childNode))
+        })
+        newsItemEl.append(itemMetaEl)
 
-        return removeControlCodes(newsItemArticle.outerHTML);
+        let contentMeta = doc.get('contentMeta')
+        let contentMetaEl = $$('contentMeta')
+        contentMeta.getNodes().forEach((childNode) => {
+            contentMetaEl.append(this.convertNode(childNode))
+        })
+        newsItemEl.append(contentMetaEl)
+
+        let idfEl = $$('idf').attr({
+            'xml:lang': newsItem.xmlLang,
+            xmlns: "http://www.infomaker.se/idf/1.0"
+        })
+        this.addHeaderGroup(doc, idfEl);
+        this.addBodyGroup(doc, idfEl);
+
+        // should be part of contentMeta already
+        // this.addTeaser(newsItemArticle, groupContainer);
+
+        return removeControlCodes(newsItemEl.outerHTML);
     }
 
     /**

@@ -29,6 +29,41 @@ class NewsMLImporter extends XMLImporter {
 
     convertDocument(newsItemEl) {
         const newsItemElement = this.getFirstElementWithTypeElement(newsItemEl);
+        let itemMetaElement = newsItemElement.find('itemMeta')
+        if (!itemMetaElement) throw new Error('<itemMeta> is mandatory.')
+        let contentMetaElement = newsItemElement.find('contentMeta')
+        if (!contentMetaElement) throw new Error('<contentMeta> is mandatory.')
+
+        let guid = newsItemElement.getAttribute('guid')
+        this.createNode({
+            type: 'newsItem',
+            id: 'newsItem',
+            guid: guid
+        })
+        let itemMeta = this.createNode({
+            type: 'container',
+            id: 'itemMeta',
+            nodes: []
+        })
+        let contentMeta = this.createNode({
+            type: 'container',
+            id: 'contentMeta',
+            nodes: []
+        })
+
+        itemMetaElement.children.forEach((childElement) => {
+            let childNode = this.convertElement(childElement)
+            itemMeta.nodes.push(childNode.id)
+        })
+
+        contentMetaElement.children.forEach((childElement) => {
+            let childNode = this.convertElement(childElement)
+            contentMeta.nodes.push(childNode.id)
+        })
+
+        // TODO: teaser could go into news-item node, by its own editor
+        // or pick the first teaser in contentMeta.
+
         const groups = newsItemElement.findAll('idf > group[type="body"]');
         const headerGroup = newsItemElement.find('idf > group[type="header"]');
 
@@ -58,7 +93,6 @@ class NewsMLImporter extends XMLImporter {
 
             this.convertElement(groupEl);
         })
-
     }
 }
 
