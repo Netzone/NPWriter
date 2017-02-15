@@ -18,6 +18,7 @@ import LinkXMLConverter from '../link/LinkXMLConverter'
 import LinkCommand from '../link/LinkCommand'
 
 import NewsMLArticle from './NewsMLArticle'
+import NewsItemNode from './NewsItemNode'
 import NewsMLImporter from './NewsMLImporter'
 import NewsMLExporter from './NewsMLExporter'
 import NPFileNode from './NPFileNode'
@@ -65,6 +66,7 @@ export default {
         config.addCommand('link', LinkCommand, { nodeType: 'link' })
 
         // content-nodes
+        config.addNode(NewsItemNode)
         config.import(BodyPackage)
 
         // config.import(ConfigEditorPackage)

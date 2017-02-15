@@ -2,6 +2,7 @@ import { documentHelpers, series, DocumentChange, DefaultDOMElement } from 'subs
 import fs from 'fs'
 import NPWriterConfigurator from './writer/packages/npwriter/NPWriterConfigurator'
 import NPWriterPackage from './writer/packages/npwriter/NPWriterPackage'
+import UnsupportedPackage from './writer/packages/unsupported/UnsupportedPackage'
 import ParagraphPackage from '../NPWriterPluginBundle/plugins/textstyles/se.infomaker.paragraph/ParagraphPackage.js'
 import HeadlinePackage from '../NPWriterPluginBundle/plugins/textstyles/se.infomaker.headline/HeadlinePackage.js'
 
@@ -9,6 +10,11 @@ let configurator = new NPWriterConfigurator()
     .import(NPWriterPackage)
     .import(ParagraphPackage)
     .import(HeadlinePackage)
+    .import(UnsupportedPackage)
+
+// Given that exportDocument returns an HTML string
+// HACK: this should work without using [0]
+DefaultDOMElement._useXNode()
 
 // this would be a customer's  template
 var exampleXML = fs.readFileSync('./data/newsitem-empty.xml', 'utf8')
@@ -27,12 +33,9 @@ export function buildSnapshot(initSnapshot, changes) {
         doc._apply(change)
     })
     let exporter = configurator.createExporter('newsml')
-    // Given that exportDocument returns an HTML string
-    // HACK: this should work without using [0]
-    DefaultDOMElement._useXNode()
     let xmlDoc = DefaultDOMElement.parseXML(exampleXML)
     // HACK: workaround for DOMElement incosistency between browser/node
-    xmlDoc = DefaultDOMElement.wrap(xmlDoc[1])
+    xmlDoc = DefaultDOMElement.wrap(xmlDoc)
     console.log('### doc', doc.getNodes())
     let xml = exporter.exportDocument(doc, xmlDoc)
     console.log('### BUILDSNAPSHOT', xml)

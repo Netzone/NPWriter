@@ -109,8 +109,10 @@ class NewsMLExporter extends XMLExporter {
             'xml:lang': newsItem.xmlLang,
             xmlns: "http://www.infomaker.se/idf/1.0"
         })
+
         this.addHeaderGroup(doc, idfEl);
         this.addBodyGroup(doc, idfEl);
+        newsItemEl.append($$('contentSet').append($$('inlineXML').append(idfEl)))
 
         // should be part of contentMeta already
         // this.addTeaser(newsItemArticle, groupContainer);

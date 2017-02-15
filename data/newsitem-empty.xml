@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><newsItem xmlns="http://iptc.org/std/nar/2006-10-01/" conformance="power" guid="809ed0c6-aa7e-42ad-86a1-917bd4614c04" standard="NewsML-G2" standardversion="2.20" version="1">
+<newsItem xmlns="http://iptc.org/std/nar/2006-10-01/" conformance="power" guid="809ed0c6-aa7e-42ad-86a1-917bd4614c04" standard="NewsML-G2" standardversion="2.20" version="1">
     <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_27.xml"/>
     <catalogRef href="http://infomaker.se/spec/catalog/catalog.infomaker.g2.1_0.xml"/>
     <itemMeta>
