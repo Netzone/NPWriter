@@ -3,6 +3,10 @@ div.sc-np-bar {
     line-height: 52px;
     border-bottom: 1px solid #eaeaea;
 
+    &.barStateInvalid {
+        background-color: #FFF0F0;
+    }
+
     &>div {
         height: 52px;
 

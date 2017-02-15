@@ -5,6 +5,7 @@ import replace from 'lodash/replace'
 
 import isObject from 'lodash/isObject'
 import isArray from 'lodash/isArray'
+import Event from '../utils/Event'
 
 import Validator from '../packages/npwriter/Validator'
 
@@ -1804,10 +1805,11 @@ class NewsItem {
     invalidate() {
         this.api.ui.showNotification(
             'invalidate',
-            "Article is invalid",
-            "This article is no longer valid"
+            this.api.getLabel("Article is invalid"),
+            this.api.getLabel("This article is no longer valid")
         );
 
+        this.api.events.triggerEvent("__internal", Event.DOCUMENT_INVALIDATED, {});
     }
 }
 export default NewsItem

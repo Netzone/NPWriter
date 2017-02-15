@@ -61,7 +61,7 @@ class NPWriter extends AbstractEditor {
                             close: this.hideDialog.bind(this)
                         },
                         {
-                            title: "Conflict detected while saving article",
+                            title: this.props.api.getLabel("Conflict detected while saving article"),
                             primary: false,
                             secondary: "Abort",
                             global: true
