@@ -18,8 +18,17 @@ class NPWriter extends AbstractEditor {
         this.props.api.setWriterReference(this);
 
         // When document is changed we need to save a local version
+
+        let documentIsInvalid = false;
+
         this.props.api.events.on('npwritercomponent', Event.DOCUMENT_CHANGED, () => {
-            this.addVersion()
+            if (!documentIsInvalid) {
+                this.addVersion()
+            }
+        })
+
+        this.props.api.events.on('npwritercomponent', Event.DOCUMENT_INVALIDATED, () => {
+            documentIsInvalid = true;
         })
 
         this.spellCheckManager = new SpellCheckManager(this.editorSession, {
@@ -29,6 +38,9 @@ class NPWriter extends AbstractEditor {
         })
 
         this.addVersion = debounce(() => {
+            if (documentIsInvalid) {
+                return
+            }
             this.props.api.history.snapshot();
         }, 7000)
     }
@@ -51,7 +63,10 @@ class NPWriter extends AbstractEditor {
                 const resolverClass = this.props.api.configurator.getConflictHandler(reason)
 
                 if (resolverClass) {
+
                     const uuid = (e.data && e.data.uuid) ? e.data.uuid : undefined
+
+                    this.props.api.newsItem.invalidate()
 
                     this.props.api.ui.showDialog(
                         resolverClass,
@@ -61,9 +76,8 @@ class NPWriter extends AbstractEditor {
                             close: this.hideDialog.bind(this)
                         },
                         {
-                            title: this.props.api.getLabel("Conflict detected while saving article"),
+                            title: this.props.api.getLabel("A problem occurred"),
                             primary: false,
-                            secondary: "Abort",
                             global: true
                         }
                     )
