@@ -90,7 +90,7 @@ export default {
 
         config.addLabel('Article is invalid', {
             en: 'Article is invalid',
-            sv: 'Artikeln är ogiltig'
+            sv: 'Artikeln går ej att spara'
         })
 
         config.addLabel('This article is no longer valid', {
@@ -98,9 +98,8 @@ export default {
             sv: 'Artikeln är markerad som ogiltig och går ej att spara'
         })
 
-        config.addLabel('Conflict detected while saving article', {
-            en: 'Conflict detected while saving the document',
-            sv: 'En konflikt uppstod när dokumentet skulle sparas'
+        config.addLabel('A problem occurred', {
+            sv: 'Ett problem har uppstått'
         })
     }
 };
