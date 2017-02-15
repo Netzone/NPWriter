@@ -221,6 +221,12 @@ class NewsItem {
             throw new Error('Undefined value');
         }
 
+        let editorSession = this.api.editorSession
+        editorSession.transaction((tx) => {
+            tx.set(['newsvalue', 'score'], newsPriority)
+        })
+        return
+
         var metaDataNode = this.api.newsItemArticle.querySelector('contentMeta metadata'),
             newsValueNode = this.api.newsItemArticle.querySelector(
                 'contentMeta metadata object[type="x-im/newsvalue"]');

@@ -5,12 +5,18 @@ import NPWriterPackage from './writer/packages/npwriter/NPWriterPackage'
 import UnsupportedPackage from './writer/packages/unsupported/UnsupportedPackage'
 import ParagraphPackage from '../NPWriterPluginBundle/plugins/textstyles/se.infomaker.paragraph/ParagraphPackage.js'
 import HeadlinePackage from '../NPWriterPluginBundle/plugins/textstyles/se.infomaker.headline/HeadlinePackage.js'
+import NewsPriorityNode from '../NPWriterPluginBundle/plugins/se.infomaker.newspriority/NewsPriorityNode'
+import NewsPriorityConverter from '../NPWriterPluginBundle/plugins/se.infomaker.newspriority/NewsPriorityConverter'
 
 let configurator = new NPWriterConfigurator()
     .import(NPWriterPackage)
     .import(ParagraphPackage)
     .import(HeadlinePackage)
-    .import(UnsupportedPackage)
+
+configurator.addNode(NewsPriorityNode)
+configurator.addConverter('newsml', NewsPriorityConverter)
+
+configurator.import(UnsupportedPackage)
 
 // Given that exportDocument returns an HTML string
 // HACK: this should work without using [0]
