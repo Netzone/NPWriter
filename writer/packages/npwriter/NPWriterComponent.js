@@ -57,7 +57,8 @@ class NPWriter extends AbstractEditor {
                         resolverClass,
                         {
                             uuid: uuid,
-                            error: e
+                            error: e,
+                            close: this.hideDialog.bind(this)
                         },
                         {
                             title: "Conflict detected while saving article",
