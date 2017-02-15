@@ -98,15 +98,17 @@ class ContentMenu extends Toolbox {
         if (this.hasActiveTools()) {
             this.el.removeClass('sm-hidden')
             if (hints) {
-                // let contentWidth = this.el.htmlProp('offsetWidth')
                 let selRect = hints.selectionRect
-                let contentRect = hints.contentRect
+
+                // HACK: Use surface element as the left reference point
+                let surfaceEl = this.el.parentNode.find('.sc-surface').getNativeElement()
+                let surfaceRect = surfaceEl.getBoundingClientRect()
 
                 // By default, gutter is centered (y-axis) and left of the scrollPane content (x-axis)
                 this._top = selRect.top
                 this.el.css('top', this._top)
-                const MARGIN = 15
-                this._left = contentRect.left + MARGIN
+                const MARGIN = 30
+                this._left = surfaceRect.left - MARGIN
                 this.el.css('left', this._left)
             }
         } else {
