@@ -13,7 +13,7 @@ var seedLib = require('./seed.cjs.js')
 var WebSocketServer = ws.Server
 var seed = seedLib.seed
 var buildSnapshot = seedLib.buildSnapshot
-
+var Backend = require('./server/models/Backend.js');
 require('source-map-support').install()
 
 const ConfigurationLoader = require('./server/models/ConfigurationLoader')
@@ -106,11 +106,12 @@ function startServer() {
 
         // HACK: only for demoing purposes, seeding should not
         // be done on server start up
-        console.info('Seeding database ...')
+        console.time("Timing");
         let changeStore = cfg.getChangeStore()
         let snapshotStore = cfg.getSnapshotStore()
         seed(changeStore, snapshotStore, function() {
-            console.info('successfully seeded.', snapshotStore)
+            console.timeEnd("Timing");
+            console.info('successfully seeded.')
         })
 
         httpServer.listen(cfg.getPort(), cfg.getHost(), function() {

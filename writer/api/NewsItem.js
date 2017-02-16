@@ -158,14 +158,12 @@ class NewsItem {
      * @return {Object} News priority object
      */
     getNewsPriority() {
-        var node = this.api.newsItemArticle.querySelector(
-            'contentMeta metadata object[type="x-im/newsvalue"]');
-        if (!node) {
-            console.warn('News Priority not found in document');
-            return null;
+        const newsValueNode = this.api.editorSession.getDocument().get('newsvalue')
+        if(!newsValueNode) {
+            console.warn('Newsvalue node not found');
+            return undefined
         }
-
-        return jxon.build(node);
+        return newsValueNode.score
     }
 
 
@@ -225,32 +223,17 @@ class NewsItem {
         editorSession.transaction((tx) => {
             tx.set(['newsvalue', 'score'], newsPriority)
         })
-        return
-
-        var metaDataNode = this.api.newsItemArticle.querySelector('contentMeta metadata'),
-            newsValueNode = this.api.newsItemArticle.querySelector(
-                'contentMeta metadata object[type="x-im/newsvalue"]');
-
-        if (!metaDataNode) {
-            var contentMetaNode = this.api.newsItemArticle.querySelector('contentMeta');
-            metaDataNode = this.api.newsItemArticle.createElement('metadata');
-            contentMetaNode.appendChild(metaDataNode);
-        }
-        else if (newsValueNode) {
-            metaDataNode.removeChild(newsValueNode);
-        }
-
-        newsValueNode = jxon.unbuild(newsPriority, null, 'object');
-        metaDataNode.appendChild(newsValueNode.childNodes[0]);
 
         this.api.events.documentChanged(
             name,
             {
                 type: 'newsPriority',
                 action: 'update',
-                data: this.getNewsPriority(name)
+                data: editorSession.getDocument().get('newsvalue').score
             }
-        );
+        )
+
+        return
     }
 
     /**

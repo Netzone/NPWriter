@@ -4,6 +4,76 @@
   "labelLanguage": "sv",
   "plugins": [
     {
+      "id": "se.infomaker.newspriority",
+      "name": "newspriority",
+      "url": "http://localhost:5001/index.js",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "durationKey": "duration",
+        "defaultLifetimesIndex": "1",
+        "defaultScoresIndex": 1,
+        "scores": [
+          {
+            "value": 1,
+            "text": "Breaking news"
+          },
+          {
+            "value": 2,
+            "text": "Stoppa pressarna"
+          },
+          {
+            "value": 3,
+            "text": "Värdigt för löpet"
+          },
+          {
+            "value": 4,
+            "text": "Allmänt intresse"
+          },
+          {
+            "value": 5,
+            "text": "Liten notis"
+          },
+          {
+            "value": 6,
+            "text": "Katt i träd"
+          }
+        ],
+        "lifetimes": [
+          {
+            "value": "3600",
+            "label": "6H",
+            "text": "6 timmar"
+          },
+          {
+            "value": "84600",
+            "label": "1D",
+            "text": "1 dag"
+          },
+          {
+            "value": "592200",
+            "label": "7D",
+            "text": "7 dagar"
+          },
+          {
+            "value": "2538000",
+            "label": "30D",
+            "text": "30 dagar"
+          },
+          {
+            "value": "",
+            "label": "∞",
+            "text": "För evigt"
+          },
+          {
+            "value": "custom",
+            "label": "Tid",
+            "text": "Tidsangivelse"
+          }
+        ]
+      }
+    },
+    {
       "id": "se.infomaker.hdsds.channelselector",
       "name": "channelselector",
       "url": "http://localhost:5001/index.js",
@@ -481,76 +551,6 @@
         "elements": [
           "headline",
           "leadin"
-        ]
-      }
-    },
-    {
-      "id": "se.infomaker.newspriority",
-      "name": "newspriority",
-      "url": "http://localhost:5001/index.js",
-      "mandatory": false,
-      "enabled": true,
-      "data": {
-        "durationKey": "duration",
-        "defaultLifetimesIndex": "1",
-        "defaultScoresIndex": 1,
-        "scores": [
-          {
-            "value": 1,
-            "text": "Breaking news"
-          },
-          {
-            "value": 2,
-            "text": "Stoppa pressarna"
-          },
-          {
-            "value": 3,
-            "text": "Värdigt för löpet"
-          },
-          {
-            "value": 4,
-            "text": "Allmänt intresse"
-          },
-          {
-            "value": 5,
-            "text": "Liten notis"
-          },
-          {
-            "value": 6,
-            "text": "Katt i träd"
-          }
-        ],
-        "lifetimes": [
-          {
-            "value": "3600",
-            "label": "6H",
-            "text": "6 timmar"
-          },
-          {
-            "value": "84600",
-            "label": "1D",
-            "text": "1 dag"
-          },
-          {
-            "value": "592200",
-            "label": "7D",
-            "text": "7 dagar"
-          },
-          {
-            "value": "2538000",
-            "label": "30D",
-            "text": "30 dagar"
-          },
-          {
-            "value": "",
-            "label": "∞",
-            "text": "För evigt"
-          },
-          {
-            "value": "custom",
-            "label": "Tid",
-            "text": "Tidsangivelse"
-          }
         ]
       }
     },
