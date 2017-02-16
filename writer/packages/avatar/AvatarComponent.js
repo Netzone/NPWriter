@@ -1,5 +1,6 @@
 import { Component, FontAwesomeIcon } from 'substance'
 import { isObject, isArray } from 'lodash'
+import md5 from 'js-md5'
 
 class AvatarComponent extends Component {
 
@@ -32,12 +33,20 @@ class AvatarComponent extends Component {
                     contentElement = $$('img').addClass('avatar').attr('src', this.state.avatarUrl)
                 }
                 break
-
+            case 'gravatar': {
+                contentElement = $$('img').addClass('avatar').attr('src', this.generateGravatarUrl(avatarId))
+                break
+            }
             default:
                 contentElement = this._getDummyAvatarComponent($$)
         }
 
         return el.append(contentElement)
+    }
+
+    generateGravatarUrl(email) {
+        const hashedEmail = md5(email)
+        return `https://www.gravatar.com/avatar/${hashedEmail}?d=${encodeURI('https://dl.dropboxusercontent.com/u/2455273/fa-user-128.png')}`
     }
 
     /**

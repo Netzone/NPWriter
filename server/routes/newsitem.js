@@ -85,14 +85,22 @@ router.get('/newsitem/:uuid', function (req, res) {
  * E.g. /api/newsitem/0f144a19-32a6-4151-9c74-c51751f161bd
  */
 router.put('/newsitem/:uuid', function (req, res) {
-    var uuid = req.params.uuid,
-        toBase64 = req.body.toString('base64');
+    let uuid = req.params.uuid,
+        toBase64 = req.body.toString('base64'),
+        headers;
 
     log.info({id: uuid}, "Updating newsitem");
 
-    Backend.exec(
+    if (req.headers && req.headers['if-match']) {
+        headers = {
+            'If-Match': req.headers['if-match']
+        }
+    }
+
+    Backend.execWithHeaders(
         '{"action":"update", "data": {"id":"' + uuid + '", "document": "' + toBase64 + '"}}',
         config.get('external.contentrepository'),
+        headers,
         (error, response, body) => {
             Backend.defaultHandling(res, error, response, body, null, req, uuid);
         }
@@ -268,7 +276,8 @@ router.post('/binary', function (req, res) {
                         Backend.exec(
                             '{"action":"create_binary_newsitem", "data": {"filename":"' + binaryInfo.hashedName +
                             '", "imType":"' + imType + '", "mimetype":"' + binaryInfo.mimetype +
-                            '", "objectName":"' + objectName + '"}}', config.get('external.contentrepository'),
+                            '", "objectName":"' + objectName + '"}}',
+                            config.get('external.contentrepository'),
                             (error, response, newsItem) => {
                                 if (error) {
                                     log.error('Error creating newsItem.', error);
@@ -309,7 +318,7 @@ router.get('/image', function (req, res) {
 router.get('/binary', function (req, res) {
     var context, msg, source, imType, tmpFileName;
 
-    // Sanity check
+    // Sanity checks
     if (typeof req.query.imType == "undefined") {
         msg = 'Invalid request to GET /binary. Missing query parameter imType';
     }
@@ -351,23 +360,24 @@ router.get('/binary', function (req, res) {
                         Backend.exec(
                             '{"action":"create_binary_newsitem", "data": {"filename":"' + binaryInfo.hashedName +
                             '", "imType":"' + imType + '", "mimetype":"' + binaryInfo.mimetype +
-                            '", "objectName":""}}', config.get('external.contentrepository'),
+                            '", "objectName":""}}',
+                            config.get('external.contentrepository'),
                             (error, response, newsItem) => {
                                 if (error) {
                                     return next(error, response.statusCode);
                                 }
-                                next(null, response.statusCode, newsItem);
+                                next(null, response.statusCode, newsItem, response.headers);
                             });
                     }
                 }
             })
         }
-    ], function (error, statusCode, newsItem) {
+    ], function (error, statusCode, newsItem, headers) {
         fs.unlink(tmpFileName);
         if (error) {
             Backend.defaultErrorHandling(res, error, statusCode, null, req.headers, context);
         } else {
-            var response = {statusCode: 200};
+            var response = {statusCode: 200, headers: headers};
             Backend.defaultHandling(res, error, response, newsItem, null, req, context);
         }
     });
