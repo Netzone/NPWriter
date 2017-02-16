@@ -42,6 +42,7 @@ class BarComponent extends Component {
             ])
 
         if (!this.state.barStateValid) {
+            leftRibbon.append($$('div').addClass('invalidTextBlock').append(this.getLabel('Article is invalid')))
             barDiv.addClass('barStateInvalid')
         }
 
