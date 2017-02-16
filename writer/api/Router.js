@@ -132,7 +132,7 @@ class Router {
             if (eTag) {
                 requestProperties.headers['If-Match'] = eTag
             } else {
-                console.error('Bad PUT request. Missing eTag. Path was', path)
+                console.warn('PUT request without ETag is deprecated')
             }
         } else {
             console.error('Bad PUT request. Missing uuid in parameters. Path was', path)
