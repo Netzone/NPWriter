@@ -66,8 +66,6 @@ class NPWriter extends AbstractEditor {
 
                     const uuid = (e.data && e.data.uuid) ? e.data.uuid : undefined
 
-                    this.props.api.newsItem.invalidate()
-
                     this.props.api.ui.showDialog(
                         resolverClass,
                         {
