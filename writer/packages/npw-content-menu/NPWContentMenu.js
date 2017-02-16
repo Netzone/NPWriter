@@ -101,7 +101,8 @@ class ContentMenu extends Toolbox {
                 let selRect = hints.selectionRect
 
                 // HACK: Use surface element as the left reference point
-                let surfaceEl = this.el.parentNode.find('.sc-surface').getNativeElement()
+                // Could not use surface class because it caused problem with the header group editor
+                let surfaceEl = this.el.parentNode.find('.sc-container-editor').getNativeElement()
                 let surfaceRect = surfaceEl.getBoundingClientRect()
 
                 // By default, gutter is centered (y-axis) and left of the scrollPane content (x-axis)
