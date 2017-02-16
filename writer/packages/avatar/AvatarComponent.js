@@ -1,6 +1,6 @@
 import { Component, FontAwesomeIcon } from 'substance'
 import { isObject, isArray } from 'lodash'
-import md5 from 'js-md5'
+import md5 from 'md5'
 
 class AvatarComponent extends Component {
 
