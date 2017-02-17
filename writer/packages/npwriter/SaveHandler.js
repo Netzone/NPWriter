@@ -108,7 +108,6 @@ class SaveHandler {
                     // User canceled the save when on validation errors
                     this.api.events.userActionCancelSave()
                 } else if (error.name === 'FileUploadError') {
-                    this.api.router.get('/api/err?error=' + error.message)
                     this.api.router.get('/api/err?error=' + JSON.stringify(error.message))
                 } else {
                     this.api.router.get('/api/err?error=' + JSON.stringify(error.message))

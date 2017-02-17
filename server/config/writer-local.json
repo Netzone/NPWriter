@@ -362,9 +362,13 @@
         "imageinfo": true,
         "imageFileExtension": [
           ".jpg",
+          ".JPG",
           ".jpeg",
+          ".JPG",
           ".png",
-          ".gif"
+          ".PNG",
+          ".gif",
+          ".GIF"
         ],
         "crops": {
           "16:9": [
