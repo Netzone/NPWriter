@@ -58,7 +58,7 @@
     "sinon": "2.0.0-pre.3",
     "source-map-support": "^0.4.11",
     "style-loader": "^0.13.1",
-    "substance": "1.0.0-beta.6",
+    "substance": "substance/substance#xml-snapshots",
     "substance-bundler": "^0.7.3",
     "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony",
     "webpack": "^1.13.2",
