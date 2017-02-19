@@ -73,7 +73,6 @@
     "build": "cd node_modules/substance/ && npm install && node make && cd ../.. && webpack --config webpack.config.production.js && ./node_modules/uglify-js/bin/uglifyjs dist/writer/substance/substance.js -o dist/writer/substance/substance.js",
     "build-substance": "cd node_modules/substance/ && npm install && node make",
     "build-dep": "cd node_modules/substance/ && npm install && node make",
-    "reset": "rm -rf node_modules/; yarn cache clean; yarn install",
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
     "generate-docs-to-developerportal": "npm run generate-docs -- -d ../../NPWriter/developerportal/docs"
   },
