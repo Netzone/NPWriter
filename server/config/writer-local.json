@@ -222,7 +222,7 @@
       "name": "ximplace",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": true,
+      "enabled": false,
       "mandatory": true,
       "data": {
         "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
@@ -233,7 +233,7 @@
       "name": "ximplace",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": false,
+      "enabled": true,
       "mandatory": true,
       "data": {
         "features": "position",
@@ -245,7 +245,7 @@
       "name": "ximplace",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": false,
+      "enabled": true,
       "mandatory": true,
       "data": {
         "features": "polygon",
@@ -302,7 +302,6 @@
       "enabled": true,
       "mandatory": true
     },
-
     {
       "id": "se.infomaker.preleadin",
       "name": "preleadin",
@@ -586,7 +585,7 @@
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
       "mandatory": false,
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "se.infomaker.tags",
@@ -594,7 +593,44 @@
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
       "mandatory": false,
-      "enabled": true
+      "enabled": false
+    },
+    {
+      "id": "se.infomaker.ximtags",
+      "name": "ximtags",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "mandatory": false,
+      "enabled": true,
+      "data": {
+        "tags": {
+          "x-im/person": {
+            "icon": "fa-user",
+            "name": "Person",
+            "editable": true
+          },
+          "x-im/organisation": {
+            "icon": "fa-sitemap",
+            "name": "Organisation",
+            "editable": true
+          },
+          "x-im/channel": {
+            "icon": "fa-random",
+            "name": "Channel",
+            "editable": false
+          },
+          "x-im/topic": {
+            "icon": "fa-tags",
+            "name": "Topic",
+            "editable": true
+          },
+          "x-im/category": {
+            "icon": "fa-tags",
+            "name": "Category",
+            "editable": false
+          }
+        }
+      }
     },
     {
       "id": "se.infomaker.htmlembed",
@@ -755,8 +791,8 @@
       "enabled": false,
       "mandatory": false,
       "data": {
-        "imageProxyServer" : "https://services.dev.np.infomaker.io",
-        "newspilotServer" : "http://newspilot.dev.np.infomaker.io:8080"
+        "imageProxyServer": "https://services.dev.np.infomaker.io",
+        "newspilotServer": "http://newspilot.dev.np.infomaker.io:8080"
       }
     }
   ]
