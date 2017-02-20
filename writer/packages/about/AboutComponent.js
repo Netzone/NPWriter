@@ -6,12 +6,6 @@ class AboutComponent extends Component {
         super(...args)
     }
 
-    didMount() {
-        this.props.popover.setStatusText(
-            this.getLabel('version')
-        )
-    }
-
     render($$) {
         return $$('div')
             .addClass('sc-np-about-popover')

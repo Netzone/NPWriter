@@ -18,11 +18,6 @@ export default {
             AboutComponent
         )
 
-        config.addLabel('version', {
-            en: "NP Writer 3.0 alpha",
-            sv: "NP Writer 3.0 alpha"
-        })
-
         config.addLabel('about-header', {
             en: "NP Writer 3.0 alpha",
             sv: "NP Writer 3.0 alpha"

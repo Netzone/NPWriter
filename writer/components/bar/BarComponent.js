@@ -2,11 +2,20 @@ import {Component} from 'substance'
 
 import PopoverComponent from './../popover/PopoverComponent'
 import './scss/bar.scss'
+import Event from '../../utils/Event'
 
 class BarComponent extends Component {
 
     constructor(...args) {
         super(...args)
+
+        this.context.api.events.on('__barcomponent', Event.DOCUMENT_INVALIDATED, () => {
+            this.extendState({barStateValid: false})
+        })
+    }
+
+    getInitialState() {
+        return {barStateValid: true}
     }
 
     render($$) {
@@ -24,13 +33,20 @@ class BarComponent extends Component {
             }
         })
 
-        return $$('div')
+        const barDiv = $$('div')
             .ref('bar_container')
             .addClass('sc-np-bar')
             .append([
                 leftRibbon,
                 rightRibbon
             ])
+
+        if (!this.state.barStateValid) {
+            leftRibbon.append($$('div').addClass('invalidTextBlock').append(this.getLabel('Article is invalid')))
+            barDiv.addClass('barStateInvalid')
+        }
+
+        return barDiv
     }
 
     renderPopover($$, popover) {
