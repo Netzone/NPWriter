@@ -65,10 +65,12 @@ class ContextMenu extends Toolbox {
         let contentWidth = this.el.htmlProp('offsetWidth')
 
         // By default, context menu are aligned left bottom to the mouse coordinate clicked
-        this.el.css('top', mouseBounds.top)
-        let leftPos = mouseBounds.left
+        this.el.css('top', mouseBounds.top + 12)
+        let leftPos = mouseBounds.left - 12
+
         // Must not exceed left bound
         leftPos = Math.max(leftPos, 0)
+
         // Must not exceed right bound
         let maxLeftPos = mouseBounds.left + mouseBounds.right - contentWidth
         leftPos = Math.min(leftPos, maxLeftPos)
