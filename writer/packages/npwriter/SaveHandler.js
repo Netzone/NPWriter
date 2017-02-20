@@ -150,6 +150,7 @@ class SaveHandler {
                 this.api.events.documentSaved();
             })
             .catch((error) => {
+                error.uuid = uuid
                 this.api.events.documentSaveFailed(error)
             })
     }

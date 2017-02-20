@@ -5,6 +5,7 @@ import replace from 'lodash/replace'
 
 import isObject from 'lodash/isObject'
 import isArray from 'lodash/isArray'
+import Event from '../utils/Event'
 
 import Validator from '../packages/npwriter/Validator'
 
@@ -1799,6 +1800,16 @@ class NewsItem {
                 data: id
             })
         }
+    }
+
+    invalidate() {
+        this.api.ui.showNotification(
+            'invalidate',
+            this.api.getLabel("Article is invalid"),
+            this.api.getLabel("This article is no longer valid")
+        );
+
+        this.api.events.triggerEvent("__internal", Event.DOCUMENT_INVALIDATED, {});
     }
 }
 export default NewsItem

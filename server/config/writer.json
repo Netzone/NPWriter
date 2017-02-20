@@ -83,10 +83,10 @@
       "mandatory": true
     },
     {
-      "id": "se.infomaker.mitm.publicationchannel",
+      "id": "se.infomaker.infomaker.publicationchannel",
       "name": "publicationchannel",
-      "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/mitm-publicationchannel.js",
-      "style": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/mitm-publicationchannel.css",
+      "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/im-publicationchannel.js",
+      "style": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/im-publicationchannel.css",
       "mandatory": false,
       "enabled": false,
       "data": {
@@ -201,30 +201,6 @@
             "qcode": "imchn:opse",
             "name": "op.se",
             "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAZtJREFUOBHdkj1IQlEYht97VUxFIUsNQxukEKKIrM2anFqipamhocGkrZa29qCgqSGIhqihMZwagmgwhIIckqKbRqWi+Yf/P7dzr3o0bQkcojN95z3v99zv5zLTq6dZdOFIeZ5XdIEDthsQgfGPQdL2GS3YLfC/xmHWqxFN5eD1R9otP947QIP9KhTLFZh1avAkRSphYehVtiXzCH1mUakKjtr5BpoZM8JhM8PHxTBk0GBiWIfn9wTWF22wjejEjN2zO6zMjYInjM2Da9w8hEWdbk0uk2DbaYdQ0T0XBRdKYpKAdlyzCEZS9e8Ct48RpHNFaFQyuObHqU5BCrkUEpahD41gQKuEqkfWuIIlHpap+T5iGarT1nKFslhu3UMN0WQe2XyJ3pccVgTCaVx4ORy7fVSnFRVKFWwdeRBPF2A1aWHsU+HpLYmN/SuY9Bqa4Pa8YG3vEoHDQywHz6nOTDlPmqOvy40Wha0IW7MYm6BkpihujCE7ZcjEq0ytFtoaRZOgda3lSpX8V4nWZzEmGPAtc6CtdTh/Kfw90BdC/oJq6861+AAAAABJRU5ErkJggg=="
-          }
-        ]
-      }
-    },
-    {
-      "id": "se.infomaker.hdsds.channelselector",
-      "name": "channelselector",
-      "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/hdsds-channelselector.js",
-      "style": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/hdsds-channelselector.css",
-      "mandatory": false,
-      "enabled": true,
-      "data": {
-        "products": [
-          {
-            "name": "Sydsvenskan.se",
-            "qcode": "imchn:sydsvenskan"
-          },
-          {
-            "name": "8till5.se",
-            "qcode": "imchn:8till5"
-          },
-          {
-            "name": "Hd.se",
-            "qcode": "imchn:hd"
           }
         ]
       }

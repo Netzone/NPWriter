@@ -88,5 +88,18 @@ export default {
             sv: 'Artikeln har uppdaterats. Vänligen spara dina ändringar och ladda om artikeln för att få de senaste ändringarna.'
         })
 
+        config.addLabel('Article is invalid', {
+            en: 'Article is invalid',
+            sv: 'Artikeln går ej att spara'
+        })
+
+        config.addLabel('This article is no longer valid', {
+            en: 'Article is marked invalid and can no longer be saved',
+            sv: 'Artikeln är markerad som ogiltig och går ej att spara'
+        })
+
+        config.addLabel('A problem occurred', {
+            sv: 'Ett problem har uppstått'
+        })
     }
 };

@@ -1,13 +1,11 @@
-import {SplitPane, ScrollPane, SpellCheckManager} from 'substance'
-import {AbstractEditor} from 'substance'
-
-import SidebarComponent from './components/SidebarComponent'
-import DialogMessageComponent from '../dialog/DialogMessageComponent'
-import BarComponent from './../../components/bar/BarComponent'
-import DialogPlaceholder from '../dialog/DialogPlaceholder'
-import Event from '../../utils/Event'
-import debounce from '../../utils/Debounce'
-import NPResourceManager from './NPResourceManager'
+import {SplitPane, ScrollPane, SpellCheckManager, AbstractEditor} from "substance";
+import SidebarComponent from "./components/SidebarComponent";
+import DialogMessageComponent from "../dialog/DialogMessageComponent";
+import BarComponent from "./../../components/bar/BarComponent";
+import DialogPlaceholder from "../dialog/DialogPlaceholder";
+import Event from "../../utils/Event";
+import debounce from "../../utils/Debounce";
+import NPResourceManager from "./NPResourceManager";
 
 class NPWriter extends AbstractEditor {
 
@@ -20,8 +18,17 @@ class NPWriter extends AbstractEditor {
         this.props.api.setWriterReference(this);
 
         // When document is changed we need to save a local version
+
+        let documentIsInvalid = false;
+
         this.props.api.events.on('npwritercomponent', Event.DOCUMENT_CHANGED, () => {
-            this.addVersion()
+            if (!documentIsInvalid) {
+                this.addVersion()
+            }
+        })
+
+        this.props.api.events.on('npwritercomponent', Event.DOCUMENT_INVALIDATED, () => {
+            documentIsInvalid = true;
         })
 
         this.spellCheckManager = new SpellCheckManager(this.editorSession, {
@@ -31,6 +38,9 @@ class NPWriter extends AbstractEditor {
         })
 
         this.addVersion = debounce(() => {
+            if (documentIsInvalid) {
+                return
+            }
             this.props.api.history.snapshot();
         }, 7000)
     }
@@ -47,13 +57,45 @@ class NPWriter extends AbstractEditor {
         this.handleActions(actionHandlers)
 
         this.props.api.events.on('__internal', Event.DOCUMENT_SAVE_FAILED, (e) => {
-            let errorMessages = e.data.errors.map((error) => {
+
+            try {
+                const reason = (e.data && e.data.reason) ? e.data.reason : undefined
+                const resolverClass = this.props.api.configurator.getConflictHandler(reason)
+
+                if (resolverClass) {
+
+                    const uuid = (e.data && e.data.uuid) ? e.data.uuid : undefined
+
+                    this.props.api.ui.showDialog(
+                        resolverClass,
+                        {
+                            uuid: uuid,
+                            error: e,
+                            close: this.hideDialog.bind(this)
+                        },
+                        {
+                            title: this.props.api.getLabel("A problem occurred"),
+                            primary: false,
+                            global: true
+                        }
+                    )
+                    return;
+                }
+
+            } catch (e) {
+                // Got error when resolving resolver, continuing
+                console.log("Error resolving conflict handler", e)
+            }
+
+            // Default behavior
+            const errorMessages = e.data.errors.map((error) => {
                 return {
                     type: 'error',
                     message: error.error
                 }
             })
             this.props.api.ui.showMessageDialog(errorMessages)
+
         })
 
         // Warn user before navigating away from unsaved article
@@ -287,7 +329,6 @@ class NPWriter extends AbstractEditor {
             props: props,
             options: options
         })
-
     }
 
     showMessageDialog(messages, props, options) {
@@ -330,7 +371,7 @@ class NPWriter extends AbstractEditor {
      * If no nodeType is found the title should be "Newspilot Writer"
      */
     updateTitle() {
-        const documentNodes =  this.props.api.document.getDocumentNodes()
+        const documentNodes = this.props.api.document.getDocumentNodes()
         const nodeTypeToUseForTitle = [
             'headline',
             'preamble',
@@ -343,13 +384,13 @@ class NPWriter extends AbstractEditor {
                 return node.type === nodeType ? node : false
             })
 
-            if(docNode) {
+            if (docNode) {
                 nodeToUse = docNode
                 return true
             }
         })
         let title = 'Newspilot Writer'
-        if(nodeToUse) {
+        if (nodeToUse) {
             title = nodeToUse.content.substr(0, 100)
         }
         this.props.api.browser.setTitle(title)
