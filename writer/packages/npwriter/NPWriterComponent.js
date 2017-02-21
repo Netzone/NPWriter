@@ -343,6 +343,8 @@ class NPWriter extends AbstractEditor {
 
 
     hideDialog() {
+        // Hack to se the selection and focus to the editor when closing a modal
+        this.editorSession.setSelection(this.editorSession.getSelection())
         if (this.refs.modalPlaceholder) {
             this.refs.modalPlaceholder.setProps({
                 showModal: false
