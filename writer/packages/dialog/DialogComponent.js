@@ -31,6 +31,7 @@ class DialogComponent extends Component {
     }
 
     dispose() {
+        this.context.api.events.off('__dialog', Event.USERACTION_KEY_ESCAPE)
         window.onresize = null
     }
 
