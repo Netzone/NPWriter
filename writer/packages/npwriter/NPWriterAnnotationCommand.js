@@ -7,7 +7,7 @@ class NPWriterAnnotationCommand extends AnnotationCommand {
     }
 
     isDisabled(sel) {
-        if(sel.isNull()) {
+        if(sel.isNull() || !sel.surfaceId) {
             return true
         }
 

@@ -151,8 +151,43 @@ class NPWriter extends AbstractEditor {
 
         this.spellCheckManager.runGlobalCheck()
         this.editorSession.onUpdate(this.editorSessionUpdated, this)
+
+       this.setSelectionInBeginningOfFirstText()
+
     }
 
+    /**
+     *
+     * HACK: Really hacky stuff to set selection
+     * First select the first node, the get that selection to get a path.
+     */
+    setSelectionInBeginningOfFirstText() {
+        const doc = this.props.api.editorSession.getDocument()
+        const body = doc.get('body')
+
+        // Find the first text node, so skip teaser, images etc.
+        const firstNode = body.nodes.find((nodeId) => {
+            return doc.get(nodeId).isText() ? true : false
+        })
+
+        this.editorSession.setSelection({
+            type: 'node',
+            nodeId: firstNode,
+            containerId: 'body',
+            surfaceId: 'body'
+        })
+        const nodeSelection = this.editorSession.getSelection()
+        this.editorSession.setSelection({
+            type: 'property',
+            path: nodeSelection.path,
+            containerId: 'body',
+            startOffset: 0,
+            endOffset: 0
+        })
+
+        // Set focus
+        this.getNativeElement().focus()
+    }
 
     editorSessionUpdated(data) {
         if (!data._change || data._info.history === false) {
@@ -272,7 +307,7 @@ class NPWriter extends AbstractEditor {
         const OverlayMenu = this.getComponent('npw-overlay-menu')
         const ContentMenu = this.getComponent('npw-content-menu')
         const BodyComponent = this.getComponent('body')
-        const DropTeaser = this.getComponent('drop-teaser')
+        const Dropzones = this.getComponent('dropzones')
 
         let contentPanel = $$(ScrollPane, {
             scrollbarType: 'native',
@@ -296,7 +331,7 @@ class NPWriter extends AbstractEditor {
             $$(ContextMenu),
             $$(OverlayMenu),
             $$(ContentMenu),
-            $$(DropTeaser)
+            $$(Dropzones)
 
         ])
         return contentPanel

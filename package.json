@@ -17,6 +17,7 @@
     "js-md5": "^0.4.2",
     "libhoney": "^1.0.0-beta.1",
     "lodash": "^4.14.1",
+    "md5": "^2.2.1",
     "moment": "^2.15.1",
     "read-chunk": "^2.0.0",
     "request": "^2.75.0",
@@ -57,7 +58,7 @@
     "sass-loader": "^4.0.2",
     "sinon": "2.0.0-pre.3",
     "style-loader": "^0.13.1",
-    "substance": "substance/substance#beta-6",
+    "substance": "substance/substance#beta-6-fixes",
     "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2"
@@ -72,7 +73,6 @@
     "build": "cd node_modules/substance/ && npm install && node make && cd ../.. && webpack --config webpack.config.production.js && ./node_modules/uglify-js/bin/uglifyjs dist/writer/substance/substance.js -o dist/writer/substance/substance.js",
     "build-substance": "cd node_modules/substance/ && npm install && node make",
     "build-dep": "cd node_modules/substance/ && npm install && node make",
-    "reset": "rm -rf node_modules/; yarn cache clean; yarn install",
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
     "generate-docs-to-developerportal": "npm run generate-docs -- -d ../../NPWriter/developerportal/docs"
   },
