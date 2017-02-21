@@ -179,6 +179,9 @@ class DialogComponent extends Component {
     }
 
     close() {
+        if(this.props.options.disableEscKey) {
+            return
+        }
         if (this.refs.contentComponent.onClose && this.refs.contentComponent.onClose('cancel') !== false) {
             this.send(Event.DIALOG_CLOSE) // Send this close to Writer can reset state
             this.remove();

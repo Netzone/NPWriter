@@ -49,6 +49,9 @@ class NPWriter extends AbstractEditor {
             }
             this.props.api.history.snapshot();
         }, 7000)
+
+        // If we want to handle multiple modals, create a queue
+        this.modalQueue = []
     }
 
     constructor(...args) {
@@ -369,6 +372,13 @@ class NPWriter extends AbstractEditor {
             this.refs.modalPlaceholder.setProps({
                 showModal: false
             })
+
+            // When closing the modal we trigger a new dialog if it's one in the queue
+            if(this.modalQueue.length > 0) {
+                const nextModal = this.modalQueue.shift()
+                this.showDialog(nextModal.contentComponent, nextModal.props, nextModal.options)
+            }
+
         }
 
     }
@@ -380,12 +390,23 @@ class NPWriter extends AbstractEditor {
      * @param {object} options Options passed to the DialogComponent
      */
     showDialog(contentComponent, props, options) {
-        this.refs.modalPlaceholder.setProps({
-            showModal: true,
-            contentComponent: contentComponent,
-            props: props,
-            options: options
-        })
+        if(!this.refs.modalPlaceholder.props.showModal) {
+            this.refs.modalPlaceholder.setProps({
+                showModal: true,
+                contentComponent: contentComponent,
+                props: props,
+                options: options
+            })
+        } else {
+            // Modal already open, add to queue
+            this.modalQueue.push({
+                contentComponent: contentComponent,
+                props: props,
+                options: options
+            })
+
+        }
+
     }
 
     showMessageDialog(messages, props, options) {
