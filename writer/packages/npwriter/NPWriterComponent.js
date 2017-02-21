@@ -20,12 +20,18 @@ class NPWriter extends AbstractEditor {
         // When document is changed we need to save a local version
 
         let documentIsInvalid = false;
+        let documentIsChanged = false;
 
         this.props.api.events.on('npwritercomponent', Event.DOCUMENT_CHANGED, () => {
             if (!documentIsInvalid) {
+                documentIsChanged = true;
                 this.addVersion()
             }
         })
+
+        this.props.api.events.on('npwritercomponent', Event.DOCUMENT_SAVED, () => {
+            documentIsChanged = false;
+        });
 
         this.props.api.events.on('npwritercomponent', Event.DOCUMENT_INVALIDATED, () => {
             documentIsInvalid = true;
@@ -38,7 +44,7 @@ class NPWriter extends AbstractEditor {
         })
 
         this.addVersion = debounce(() => {
-            if (documentIsInvalid) {
+            if (documentIsInvalid || !documentIsChanged) {
                 return
             }
             this.props.api.history.snapshot();
