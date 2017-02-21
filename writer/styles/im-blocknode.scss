@@ -1,5 +1,4 @@
 .im-blocknode__container {
-    margin-bottom: 10px;
     display: inline-block;
     text-decoration: none;
     width: 100%;
@@ -53,19 +52,47 @@
     }
 }
 
-/**
-    Now outline border
+/*
+ * Isolated node overrides
  */
+ .sc-isolated-node.sm-default-style,
+ .sc-isolated-node {
+    margin-bottom: 15px;
+    position: relative;
+
+    .se-container {
+        outline: none;
+    }
+
+    &.sm-selected,
+    &.sm-focused {
+        outline: none;
+        background-color: rgba(163, 205, 253, 0.2);
+
+        .im-blocknode__container {
+            border-color: rgba(163, 205, 253, 0);
+        }
+
+        &:before {
+            content: " ";
+            z-index: -1;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            border: 2px solid rgba(163, 205, 253, 0.8);
+            border-radius: 4px;
+        }
+    }
+
+    &.sm-focused {
+        background-color: inherit;
+    }
+ }
+
+
 .sc-isolated-node.sm-default-style.sm-co-selected > .se-container,
 .sc-isolated-node.sm-default-style.sm-selected > .se-container {
     outline: none;
-}
-
-.sc-isolated-node.sm-selected {
-    .im-blocknode__container {
-        box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px;
-        background: rgba(222, 235, 255, 0.6);
-        margin-bottom:10px;
-        border: 1px solid #fff;
-    }
 }
