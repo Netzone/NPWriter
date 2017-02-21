@@ -61,10 +61,11 @@ class NewsItem {
      *
      * @param {string} newsML The NewsML source
      * @param {object} writerConfig Optional, explicit writer config used internally only, should be empty.
+     * @param {string} etag An etag for the NewsML source
      *
      * @return {object | null}
      */
-    setSource(newsML, writerConfig) {
+    setSource(newsML, writerConfig, etag) {
         var newsMLImporter = this.api.configurator.createImporter('newsml', {
             api: this.api
         })
@@ -82,6 +83,12 @@ class NewsItem {
 
         this.api.newsItemArticle = newsItemArticle;
         this.api.doc = idfDocument;
+
+        // Set etag in router
+        if (etag) {
+            console.log('Setting etag', etag, 'for uuid', this.getGuid(), 'in route')
+            this.api.router.setEtag(this.getGuid(), etag)
+        }
 
         this.api.writer.send('replacedoc', {
             newsItemArticle: newsItemArticle,
