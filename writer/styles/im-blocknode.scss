@@ -55,7 +55,8 @@
 /*
  * Isolated node overrides
  */
- .sc-isolated-node.sm-default-style {
+ .sc-isolated-node.sm-default-style,
+ .sc-isolated-node {
     margin-bottom: 15px;
     position: relative;
 
