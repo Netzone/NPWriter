@@ -1,5 +1,5 @@
-import moment from 'moment'
-import Event from '../utils/Event'
+import moment from 'moment';
+import Event from '../utils/Event';
 const HST_KEY = "__history__"
 const HST_MAX_LENGTH = 15
 
@@ -64,8 +64,6 @@ class History {
     }
 
 
-
-
     createAndAddEmptyHistory(id) {
 
         let articleHistory = []
@@ -95,7 +93,7 @@ class History {
             return false;
         }
 
-        const historyId = HST_KEY+id
+        const historyId = HST_KEY + id
         this.storage.removeItem(historyId)
         this.api.events.triggerEvent(null, Event.HISTORY_CLEARED, {historyId: historyId});
     }
@@ -112,12 +110,12 @@ class History {
 
         const history = Object.keys(this.storage).filter((key) => {
             return key.indexOf('__history__') >= 0
-        }).map((historyKey)=> {
+        }).map((historyKey) => {
             return this.storage[historyKey]
         }).map((article) => {
             try {
                 return JSON.parse(article)
-            } catch(e) {
+            } catch (e) {
                 this.api.ui.showNotification('history', null, "Error loading history");
             }
 
@@ -131,7 +129,7 @@ class History {
         }
 
         try {
-            let articleHistory = this.storage.getItem(HST_KEY+id)
+            let articleHistory = this.storage.getItem(HST_KEY + id)
             return (!articleHistory) ? null : JSON.parse(articleHistory);
         }
         catch (e) {
@@ -182,7 +180,7 @@ class History {
 
         try {
             let historyJson = JSON.stringify(history)
-            this.storage.setItem(HST_KEY+id, historyJson)
+            this.storage.setItem(HST_KEY + id, historyJson)
 
             const eventData = {
                 type: 'add',
@@ -213,6 +211,16 @@ class History {
         let id = this.api.newsItem.getIdForArticle()
 
         let doc = this.get(id)
+
+        if (!doc.etag) {
+            let etag = this.api.router.getEtag(id);
+            if (etag) {
+                console.log('Document missing etag. Setting etag to', etag)
+                doc.etag = etag
+            } else {
+                console.warn('No etag available')
+            }
+        }
 
         // Don't grow the version list too much
         if (doc.versions.length >= HST_MAX_LENGTH) {
