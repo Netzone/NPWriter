@@ -88,14 +88,7 @@ class NPWriter extends AbstractEditor {
             }
 
             // Default behavior
-            const errorMessages = e.data.errors.map((error) => {
-                return {
-                    type: 'error',
-                    message: error.error
-                }
-            })
-            this.props.api.ui.showMessageDialog(errorMessages)
-
+            this.props.api.ui.showMessageDialog(NPWriter._getErrorMessagesForDialog(e))
         })
 
         // Warn user before navigating away from unsaved article
@@ -145,6 +138,27 @@ class NPWriter extends AbstractEditor {
         // })
     }
 
+    static _getErrorMessagesForDialog(e) {
+        if (e.data && e.data.errors) {
+            return e.data.errors.map((error) => {
+                return {
+                    type: 'error',
+                    message: error.error
+                }
+            })
+        } else if (e.data && e.data.message) {
+            return [
+                {type: 'error', message: e.data.message}
+            ]
+        } else if (e.message) {
+            return [
+                {type: 'error', message: e.message}
+            ]
+        } else {
+            return [{type: 'error', message: 'Unknown error'}]
+        }
+
+    }
 
     didMount() {
         super.didMount()
@@ -152,7 +166,7 @@ class NPWriter extends AbstractEditor {
         this.spellCheckManager.runGlobalCheck()
         this.editorSession.onUpdate(this.editorSessionUpdated, this)
 
-       this.setSelectionInBeginningOfFirstText()
+        this.setSelectionInBeginningOfFirstText()
 
     }
 
