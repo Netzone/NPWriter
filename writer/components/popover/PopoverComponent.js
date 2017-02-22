@@ -10,19 +10,11 @@ class PopoverComponent extends Component {
         super(...args)
 
         this.context.api.events.on('__popover-' + args[1].popover.id, Event.BROWSER_RESIZE, () => {
-            let triggerElement
-            if (this.state.active) {
-                triggerElement = this.el.el.querySelector('.sc-np-bar-container > .active')
-                if (null === triggerElement) {
-                    let triggerElements = this.el.el.querySelectorAll('.sc-np-bar-container .sc-np-btn')
-                    if (triggerElements.length === 2) {
-                        triggerElement = triggerElements[1]
-                    }
-                }
-                this.positionPopover(
-                    this.getOffsets(triggerElement.offsetLeft, triggerElement.offsetWidth)
-                )
-            }
+            this.recalculateOffsets()
+        })
+
+        this.context.api.events.on('__popover-' + args[1].popover.id, 'popover:close', () => {
+            this.extendState({active: false})
         })
     }
 
@@ -35,6 +27,24 @@ class PopoverComponent extends Component {
             statusText: this.props.popover.statusText || null,
             triggerElement: null
         }
+    }
+
+    didMount() {
+        document.addEventListener(
+            'click',
+            (e) => {
+                // Listen to clicks outside of the popover only so that we
+                // can close non sticky popovers automatically
+                if (!this.state.active || this.props.popover.sticky === true) {
+                    return
+                }
+
+                if (!this.refs.popover.el.el.contains(e.target)) {
+                    this.extendState({active: false})
+                }
+            },
+            false
+        )
     }
 
     render($$) {
@@ -170,31 +180,66 @@ class PopoverComponent extends Component {
                 offsetWidth: triggerElement.offsetWidth,
                 active: true
             })
+
+            // Opening one popover closes others, even the sticky ones, so
+            // send an internal close event to all other popovers
+            this.context.api.events.triggerEvent(
+                '__popover-' + this.props.popover.id,
+                'popover:close'
+            )
+
         }
+
+        // Must prevent default and propagation for automatic closing
+        // functionality on click outside of the popover
+        evt.preventDefault()
+        evt.stopPropagation()
     }
 
     onSetIcon(iconClass) {
+        let old = this.state.iconClass
         this.extendState({
             icon: iconClass
         })
+
+        this.onLayoutChange(iconClass, old)
     }
 
     onSetStatusText(text) {
+        let old = this.state.statusText
         this.extendState({
             statusText: text
         })
+
+        this.onLayoutChange(text, old)
     }
 
     onSetButtonText(text) {
+        let old = this.state.button
         this.extendState({
             button: text
         })
+
+        this.onLayoutChange(text, old)
     }
 
     onSetEnabled(enabled) {
         this.extendState({
             enabled: enabled
         })
+    }
+
+    onLayoutChange(newValue, oldValue) {
+        if (newValue === oldValue) {
+            return
+        }
+
+        // Send browser resize event to enforce position recalculations
+        // for all active (visible) popovers
+        this.context.api.events.triggerEvent(
+            '__popover',
+            Event.BROWSER_RESIZE
+        )
     }
 
     /*
@@ -226,6 +271,24 @@ class PopoverComponent extends Component {
         return {
             box: left,
             arrow: margin
+        }
+    }
+
+    recalculateOffsets() {
+        let triggerElement
+
+        if (this.state.active) {
+            triggerElement = this.el.el.querySelector('.sc-np-bar-container > .sc-np-bar-icon')
+            if (null === triggerElement) {
+                let triggerElements = this.el.el.querySelectorAll('.sc-np-bar-container .sc-np-btn')
+                if (triggerElements.length === 2) {
+                    triggerElement = triggerElements[1]
+                }
+            }
+
+            this.positionPopover(
+                this.getOffsets(triggerElement.offsetLeft, triggerElement.offsetWidth)
+            )
         }
     }
 }

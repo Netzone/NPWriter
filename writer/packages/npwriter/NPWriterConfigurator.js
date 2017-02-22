@@ -62,11 +62,13 @@ class NPWriterConfigurator extends Configurator {
             throw new Error('Popover trigger must have a default icon')
         }
 
+        // Props handed over to popover when created
         this.config.popovers.push({
             id: id,
             icon: def.icon,
             button: def.button,
             align: def.align,
+            sticky: def.sticky || false,
             css: def.css || {},
             component: component
         })
