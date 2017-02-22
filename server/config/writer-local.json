@@ -726,6 +726,18 @@
         "imageProxyServer": "https://services.dev.np.infomaker.io",
         "newspilotServer": "http://newspilot.dev.np.infomaker.io:8080"
       }
+    },
+    {
+      "id": "se.infomaker.uatracker",
+      "name": "uatracker",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/style.css",
+      "enabled": true,
+      "mandatory": false,
+      "data": {
+        "customerKey": "im-writer",
+        "host": "https://uatracker.dev.writer.infomaker.io"
+      }
     }
   ]
 }
