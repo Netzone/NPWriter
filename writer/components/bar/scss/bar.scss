@@ -2,7 +2,13 @@ div.sc-np-bar {
     height: 52px;
     line-height: 52px;
     border-bottom: 1px solid #eaeaea;
-
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    
     &.barStateInvalid {
         background-color: #FFF0F0;
     }
@@ -13,6 +19,8 @@ div.sc-np-bar {
 
     &>div {
         height: 52px;
+        display: flex;
+        flex-wrap: nowrap;
 
         & > div {
             display: inline-block;
@@ -26,12 +34,12 @@ div.sc-np-bar {
 
         div.sc-np-btn-group {
             display: inline-block;
+            white-space: nowrap;
         }
     }
 
     &>div:first-child {
-        float: left;
-        margin-left: 100px;
+        margin-left: 20px;
 
         & > div {
             margin-right: 10px;
@@ -46,7 +54,6 @@ div.sc-np-bar {
     }
 
     &>div:last-child {
-        float: right;
         margin-right: 20px;
 
         & > div {
