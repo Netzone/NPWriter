@@ -6,9 +6,7 @@ div.sc-np-bar {
     flex-wrap: nowrap;
     justify-content: space-between;
     overflow: hidden;
-    overflow-y: hidden;
-    overflow-x: scroll;
-    
+
     &.barStateInvalid {
         background-color: #FFF0F0;
     }
