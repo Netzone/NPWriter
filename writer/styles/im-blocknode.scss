@@ -96,3 +96,10 @@
 .sc-isolated-node.sm-default-style.sm-selected > .se-container {
     outline: none;
 }
+
+/*
+ * Drop zone overrides
+ */
+.sc-dropzones .se-dropzone.sm-over .se-drop-teaser {
+    background: rgba(163, 205, 253, 0.8);
+}
