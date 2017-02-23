@@ -4,6 +4,18 @@
   "labelLanguage": "sv",
   "plugins": [
     {
+      "id": "se.infomaker.uatracker",
+      "name": "uatracker",
+      "url": "http://localhost:5001/index.js",
+      "style": "http://localhost:5001/index.js",
+      "enabled": true,
+      "mandatory": false,
+      "data": {
+        "customerKey": "im-writer",
+        "host": "https://uatracker.dev.writer.infomaker.io"
+      }
+    },
+    {
       "id": "se.infomaker.newspriority",
       "name": "newspriority",
       "url": "http://localhost:5001/index.js",
@@ -176,7 +188,7 @@
       "name": "ximplace",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": false,
+      "enabled": true,
       "mandatory": true,
       "data": {
         "googleMapAPIKey": "AIzaSyB0pmf9RAml2HL3AgiB_yYTwIeMILqQ_1w"
@@ -199,7 +211,7 @@
       "name": "ximplace",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
-      "enabled": true,
+      "enabled": false,
       "mandatory": false,
       "data": {
         "features": "polygon",
@@ -493,43 +505,6 @@
     {
       "id": "se.infomaker.ximtags",
       "name": "ximtags",
-      "url": "http://localhost:5001/index.js",
-      "style": "http://localhost:5001/style.css",
-      "mandatory": false,
-      "enabled": true,
-      "data": {
-        "tags": {
-          "x-im/person": {
-            "icon": "fa-user",
-            "name": "Person",
-            "editable": true
-          },
-          "x-im/organisation": {
-            "icon": "fa-sitemap",
-            "name": "Organisation",
-            "editable": true
-          },
-          "x-im/channel": {
-            "icon": "fa-random",
-            "name": "Channel",
-            "editable": false
-          },
-          "x-im/topic": {
-            "icon": "fa-tags",
-            "name": "Topic",
-            "editable": true
-          },
-          "x-im/category": {
-            "icon": "fa-tags",
-            "name": "Category",
-            "editable": false
-          }
-        }
-      }
-    },
-    {
-      "id": "se.infomaker.ximtags",
-      "name": "tags",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
       "mandatory": false,
