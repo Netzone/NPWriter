@@ -83,7 +83,7 @@
       "mandatory": true
     },
     {
-      "id": "se.infomaker.infomaker.publicationchannel",
+      "id": "se.infomaker.publicationchannel",
       "name": "publicationchannel",
       "url": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/im-publicationchannel.js",
       "style": "https://s3-eu-west-1.amazonaws.com/writer-dev-plugins/im-publicationchannel.css",

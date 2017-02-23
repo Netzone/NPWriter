@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "se.infomaker.infomaker.publicationchannel",
+      "id": "se.infomaker.publicationchannel",
       "name": "publicationchannel",
       "url": "http://localhost:5001/index.js",
       "style": "http://localhost:5001/style.css",
