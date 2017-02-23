@@ -9,7 +9,6 @@ echo Installing dependencies
 npm install
 
 echo Running tests
-npm run build-substance
 # FIXME: Fix tests that now fail because of underlying Substance issues
 #npm run test
 
