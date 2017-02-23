@@ -51,7 +51,7 @@ div.npw-start-container {
     & > div.npw-start-top {
         border-bottom: 1px solid #eee;
         height: 52px;
-        padding-left: 99px;
+        padding-left: 20px;
         text-align: left;
 
         & > div {
@@ -63,11 +63,12 @@ div.npw-start-container {
 
             img {
                 margin-top: 12px;
-                width: 30px;
-                height: 30px;
+                width: 29px;
+                height: 29px;
 
                 animation-timing-function: ease-in;
                 animation: paper-plane-soaring 0.5s;
+                opacity: 0.8;
             }
         }
     }

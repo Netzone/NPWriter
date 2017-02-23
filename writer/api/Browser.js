@@ -1,4 +1,4 @@
-import ResourceLoader from '../utils/ResourceLoader'
+import ResourceLoader from "../utils/ResourceLoader";
 /**
  * Class used internally to handle browser behaviour.
  */
@@ -91,6 +91,18 @@ class Browser {
     addExternalScript(scriptSource) {
         const resourceLoader = new ResourceLoader()
         return resourceLoader.load({url: scriptSource}, 'js')
+    }
+
+    openInNewWindow(instructions) {
+        let url = document.createElement('a');
+
+        url.href = instructions.url === 'current' ? window.location.href : instructions.url
+
+        if (instructions.hash) {
+            url.hash = instructions.hash
+        }
+
+        window.open(url.href, "_blank")
     }
 
 }

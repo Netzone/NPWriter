@@ -72,7 +72,7 @@
         .tag-icon--delete {
             color: $red;
             display: inline;
-
+            cursor: pointer;
             &:hover {
                 color: lighten($red, 15%);
             }

@@ -1,5 +1,5 @@
-import 'whatwg-fetch'
-import isObject from 'lodash/isObject'
+import "whatwg-fetch";
+import isObject from "lodash/isObject";
 
 /**
  * @class Api.Router
@@ -8,6 +8,11 @@ import isObject from 'lodash/isObject'
  * All router functions are available through the context.api.router object.
  */
 class Router {
+
+    constructor(api) {
+        this.api = api;
+        this.etags = {};
+    }
 
     /**
      * Creates a querystring from an object, starting with a ?
@@ -116,6 +121,23 @@ class Router {
     put(path, parameters) {
         let url = this.getEndpoint() + path + this.getQuerystringFromParameters(parameters)
         let requestProperties = this.getRequestPropertiesForMethod('PUT', parameters)
+
+        if (!requestProperties.headers) {
+            requestProperties['headers'] = {}
+        }
+
+        const uuid = parameters.uuid
+        if (uuid) {
+            const eTag = this.getEtag(uuid)
+            if (eTag) {
+                requestProperties.headers['If-Match'] = eTag
+            } else {
+                console.warn('PUT request without ETag is deprecated')
+            }
+        } else {
+            console.error('Bad PUT request. Missing uuid in parameters. Path was', path)
+        }
+
         return fetch(url, requestProperties)
 
     }
@@ -195,6 +217,7 @@ class Router {
     _getItem(uuid, imType) {
         return this.get('/api/newsitem/' + uuid, {imType: imType, headers: {'Content-Type': 'text/xml'}}, null)
             .then(response => this.checkForOKStatus(response))
+            .then(response => this.handleEtag(response, uuid))
             .then(response => response.text())
             .then(text => {
                 const parser = new DOMParser()
@@ -230,8 +253,9 @@ class Router {
      * @return A promise with no data
      */
     updateConceptItem(id, concept) {
-        return this.put('/api/newsitem/' + id, {body: concept})
+        return this.put('/api/newsitem/' + id, {body: concept, uuid: id})
             .then(response => this.checkForOKStatus(response))
+            .then(response => this.handleEtag(response, id))
     }
 
     /**
@@ -242,6 +266,7 @@ class Router {
     createConceptItem(concept) {
         return this.post('/api/newsitem', {body: concept})
             .then(response => this.checkForOKStatus(response))
+            .then(response => this.handleEtag(response, null))
             .then(response => response.text())
     }
 
@@ -267,6 +292,23 @@ class Router {
     checkForOKStatus(response) {
         if (response.status >= 200 && response.status < 300) {
             return response
+        } else if (response.status === 409) {
+            console.log("409 Conflict status")
+            return new Promise((resolve, reject) => {
+                response.text()
+                    .then(() => {
+                        reject({
+                            errors: [
+                                {error: this.api.getLabel('error-human-readable-409-conflict')}
+                            ],
+                            status: response.status,
+                            reason: "server.conflict"
+                        })
+                    })
+                    .catch(() => {
+                        reject(response.statusText)
+                    })
+            })
         } else {
             console.log("Not OK status: " + response.status)
             return new Promise((resolve, reject) => {
@@ -280,7 +322,7 @@ class Router {
                                 reject(text)
                             }
                         } else {
-                            if(text.length === 0) {
+                            if (text.length === 0) {
                                 reject(response);
                             } else {
                                 reject(text)
@@ -320,6 +362,40 @@ class Router {
                     }
                 )
         })
+    }
+
+    handleEtag(response, uuid) {
+        return new Promise((resolve, reject) => {
+            // If no uuid supplied, try to use "Location" header
+            uuid = uuid || this.getLocationFromHeaders(response)
+
+            if (!uuid) {
+                console.warn('Trying to set ETag for nil uuid')
+                return resolve(response)
+            }
+
+            if (response.headers.get('etag')) {
+                this.setEtag(uuid, response.headers.get('etag'))
+            } else {
+                console.warn('Missing ETag for document with uuid', uuid)
+            }
+            resolve(response);
+        })
+    }
+
+    getEtag(uuid) {
+        return this.etags[uuid]
+    }
+
+    setEtag(uuid, eTag) {
+        this.etags[uuid] = eTag
+    }
+
+    getLocationFromHeaders(response) {
+        if (response.headers && response.headers.get('location')) {
+            return response.headers.get('location')
+        }
+        return null;
     }
 }
 

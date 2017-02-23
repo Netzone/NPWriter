@@ -82,6 +82,14 @@ class NPFileProxy extends FileProxy {
             return this.uploadPromise
         }
 
+        // TODO If node does not exist in document, skip sync.
+        // TODO Remove this when proxy node is being properly removed when image node is deleted
+        const nodeInDocument = this.context.api.editorSession.getDocument().get(this.fileNode.id)
+
+        if (!nodeInDocument) {
+            return Promise.resolve()
+        }
+
         if (!this.fileNode.uuid && this.sourceFile) { // regular file upload
             this.uploadPromise = new Promise((resolve, reject) => {
 
@@ -102,7 +110,7 @@ class NPFileProxy extends FileProxy {
                     .catch((e) => {
                         console.log("Error uploading", e)
                         const api = this.context.api
-                        api.ui.showNotification('NPFile Upload', api.getLabel('Error occured'), api.getLabel('An error occured') + e.message)
+                        api.ui.showNotification('NPFile Upload', api.getLabel('Error occured'), api.getLabel('An error occured') + ": " + e.message)
                         this.uploadPromise = null
                         reject(e)
                     })
@@ -124,7 +132,7 @@ class NPFileProxy extends FileProxy {
                     .catch((e) => {
                         console.log("Error uploading", e);
                         const api = this.context.api
-                        api.ui.showNotification('NPFile Upload', api.getLabel('Error occured'), api.getLabel('An error occured') + e.message)
+                        api.ui.showNotification('NPFile Upload', api.getLabel('Error occured'), api.getLabel('An error occured') + ": " + e.message)
                         this.uploadPromise = null
                         reject(e)
                     })

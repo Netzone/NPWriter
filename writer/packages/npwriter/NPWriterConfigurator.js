@@ -16,6 +16,7 @@ class NPWriterConfigurator extends Configurator {
         this.config.sidebarPanels = []
         this.config.uis = new Map()
 
+        this.config.conflictResolvers = new Map();
     }
 
     /**
@@ -61,11 +62,13 @@ class NPWriterConfigurator extends Configurator {
             throw new Error('Popover trigger must have a default icon')
         }
 
+        // Props handed over to popover when created
         this.config.popovers.push({
             id: id,
             icon: def.icon,
             button: def.button,
             align: def.align,
+            sticky: def.sticky || false,
             css: def.css || {},
             component: component
         })
@@ -95,8 +98,8 @@ class NPWriterConfigurator extends Configurator {
      * @param {object} pluginConfigObject Pass the plugin config object
      */
     addComponentToSidebarWithTabId(id, tabId, component, pluginConfigObject) {
-        if (!component instanceof Component) {
-            throw new Error('Ui must be an instance of Component')
+        if (typeof component.render !== 'function') {
+            throw new Error('Ui must be an instance of Component and have a render function')
         }
 
         this.addComponent(id + "-tab", component)
@@ -142,6 +145,19 @@ class NPWriterConfigurator extends Configurator {
         return this.config.validators
     }
 
+    /**
+     * Register a conflict resolver in the writer.
+     * The conflict resolver will be called when the server responds with <pre>409 Conflict</pre>
+     * when an article is saved.
+     * @param resolver The resolver
+     */
+    registerConflictHandler(reason, resolver) {
+        this.config.conflictResolvers.set(reason, resolver)
+    }
+
+    getConflictHandler(reason) {
+        return this.config.conflictResolvers.get(reason)
+    }
 
     /**
      * Loads /api/config endpoint and stores it in configurator

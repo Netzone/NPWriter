@@ -188,7 +188,9 @@ class DialogImageComponent extends Component {
             searchComponent = $$(AuthorAddComponent, {
                 existingItems: this.authors,
                 onSelect: this.addAuthor.bind(this),
-                onCreate: this.createAuthor.bind(this),
+                onCreate: (authorItem) => {
+                    this.createAuthor(authorItem, false)
+                },
                 createAllowed: true,
                 placeholderText: this.getLabel("Add creator")
             }).ref('FormSearchComponent')
@@ -567,7 +569,7 @@ class DialogImageComponent extends Component {
      * Save image news item, called from image archive dialog
      */
     saveImageData(uuid, xml) {
-        this.context.api.router.put('/api/newsitem/' + uuid, {body: xml})
+        this.context.api.router.put('/api/newsitem/' + uuid, {body: xml, uuid: uuid})
             .then((response) => this.context.api.router.checkForOKStatus(response))
             .then(() => {
                 this.context.api.ui.showNotification('', '', this.getLabel('Image data saved to archive'))

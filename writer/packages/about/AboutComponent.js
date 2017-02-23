@@ -6,12 +6,6 @@ class AboutComponent extends Component {
         super(...args)
     }
 
-    didMount() {
-        this.props.popover.setStatusText(
-            this.getLabel('version')
-        )
-    }
-
     render($$) {
         return $$('div')
             .addClass('sc-np-about-popover')
@@ -24,10 +18,10 @@ class AboutComponent extends Component {
                     this.getLabel('about-header')
                 ),
                 $$('p').append(
-                    this.getLabel('about-description')
+                    this.getLabel('Newspilot Writer is brought to you by Infomaker Scandinavia AB and was first released in early 2016.')
                 ).css('margin', '20px 0'),
                 $$('h3').addClass('clear').append(
-                    this.getLabel('about-credits')
+                    this.getLabel('Core team and credits')
                 ),
                 this.appendCredits($$),
                 $$('p').append([

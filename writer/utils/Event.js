@@ -2,6 +2,7 @@ export default {
     DOCUMENT_SAVED: 'document:saved',
     DOCUMENT_SAVE_FAILED: 'document:savefailed',
     DOCUMENT_CHANGED: 'document:changed',
+    DOCUMENT_INVALIDATED: 'document:invalidated',
     DIALOG_CLOSE: 'dialog:close',
     NOTIFICATION_ADD: 'notification:add',
     HISTORY_SAVED: 'history:saved',
@@ -9,5 +10,6 @@ export default {
     USERACTION_SAVE: 'useraction:save',
     USERACTION_KEY_ESCAPE: 'useraction:keypressed_esc',
     USERACTION_CANCEL_SAVE: 'useraction:cancel_save',
-    DISABLE_UNLOAD_WARNING: 'unload:disable_warning'
+    DISABLE_UNLOAD_WARNING: 'unload:disable_warning',
+    BROWSER_RESIZE: 'browser:resize'
 }

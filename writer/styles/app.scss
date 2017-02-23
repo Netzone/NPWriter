@@ -77,10 +77,19 @@ p {
   .sc-np-writer {
     & > .sc-split-pane {
       top: 52px;
+
+      align-content: space-between;
+      justify-content: space-between;
     }
   }
 
   .se-context-section {
+    max-width: 600px;
+    @media all and (max-width: 900px){
+      max-width: 500px;
+    }
+    flex: 1;
+
     border-left: 1px solid #ddd;
 
     .se-tabs {
@@ -118,31 +127,11 @@ p {
   }
 
   .se-main-section {
-    width: 65%;
-
-    .se-content {
-      width: 100%;
-      height: 90%;
-      padding: 0;
-
-      .sc-layout {
-        height: 100%;
-        padding: 40px 70px;
-
-        &.sm-width-large {
-          max-width: 800px;
-        }
-
-        .sc-body {
-          height: 100%;
-
-          & > div {
-            height: 100%;
-          }
-        }
-      }
-    }
+    flex: 1 0 auto;
   }
+}
+.sc-split-pane > .se-pane.sm-sized {
+  flex:  2 0 auto;
 }
 .se-container {
   width: 100%;
@@ -153,9 +142,14 @@ p {
 }
 
 .sc-np-writer .se-layout {
-  margin: 40px 100px;
-}
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 40px;
 
-.se-header-editor-container {
-  margin:40px 100px;
+  @media all and (max-width: 900px) and (min-width: 551px) {
+    padding: 40px 40px;
+  }
+  @media all and (max-width: 550px){
+    padding: 40px 40px;
+  }
 }

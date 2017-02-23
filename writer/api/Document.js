@@ -78,14 +78,15 @@ class Document {
         data.id = !data.id ? idGenerator() : data.id;
 
         editorSession.transaction((tx, args) => {
-            args.node = data;
-            args.containerId = 'body';
-            result = insertNode(tx, args);
+            // args.node = data;
+            // args.containerId = 'body';
+            // result = insertNode(tx, args);
+            tx.insertBlockNode(data)
             // NOTE: need to return result here, so that the selection is set
-            return result
-        });
+            // return result
+        })
 
-        return result;
+        return result
     }
 
 

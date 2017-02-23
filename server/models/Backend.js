@@ -9,26 +9,38 @@ let ocSanitize = require('../utils/oc-search-sanitizer');
 
 function Backend() {}
 
-Backend.exec = function(body, cfg, cb) {
-    var port = "";
+Backend.execWithHeaders = function(body, cfg, headers, cb) {
+    let port = "";
+
     if (cfg.port !== undefined && cfg.port !== undefined) {
         port = ":" + cfg.port;
     }
-    var uri = cfg.protocol + "//" + cfg.host + port + "/" + cfg.endpoint;
 
-    log.debug({url: uri, body: body}, 'Execute backend request');
+    const uri = cfg.protocol + "//" + cfg.host + port + "/" + cfg.endpoint;
+    const truncatedBody = body.length < 100 ? body : body.substring(0, 100) + '... (body is truncated)'
+
+    log.debug({url: uri, body: truncatedBody}, 'Execute backend request');
+
+    if (!headers) {
+        headers = {}
+    }
+
+    headers['Content-Type'] = 'application/json'
 
     request({
         method: 'POST',
         uri: uri,
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: body
     }, (error, response, body) => {
         cb(error, response, body);
     });
 };
+
+Backend.exec = function(body, cfg, cb) {
+    Backend.execWithHeaders(body, cfg, null, cb)
+};
+
 
 /**
  * Make a call to an external backend
@@ -162,6 +174,16 @@ Backend.defaultHandling = function(res, error, response, body, contentType, req,
             .send({error: error});
     } else {
         log.info({context: context}, "operation finished");
+
+        if (response.headers && response.headers.etag) {
+            res.setHeader('ETag', response.headers.etag)
+        } else {
+            log.warn('Response from backend missing header ETag')
+        }
+
+        if (response.headers && response.headers.location) {
+            res.setHeader('Location', response.headers.location)
+        }
 
         res.contentType(contentType || 'application/xml')
             .status(response.statusCode)

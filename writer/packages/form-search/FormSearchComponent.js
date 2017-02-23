@@ -28,6 +28,8 @@ class FormSearchComponent extends Component {
         if (this.props.createAllowed && !this.props.onCreate) {
             console.warn("Creation of items is allowed but onCreate method is missing");
         }
+
+        this.searchFunction = debounce(() => this.lookup(), 300);
     }
 
     next() {
@@ -117,7 +119,7 @@ class FormSearchComponent extends Component {
                 this.hide();
                 break;
             default:
-                debounce(() => this.lookup(), 300)()
+                this.searchFunction()
         }
     }
 
@@ -263,7 +265,7 @@ class FormSearchComponent extends Component {
             return;
         }
         if (this.props.onCreate && this.props.createAllowed && item.uuid === '__create-new') {
-            this.props.onCreate(item, true);
+            this.props.onCreate(item, this.itemAlreadyExists(this.state.items, item));
         } else {
             this.props.onSelect(item);
         }

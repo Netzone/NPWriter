@@ -1,5 +1,5 @@
-import includes from 'lodash/includes'
-import isArray from 'lodash/isArray'
+import includes from "lodash/includes";
+import FileUploadError from "../utils/errors/FileUploadError";
 
 /**
  * @class Upload
@@ -111,65 +111,66 @@ class Upload {
                     resolve(xmlString)
                 })
                 .catch((error) => {
-                    reject(error)
+                    reject(new FileUploadError(error.error ? error.error : error))
                 })
 
         })
     }
-/*
-        this.router.get('/api/image', {source: uri}).done(function (data) {
-            if (observer.progress) {
-                observer.progress(100);
-            }
 
-            if (observer.done) {
-
-                var dom = $.parseXML(data),
-                    newsItem = dom.querySelector('newsItem'),
-                    uuid = newsItem.getAttribute('guid'),
-                    itemClass = dom.querySelector(
-                        'newsItem > itemMeta > itemClass').getAttribute('qcode');
-
-                var allowedItemClasses = getParam(params, 'allowedItemClasses', undefined);
-
-                if (allowedItemClasses) {
-                    if (!includes(allowedItemClasses, itemClass)) {
-                        if (observer.error) {
-                            observer.error("Item class " + itemClass + " not supported");
-                        }
-                        return;
-                    }
+    /*
+            this.router.get('/api/image', {source: uri}).done(function (data) {
+                if (observer.progress) {
+                    observer.progress(100);
                 }
 
-                var w = getParam(params, 'imageSize/w', undefined);
-                var h = getParam(params, 'imageSize/h', undefined);
+                if (observer.done) {
 
-                var url = '/api/image/url/' + uuid;
-                if (h) {
-                    url = url + '/' + h;
-                }
-                if (w) {
-                    url = url + "?width=" + w;
-                }
+                    var dom = $.parseXML(data),
+                        newsItem = dom.querySelector('newsItem'),
+                        uuid = newsItem.getAttribute('guid'),
+                        itemClass = dom.querySelector(
+                            'newsItem > itemMeta > itemClass').getAttribute('qcode');
 
-                router.get(url)
-                    .done(
-                        function (imageUrl) {
-                            if (observer.done) {
-                                observer.done({dom: dom, imageUrl: imageUrl});
-                            } else {
-                                console.log("Missing 'done'");
+                    var allowedItemClasses = getParam(params, 'allowedItemClasses', undefined);
+
+                    if (allowedItemClasses) {
+                        if (!includes(allowedItemClasses, itemClass)) {
+                            if (observer.error) {
+                                observer.error("Item class " + itemClass + " not supported");
                             }
+                            return;
                         }
-                    );
-            }
+                    }
 
-        }).error(function (e) {
-            if (observer.error) {
-                observer.error(e);
-            }
-        });
-    }*/
+                    var w = getParam(params, 'imageSize/w', undefined);
+                    var h = getParam(params, 'imageSize/h', undefined);
+
+                    var url = '/api/image/url/' + uuid;
+                    if (h) {
+                        url = url + '/' + h;
+                    }
+                    if (w) {
+                        url = url + "?width=" + w;
+                    }
+
+                    router.get(url)
+                        .done(
+                            function (imageUrl) {
+                                if (observer.done) {
+                                    observer.done({dom: dom, imageUrl: imageUrl});
+                                } else {
+                                    console.log("Missing 'done'");
+                                }
+                            }
+                        );
+                }
+
+            }).error(function (e) {
+                if (observer.error) {
+                    observer.error(e);
+                }
+            });
+        }*/
 }
 
 
