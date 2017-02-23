@@ -46,7 +46,7 @@ class AvatarComponent extends Component {
 
     generateGravatarUrl(email) {
         const hashedEmail = md5(email)
-        return `https://www.gravatar.com/avatar/${hashedEmail}?d=${encodeURI('https://dl.dropboxusercontent.com/u/2455273/fa-user-128.png')}`
+        return `https://www.gravatar.com/avatar/${hashedEmail}?d=${encodeURI('http://writer.dev.writer.infomaker.io/assets/fa-user-128.png')}`
     }
 
     /**
