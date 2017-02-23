@@ -5,7 +5,7 @@ import AboutComponent from './AboutComponent'
 export default {
     name: 'about',
     configure: function(config) {
-        const aboutVersion = "NP Writer 3.0 pre-beta"
+        const aboutVersion = "NP Writer 3.0 beta 1"
 
         config.addPopover(
             'npwriterabout',
