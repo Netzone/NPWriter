@@ -11,6 +11,11 @@ class DialogComponent extends Component {
             this.close()
         })
 
+         // When esc:pressed event close the dialog
+        this.context.api.events.on('__dialog', Event.USERACTION_KEY_ENTER, () => {
+            this.save()
+        })
+
         // action handlers
         this.handleActions({
             'close': this.close,
@@ -22,7 +27,6 @@ class DialogComponent extends Component {
 
 
     didMount() {
-
         this.changeModalHeight()
 
         window.onresize = () => {
@@ -32,6 +36,7 @@ class DialogComponent extends Component {
 
     dispose() {
         this.context.api.events.off('__dialog', Event.USERACTION_KEY_ESCAPE)
+        this.context.api.events.off('__dialog', Event.USERACTION_KEY_ENTER)
         window.onresize = null
     }
 
@@ -168,9 +173,12 @@ class DialogComponent extends Component {
         }
     }
 
-    save($$) {
+    save() {
         if (this.state.primaryBtnEnabled) {
-            this.showPrimaryButtonLoader($$);
+            this.extendState({
+                saveInProgress: true
+            })
+            // this.showPrimaryButtonLoader($$)
             if (this.refs.contentComponent.onClose && this.refs.contentComponent.onClose('save') !== false) {
                 this.send(Event.DIALOG_CLOSE) // Send this close to Writer can reset state
                 this.remove();
@@ -188,20 +196,19 @@ class DialogComponent extends Component {
         }
     }
 
-    showPrimaryButtonLoader($$) {
-        this.refs.primaryButton.el.text("").addClass('disabled');
-        this.refs.primaryButton.append($$(FontAwesomeIcon, {icon: 'fa-spinner fa-spin'}));
-    }
-
     renderPrimaryButton($$, options) {
-        var caption = (options.primary) ? options.primary : this.getLabel('ok');
-        let button = $$('button').attr('type', 'button')
+        const caption = (options.primary) ? options.primary : this.getLabel('ok');
+        let button = $$('button')
+            .attr('type', 'button')
             .addClass('btn sc-np-btn btn-primary')
-            .append(caption)
-            .on('click', () => {
-                this.save($$)
-            });
+            .on('click', this.save);
 
+        if(this.state.saveInProgress) {
+            button.addClass('disabled');
+            button.append($$(FontAwesomeIcon, {icon: 'fa-spinner fa-spin'}))
+        } else {
+            button.append(caption)
+        }
         if (!this.state.primaryBtnEnabled) {
             button.attr('disabled', true)
         }

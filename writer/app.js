@@ -197,7 +197,6 @@ class App extends Component {
 
     handleApplicationKeyCombos(e) {
         let handled = false;
-
         if (e.keyCode === 83 && (e.metaKey || e.ctrlKey)) { // Save: cmd+s
             this.api.events.userActionSave()
             handled = true;
@@ -212,7 +211,9 @@ class App extends Component {
 
             handled = true;
         } else if (e.keyCode === keys.ESCAPE) {
-            this.api.events.triggerEvent(null, Event.USERACTION_KEY_ESCAPE, {})
+            this.api.events.triggerEvent('__internal', Event.USERACTION_KEY_ENTER, {})
+        } else if (e.keyCode === keys.ENTER) {
+            this.api.events.triggerEvent('__internal', Event.USERACTION_KEY_ENTER, {})
         }
 
         if (handled) {
