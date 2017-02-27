@@ -37,28 +37,29 @@ BinaryProcessor.getMaxUploadByteSize = function (imType) {
  * @param objectName    The original file name for the binary (if any).
  * @param callback      Callback.
  */
-BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
+BinaryProcessor.uploadBinary = function (file, imType, objectName, callback, operation) {
+
     async.waterfall([
         function extractInfo(next) {
-            log.info('Extracting metadata from binary...');
+            log.info({context: operation}, 'Extracting metadata from binary...');
 
             BinaryProcessor.extractInfo(file, (error, binaryInfo) => {
                 if (error) {
-                    log.error('Error extracting info from binary.', error);
+                    log.error({context: operation}, 'Error extracting info from binary.', error);
                     return next('Error extracting info from binary');
                 }
                 next(null, binaryInfo);
             });
         },
         function getNewsItem(binaryInfo, next) {
-            log.info('Checking if binary already exists (i.e. has been uploaded before)...');
+            log.info({context: operation}, 'Checking if binary already exists (i.e. has been uploaded before)...');
 
             BinaryProcessor._getNewsItemByFileName(binaryInfo.hashedName, imType, (error, newsItem, response) => {
                 if (error) {
-                    log.error('Error getting newsItem.', error, response);
+                    log.error({context: operation}, 'Error getting newsItem.', error, response);
                     return next('Error getting newsItem for binary');
                 } else if (newsItem) {
-                    log.debug('Found existing newsItem for binary', binaryInfo.hashedName);
+                    log.debug({context: operation}, 'Found existing newsItem for binary', binaryInfo.hashedName);
                     next(null, null, newsItem);
                 } else {
                     next(null, binaryInfo, null);
@@ -68,16 +69,16 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
         function getUploadUrl(binaryInfo, newsItem, next) {
             if (newsItem) {
                 // Already found newsItem, skip this function call
-                log.info('Binary already exists! No duplication of binary, returning existing newsItem for binary');
+                log.info({context: operation}, 'Binary already exists! No duplication of binary, returning existing newsItem for binary');
 
                 next(null, null, null, newsItem);
             } else {
-                log.info('New binary detected. Getting upload URL from Editor Service...');
+                log.info({context: operation}, 'New binary detected. Getting upload URL from Editor Service...');
 
                 BinaryProcessor._getUploadUrl(binaryInfo.hashedName, imType, binaryInfo.mimetype,
                     (error, uploadUrl, response) => {
                         if (error) {
-                            log.error('Error getting upload url.', error, response);
+                            log.error({context: operation}, 'Error getting upload url.', error, response);
                             return next('Error getting upload url for binary');
                         }
                         next(null, binaryInfo, uploadUrl, null);
@@ -89,12 +90,12 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
                 // Already found newsItem, skip this function call
                 next(null, null, newsItem);
             } else {
-                log.info('Uploading binary to S3 and create newsItem...');
+                log.info({context: operation}, 'Uploading binary to S3 and create newsItem...');
 
                 BinaryProcessor._uploadByUrl(uploadUrl, file, binaryInfo.mimetype, binaryInfo.hashedName,
                     objectName, imType, (error) => {
                         if (error) {
-                            log.error('Error uploading binary.', error, ' using upload url', uploadUrl);
+                            log.error({context: operation}, 'Error uploading binary.', error, ' using upload url', uploadUrl);
                             return next('Error uploading binary');
                         }
                         next(null, binaryInfo, null);
@@ -119,12 +120,12 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback) {
  * @param imType    Type of binary, e.g. 'x-im/image'.
  * @param callback  Callback.
  */
-BinaryProcessor.downloadByUrl = function (url, file, imType, callback) {
+BinaryProcessor.downloadByUrl = function (url, file, imType, callback, operation) {
     var ws = fs.createWriteStream(file);
     var statusCode;
 
     ws.on('error', function (error) {
-        log.error('Error downloading binary from url', url, 'Error was', error, 'Status code was', statusCode);
+        log.error({context: operation}, 'Error downloading binary from url', url, 'Error was', error, 'Status code was', statusCode);
         if (statusCode && statusCode === 413) {
             callback({error: 'Error downloading binary from url. Binary too large.', statusCode: statusCode});
         } else {
@@ -134,7 +135,7 @@ BinaryProcessor.downloadByUrl = function (url, file, imType, callback) {
 
     ws.on('finish', function () {
         if (statusCode !== 200) {
-            log.error('Error downloading binary from url', url, '. Status code was ' + statusCode);
+            log.error({context: operation}, 'Error downloading binary from url', url, '. Status code was ' + statusCode);
             callback({error: 'Error downloading binary from url', statusCode: statusCode});
         } else {
             callback();
@@ -145,7 +146,7 @@ BinaryProcessor.downloadByUrl = function (url, file, imType, callback) {
     var req = request.get(url);
 
     req.on('error', function (error) {
-        log.error('Error downloading binary from', url, error);
+        log.error({context: operation}, 'Error downloading binary from', url, error);
     }).on('data', function (chunk) {
         size += chunk.length;
 

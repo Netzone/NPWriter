@@ -20,7 +20,7 @@ var log = require('../utils/logger').child({api: 'Router'});
  * Middleware to do some logging
  */
 router.use(function timeLog(req, res, next) {
-    log.debug({method: req.method, url: req.url});
+    log.debug({method: req.method, url: req.url}, "Routes.js");
     next();
 });
 

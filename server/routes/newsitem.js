@@ -9,10 +9,11 @@ var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
 var async = require('async');
-var log = require('../utils/logger').child({api: 'Router'});
+var log = require('../utils/logger').child({api: 'newsitem'});
 var createTmpFileName = require('../utils/tempfile');
 var Backend = require('../models/Backend.js');
 var BinaryProcessor = require('../models/BinaryProcessor.js');
+var generateAndLogOperation = require('../utils/operationLogger')
 
 router.post('/external/:name', function (req, res) {
     var backend;
@@ -28,12 +29,14 @@ router.post('/external/:name', function (req, res) {
         return;
     }
 
+    var operation = generateAndLogOperation(log, req, "Get external", {name: req.params.name})
+
     Backend.call(
         backend,
         req.body,
         (error, response, body) => {
             if (error) {
-                log.error({err: error, response: response, headers: req.headers});
+                log.error({err: error, response: response, headers: req.headers, context: operation});
                 res.contentType('application/json')
                     .status(response.statusCode)
                     .send({error: error});
@@ -42,6 +45,7 @@ router.post('/external/:name', function (req, res) {
                 res.set(response.headers)
                     .status(response.statusCode)
                     .send(body);
+                log.info({context: operation}, "Operation finished")
             }
 
         }
@@ -53,6 +57,7 @@ router.post('/external/:name', function (req, res) {
  * E.g. /api/newsitem/0f144a19-32a6-4151-9c74-c51751f161bd?imType=x-im/article
  */
 router.get('/newsitem/:uuid', function (req, res) {
+
     var uuid = req.params.uuid,
         environment = config.get('environment'),
         imType = req.query.imType;
@@ -61,6 +66,8 @@ router.get('/newsitem/:uuid', function (req, res) {
         Backend.defaultHandling(res, "Missing query parameter imType in request", "", "", null, req, uuid);
         return;
     }
+
+    var operation = generateAndLogOperation(log, req, 'Get newsitem', {uuid: uuid, imType: imType});
 
     if ("demo" === uuid || "demo" === environment) {
         res.sendFile('newsitem-text.xml', {root: './data'});
@@ -75,7 +82,7 @@ router.get('/newsitem/:uuid', function (req, res) {
         '{"action":"get", "data": {"id":"' + uuid + '", "imType":"' + imType + '"}}',
         config.get('external.contentrepository'),
         (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, null, req, uuid);
+            Backend.defaultHandling(res, error, response, body, null, req, operation);
         }
     );
 });
@@ -89,7 +96,7 @@ router.put('/newsitem/:uuid', function (req, res) {
         toBase64 = req.body.toString('base64'),
         headers;
 
-    log.info({id: uuid}, "Updating newsitem");
+    var operation = generateAndLogOperation(log, req, "Update newsitem", {uuid: uuid})
 
     if (req.headers && req.headers['if-match']) {
         headers = {
@@ -102,7 +109,7 @@ router.put('/newsitem/:uuid', function (req, res) {
         config.get('external.contentrepository'),
         headers,
         (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, null, req, uuid);
+            Backend.defaultHandling(res, error, response, body, null, req, operation);
         }
     );
 });
@@ -114,13 +121,13 @@ router.put('/newsitem/:uuid', function (req, res) {
 router.post('/newsitem', function (req, res) {
     var toBase64 = req.body.toString('base64');
 
-    log.info("Creating newsitem");
+    var operation = generateAndLogOperation(log, req, "Create newsitem")
 
     Backend.exec(
         '{"action":"create", "data": {"document": "' + toBase64 + '"}}',
         config.get('external.contentrepository'),
         (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, null, req, "New item")
+            Backend.defaultHandling(res, error, response, body, null, req, operation)
         }
     );
 });
@@ -132,7 +139,8 @@ router.post('/newsitem', function (req, res) {
  */
 router.post('/image', function (req, res) {
 
-    log.info({clientFilename: req.headers['x-filename']}, "Downloading content to local file");
+    var operation = generateAndLogOperation(log, req, "[DEPRECATED] Upload image", {clientFilename: req.headers['x-filename']})
+
 
     var buffer = new Buffer(req.body),
         tmpfileName = path.join(
@@ -141,6 +149,7 @@ router.post('/image', function (req, res) {
         );
 
     log.debug({
+        context: operation,
         file: req.headers['x-filename'],
         length: buffer.byteLength,
         contentType: req.headers['content-type']
@@ -149,8 +158,7 @@ router.post('/image', function (req, res) {
     var fd = fs.openSync(tmpfileName, 'w');
     if (!fd) {
         log.error({filename: tmpfileName});
-        Backend.defaultHandling(res, 'Failed opening temporary file', null, null, null, req,
-            "download local file");
+        Backend.defaultHandling(res, 'Failed opening temporary file', null, null, null, req, operation);
         return;
     }
 
@@ -159,14 +167,13 @@ router.post('/image', function (req, res) {
         buffer = null;
 
         if (err) {
-            log.error({filename: tmpfileName}, 'Failed writing to tmp file');
+            log.error({filename: tmpfileName, contest: operation}, 'Failed writing to tmp file');
             fs.unlink(tmpfileName);
-            Backend.defaultHandling(res, 'Failed writing to temporary file', null, null, null, req,
-                "writing to local file");
+            Backend.defaultHandling(res, 'Failed writing to temporary file', null, null, null, req, operation);
             return;
         }
 
-        log.info({clientFilename: req.headers['x-filename']}, "download done");
+        log.info({context: operation}, "download done");
 
         var formData = {
             image: {
@@ -178,15 +185,14 @@ router.post('/image', function (req, res) {
             }
         };
 
-        log.info({clientFilename: req.headers['x-filename']}, "Uploading content to backend");
+        log.info({context: operation}, "Uploading content to backend");
 
         Backend.upload(
             formData,
             config.get('external.contentrepository'),
             (error, response, body) => {
                 fs.unlink(tmpfileName);
-                Backend.defaultHandling(res, error, response, body, null, req,
-                    req.headers['x-filename']);
+                Backend.defaultHandling(res, error, response, body, null, req, operation);
             }
         );
 
@@ -199,18 +205,18 @@ router.post('/image', function (req, res) {
  * Expects header x-infomaker-type to be set, e.g. 'x-im/image'.
  */
 router.post('/binary', function (req, res) {
-    log.info('Binary post request: ', req);
 
     var objectName, imType, maxSize, buffer, tmpFileName, fd;
 
     objectName = decodeURIComponent(req.headers['x-filename']);
-    log.info({clientFilename: objectName}, "Downloading content to local file");
+
+    var operation = generateAndLogOperation(log, req, "Upload binary and get newsitem", {objectName: objectName})
 
     //Sanity check
     if (typeof req.headers['x-infomaker-type'] == "undefined") {
-        log.error('Invalid request to POST /binary. Missing request header x-infomaker-type');
+        log.error({context: operation}, 'Invalid request to POST /binary. Missing request header x-infomaker-type');
         Backend.defaultErrorHandling(
-            res, 'Error uploading binary. Invalid request', 400, null, req.headers, objectName
+            res, 'Error uploading binary. Invalid request', 400, null, req.headers, operation
         );
         return;
     }
@@ -220,16 +226,17 @@ router.post('/binary', function (req, res) {
     buffer = new Buffer(req.body);
 
     if (buffer.byteLength > maxSize) {
-        log.error('Binary to large. Maximum size is', maxSize, 'bytes');
+        log.error({context: operation}, 'Binary to large. Maximum size is', maxSize, 'bytes');
         Backend.defaultErrorHandling(
             res, 'Error uploading binary. Max binary size exceeded. Max size is ' +
-            maxSize + ' bytes.', 413, null, req.headers, objectName
+            maxSize + ' bytes.', 413, null, req.headers, operation
         );
         return;
     }
 
     tmpFileName = createTmpFileName();
     log.debug({
+        context: operation,
         file: objectName,
         length: buffer.byteLength,
         contentType: req.headers['content-type']
@@ -239,7 +246,7 @@ router.post('/binary', function (req, res) {
     if (!fd) {
         log.error('Failed to open tmp file', tmpFileName);
         Backend.defaultErrorHandling(
-            res, 'Error uploading binary. Failed to open tmp file', 500, null, req.headers, objectName
+            res, 'Error uploading binary. Failed to open tmp file', 500, null, req.headers, operation
         );
         return;
     }
@@ -251,7 +258,7 @@ router.post('/binary', function (req, res) {
             log.error('Failed writing to tmp file', tmpFileName, 'Error was', error);
             fs.unlink(tmpFileName);
             Backend.defaultErrorHandling(
-                res, 'Error uploading binary. Failed writing to tmp file', 500, null, req.headers, objectName
+                res, 'Error uploading binary. Failed writing to tmp file', 500, null, req.headers, operation
             );
             return;
         }
@@ -261,18 +268,18 @@ router.post('/binary', function (req, res) {
             function (error, binaryInfo, newsItem) {
                 fs.unlink(tmpFileName);
                 if (error) {
-                    log.error('Error uploading binary.', error);
-                    Backend.defaultErrorHandling(res, 'Error uploading binary.', 500, null, req.headers, objectName);
+                    log.error({context: operation}, 'Error uploading binary.', error);
+                    Backend.defaultErrorHandling(res, 'Error uploading binary.', 500, null, req.headers, operation);
                 } else {
                     // Optimistic view of life
                     var response = {statusCode: 200};
                     if (newsItem) {
                         // Binary already associated with newsItem, use it
-                        log.debug('Found existing newsItem for binary with object name', objectName);
-                        Backend.defaultHandling(res, null, response, newsItem, null, req, objectName);
+                        log.debug({context: operation}, 'Found existing newsItem for binary with object name', objectName);
+                        Backend.defaultHandling(res, null, response, newsItem, null, req, operation);
                     } else {
                         // First time binary gets uploaded, create newsItem for it
-                        log.debug('Got hashed binary name:', binaryInfo.hashedName);
+                        log.debug({context: operation}, 'Got hashed binary name:', binaryInfo.hashedName);
                         Backend.exec(
                             '{"action":"create_binary_newsitem", "data": {"filename":"' + binaryInfo.hashedName +
                             '", "imType":"' + imType + '", "mimetype":"' + binaryInfo.mimetype +
@@ -280,20 +287,21 @@ router.post('/binary', function (req, res) {
                             config.get('external.contentrepository'),
                             (error, response, newsItem) => {
                                 if (error) {
-                                    log.error('Error creating newsItem.', error);
+                                    log.error({context: operation}, 'Error creating newsItem.', error);
                                     Backend.defaultErrorHandling(
-                                        res, 'Error uploading binary', 500, response, req.headers, objectName
+                                        res, 'Error uploading binary', 500, response, req.headers, operation
                                     );
                                 } else {
-                                    log.debug('Done uploading binary and creating newsItem');
+                                    log.debug({context: operation}, 'Done uploading binary and creating newsItem');
                                     Backend.defaultHandling(
-                                        res, null, response, newsItem, null, req, objectName
+                                        res, null, response, newsItem, null, req, operation
                                     );
                                 }
                             });
                     }
                 }
-            });
+            },
+            operation);
     });
 });
 
@@ -305,10 +313,10 @@ router.post('/binary', function (req, res) {
 router.get('/image', function (req, res) {
     var source = req.query.source;
 
-    log.info({url: source}, "Uploading content from URL");
+    var operation = generateAndLogOperation(log, req, "[DEPRECATED] Get image from URL drop", {source: source})
 
     Backend.uploadUrl(source, config.get('external.contentrepository'), (error, response, body) => {
-        Backend.defaultHandling(res, error, response, body, null, req, source);
+        Backend.defaultHandling(res, error, response, body, null, req, operation);
     });
 });
 
@@ -316,7 +324,7 @@ router.get('/image', function (req, res) {
  * Upload binary using url drop.
  */
 router.get('/binary', function (req, res) {
-    var context, msg, source, imType, tmpFileName;
+    var msg, source, imType, tmpFileName;
 
     // Sanity checks
     if (typeof req.query.imType == "undefined") {
@@ -327,9 +335,10 @@ router.get('/binary', function (req, res) {
         msg = 'Invalid request to GET /binary. Missing query parameter source';
     }
 
-    context = 'download binary from url';
+    var operation = generateAndLogOperation(log, req, "Upload binary using url drop", {source: req.query.source, imType: req.query.imType})
+
     if (msg) {
-        Backend.defaultErrorHandling(res, msg, null, null, req.headers, context);
+        Backend.defaultErrorHandling(res, msg, null, null, req.headers, operation);
         return;
     }
 
@@ -340,12 +349,13 @@ router.get('/binary', function (req, res) {
     async.waterfall([
         function download(next) {
             BinaryProcessor.downloadByUrl(source, tmpFileName, imType, function (error) {
-                if (error) {
-                    return next(error.error, error.statusCode);
-                } else {
-                    next(null);
-                }
-            });
+                    if (error) {
+                        return next(error.error, error.statusCode);
+                    } else {
+                        next(null);
+                    }
+                },
+                operation);
         },
         function uploadBinary(next) {
             BinaryProcessor.uploadBinary(tmpFileName, imType, 'stream-binary', function (error, binaryInfo, newsItem) {
@@ -375,10 +385,10 @@ router.get('/binary', function (req, res) {
     ], function (error, statusCode, newsItem, headers) {
         fs.unlink(tmpFileName);
         if (error) {
-            Backend.defaultErrorHandling(res, error, statusCode, null, req.headers, context);
+            Backend.defaultErrorHandling(res, error, statusCode, null, req.headers, operation);
         } else {
             var response = {statusCode: 200, headers: headers};
-            Backend.defaultHandling(res, error, response, newsItem, null, req, context);
+            Backend.defaultHandling(res, error, response, newsItem, null, req, operation);
         }
     });
 });
@@ -387,6 +397,9 @@ router.get('/binary', function (req, res) {
  * Get image newsitem
  */
 router.get('/image/newsitem/:uuid', function (req, res) {
+
+    var operation = generateAndLogOperation(log, req, "[DEPRECATED] Get image newsitem", {uuid: req.params.uuid})
+
     var data = JSON.stringify({
         action: 'get',
         data: {
@@ -400,7 +413,7 @@ router.get('/image/newsitem/:uuid', function (req, res) {
         data,
         config.get('external.contentrepository'),
         (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, null, req);
+            Backend.defaultHandling(res, error, response, body, null, operation);
         }
     );
 });
@@ -445,6 +458,7 @@ router.get('/image/url/:uuid/:height?', function (req, res) {
 router.get('/binary/url/:uuid/:height?', function (req, res) {
     var params, data;
 
+
     // Sanity check
     params = req.query;
     if (typeof params.imType == "undefined") {
@@ -471,15 +485,16 @@ router.get('/binary/url/:uuid/:height?', function (req, res) {
     }
 
     data = JSON.stringify(params);
-    log.info({id: req.params.uuid}, "Getting binary url");
+
+    var operation = generateAndLogOperation(log, req, "Get render URL for binary", {uuid: req.params.uuid})
 
     Backend.exec(
         '{"action": "render_binary", "data": {"id": "' + req.params.uuid + '", "imType": "' +
         req.query.imType + '", "params": ' + JSON.stringify(params) + '}}',
         config.get('external.contentrepository'),
         (error, response, body) => {
-            log.info({body: body}, "Got url");
-            Backend.defaultHandling(res, error, response, body, null, req, req.params.uuid);
+            log.info({body: body, context: operation}, "Got url");
+            Backend.defaultHandling(res, error, response, body, null, req, operation);
         }
     );
 });

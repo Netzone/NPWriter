@@ -2,14 +2,15 @@
 
 var request = require('request');
 var config = require('../models/ConfigurationManager');
-var log = require('../utils/logger').child({model:'Backend'});
+var log = require('../utils/logger').child({model: 'Backend'});
 var b64 = require('b64');
 var fs = require('fs');
 let ocSanitize = require('../utils/oc-search-sanitizer');
 
-function Backend() {}
+function Backend() {
+}
 
-Backend.execWithHeaders = function(body, cfg, headers, cb) {
+Backend.execWithHeaders = function (body, cfg, headers, cb) {
     let port = "";
 
     if (cfg.port !== undefined && cfg.port !== undefined) {
@@ -37,7 +38,7 @@ Backend.execWithHeaders = function(body, cfg, headers, cb) {
     });
 };
 
-Backend.exec = function(body, cfg, cb) {
+Backend.exec = function (body, cfg, cb) {
     Backend.execWithHeaders(body, cfg, null, cb)
 };
 
@@ -49,7 +50,7 @@ Backend.exec = function(body, cfg, cb) {
  * @param {object} op Call operation configuration object
  * @param {Function} cb Callback function for handling response
  */
-Backend.call = function(backend, op, cb) { //method, path, contentType, body, cb) {
+Backend.call = function (backend, op, cb) {
     var uri = backend.protocol + "://" + backend.host + ":" + backend.port,
         requestObj = {
             method: op.method,
@@ -95,7 +96,7 @@ Backend.call = function(backend, op, cb) { //method, path, contentType, body, cb
  * @param {*} res
  * @param req
  */
-Backend.search = function(entity, query, res, req) {
+Backend.search = function (entity, query, res, req) {
     var sanitizedQuery = ocSanitize(query);
     if (sanitizedQuery.length === 0) {
         res.contentType('application/json').status(200).send([]);
@@ -106,19 +107,20 @@ Backend.search = function(entity, query, res, req) {
         sanitizedQuery += "*";
     }
 
-    Backend.exec('{"action":"search", "data": {"entity": "'+entity+'", "query":"' + sanitizedQuery + '"}}',
+    Backend.exec('{"action":"search", "data": {"entity": "' + entity + '", "query":"' + sanitizedQuery + '"}}',
         config.get('external.conceptbackend'),
         (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, 'application/json', req, "search");
+            Backend.defaultHandling(res, error, response, body, 'application/json', req, undefined);
         });
 };
 
-Backend.upload = function(formData, cfg, cb) {
+Backend.upload = function (formData, cfg, cb) {
+    log.warn("[DEPRECATED] Using upload instead of requesting upload url")
     request.post({
         url: cfg.protocol + "//" + cfg.host + ":" + cfg.port + "/" + cfg.upload,
         formData: formData
     }, (err, response, body) => {
-        log.debug({response:response, body:body}, 'Server response after upload');
+        log.debug({response: response, body: body}, 'Server response after upload');
         cb(err, response, body);
     });
 };
@@ -161,28 +163,36 @@ Backend.uploadUrl = function (url, cfg, cb) {
     request.get({
         url: cfg.protocol + "//" + cfg.host + ":" + cfg.port + "/" + cfg.upload + "?source=" + encodeURIComponent(url),
     }, (err, response, body) => {
-        log.debug({response:response, body:body}, 'Server response after url upload');
+        log.debug({response: response, body: body}, 'Server response after url upload');
         cb(err, response, body);
     });
 };
 
-Backend.defaultHandling = function(res, error, response, body, contentType, req, context) {
+Backend.defaultHandling = function (res, error, response, body, contentType, req, context) {
     if (error) {
-        log.error({err:error, response: response, headers: req.headers, context: context});
+        log.error({err: error, response: response, headers: req.headers, context: context});
         res.contentType('application/json')
             .status(404)
             .send({error: error});
     } else {
-        log.info({context: context}, "operation finished");
 
         if (response.headers && response.headers.etag) {
             res.setHeader('ETag', response.headers.etag)
-        } else {
-            log.warn('Response from backend missing header ETag')
+            if (context) {
+                context['ETag'] = response.headers.etag
+            }
         }
 
         if (response.headers && response.headers.location) {
             res.setHeader('Location', response.headers.location)
+            if (context) {
+                context['Location'] = response.headers.location
+            }
+        }
+
+        if (context) {
+            context['statusCode'] = response.statusCode
+            log.info({context: context}, "operation finished");
         }
 
         res.contentType(contentType || 'application/xml')
