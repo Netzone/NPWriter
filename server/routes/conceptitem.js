@@ -5,6 +5,8 @@ var router = express.Router();
 var config = require('../models/ConfigurationManager');
 var log = require('../utils/logger').child({api: 'Router'});
 var Backend = require('../models/Backend.js');
+var generateAndLogOperation = require('../utils/operationLogger');
+
 
 /**
  * Search authors route.
@@ -86,14 +88,16 @@ router.get('/search/concepts/categories', function (req, res) {
  */
 router.get('/concepts/author/:twitterHandle/thumbnail', function (req, res) {
     var twitterHandle = req.params.twitterHandle;
-    log.info({twitterHandle: twitterHandle}, "Getting twitter handle");
+
+    var operation = generateAndLogOperation(log, req, "Generate twitter handle", {twitterHandle: twitterHandle})
 
     Backend.exec(
         '{"action":"thumbnail", "data": {"url":"https://twitter.com/' + twitterHandle + '"}}',
         config.get('external.conceptbackend'),
         (error, response, body) => {
             Backend.defaultHandling(res, error, response, body, 'text/html', req, twitterHandle);
-        }
+        },
+        operation
     );
 });
 

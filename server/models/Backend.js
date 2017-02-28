@@ -10,7 +10,7 @@ let ocSanitize = require('../utils/oc-search-sanitizer');
 function Backend() {
 }
 
-Backend.execWithHeaders = function (body, cfg, headers, cb) {
+Backend.execWithHeaders = function (body, cfg, headers, cb, operation) {
     let port = "";
 
     if (cfg.port !== undefined && cfg.port !== undefined) {
@@ -28,6 +28,10 @@ Backend.execWithHeaders = function (body, cfg, headers, cb) {
 
     headers['Content-Type'] = 'application/json'
 
+    if (operation && operation.requestId) {
+        headers['X-Request-Id'] = operation.requestId;
+    }
+
     request({
         method: 'POST',
         uri: uri,
@@ -38,8 +42,8 @@ Backend.execWithHeaders = function (body, cfg, headers, cb) {
     });
 };
 
-Backend.exec = function (body, cfg, cb) {
-    Backend.execWithHeaders(body, cfg, null, cb)
+Backend.exec = function (body, cfg, cb, operation) {
+    Backend.execWithHeaders(body, cfg, null, cb, operation)
 };
 
 

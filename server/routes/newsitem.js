@@ -13,7 +13,7 @@ var log = require('../utils/logger').child({api: 'newsitem'});
 var createTmpFileName = require('../utils/tempfile');
 var Backend = require('../models/Backend.js');
 var BinaryProcessor = require('../models/BinaryProcessor.js');
-var generateAndLogOperation = require('../utils/operationLogger')
+var generateAndLogOperation = require('../utils/operationLogger');
 
 router.post('/external/:name', function (req, res) {
     var backend;
@@ -83,7 +83,8 @@ router.get('/newsitem/:uuid', function (req, res) {
         config.get('external.contentrepository'),
         (error, response, body) => {
             Backend.defaultHandling(res, error, response, body, null, req, operation);
-        }
+        },
+        operation
     );
 });
 
@@ -110,7 +111,8 @@ router.put('/newsitem/:uuid', function (req, res) {
         headers,
         (error, response, body) => {
             Backend.defaultHandling(res, error, response, body, null, req, operation);
-        }
+        },
+        operation
     );
 });
 
@@ -128,7 +130,8 @@ router.post('/newsitem', function (req, res) {
         config.get('external.contentrepository'),
         (error, response, body) => {
             Backend.defaultHandling(res, error, response, body, null, req, operation)
-        }
+        },
+        operation
     );
 });
 
@@ -297,7 +300,8 @@ router.post('/binary', function (req, res) {
                                         res, null, response, newsItem, null, req, operation
                                     );
                                 }
-                            });
+                            },
+                            operation);
                     }
                 }
             },
@@ -377,7 +381,7 @@ router.get('/binary', function (req, res) {
                                     return next(error, response.statusCode);
                                 }
                                 next(null, response.statusCode, newsItem, response.headers);
-                            });
+                            }, operation);
                     }
                 }
             })
@@ -414,7 +418,8 @@ router.get('/image/newsitem/:uuid', function (req, res) {
         config.get('external.contentrepository'),
         (error, response, body) => {
             Backend.defaultHandling(res, error, response, body, null, operation);
-        }
+        },
+        operation
     );
 });
 
@@ -495,7 +500,8 @@ router.get('/binary/url/:uuid/:height?', function (req, res) {
         (error, response, body) => {
             log.info({body: body, context: operation}, "Got url");
             Backend.defaultHandling(res, error, response, body, null, req, operation);
-        }
+        },
+        operation
     );
 });
 

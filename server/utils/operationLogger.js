@@ -1,4 +1,4 @@
-function generateOperationId() { // Public Domain/MIT
+function generateRequestId() { // Public Domain/MIT
     var d = Date.now();
     if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
         d += performance.now(); //use high-precision timer if available
@@ -11,15 +11,15 @@ function generateOperationId() { // Public Domain/MIT
 }
 
 var generateAndLogOperation = function (log, req, operation, context) {
-    var operationId = generateOperationId();
+    var requestId = generateRequestId();
     log.info({
         url: req.url,
         method: req.method,
         forwardedHost: req.headers['x-forwarded-for'],
-        operationId: operationId,
+        requestId: requestId,
         context: context
     }, operation)
-    return {operation: operation, operationId: operationId, context}
+    return {operation: operation, requestId: requestId, context}
 }
 
 module.exports = generateAndLogOperation
