@@ -64,7 +64,7 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback, ope
                 } else {
                     next(null, binaryInfo, null);
                 }
-            });
+            }, operation);
         },
         function getUploadUrl(binaryInfo, newsItem, next) {
             if (newsItem) {
@@ -82,7 +82,7 @@ BinaryProcessor.uploadBinary = function (file, imType, objectName, callback, ope
                             return next('Error getting upload url for binary');
                         }
                         next(null, binaryInfo, uploadUrl, null);
-                    });
+                    }, operation);
             }
         },
         function uploadFile(binaryInfo, uploadUrl, newsItem, next) {
@@ -205,7 +205,7 @@ BinaryProcessor.extractInfo = function (file, callback) {
  * @param callback          Callback.
  * @private
  */
-BinaryProcessor._getNewsItemByFileName = function (hashedFileName, imType, callback) {
+BinaryProcessor._getNewsItemByFileName = function (hashedFileName, imType, callback, operation) {
     Backend.exec(
         '{"action":"get_binary_by_filename", "data": {"filename":"' + hashedFileName + '", "imType":"' + imType + '"}}',
         config.get('external.contentrepository'),
@@ -221,7 +221,7 @@ BinaryProcessor._getNewsItemByFileName = function (hashedFileName, imType, callb
             } else {
                 callback('Error get NewsItem for file', null, response);
             }
-        });
+        }, operation);
 };
 
 /**
@@ -233,7 +233,7 @@ BinaryProcessor._getNewsItemByFileName = function (hashedFileName, imType, callb
  * @param callback          Callback.
  * @private
  */
-BinaryProcessor._getUploadUrl = function (hashedFileName, imType, mimeType, callback) {
+BinaryProcessor._getUploadUrl = function (hashedFileName, imType, mimeType, callback, operation) {
     Backend.exec(
         '{"action":"get_upload_url_for_binary", "data": {"filename":"' + hashedFileName +
         '", "imType":"' + imType + '", "mimeType":"' + mimeType + '"}}',
@@ -244,7 +244,7 @@ BinaryProcessor._getUploadUrl = function (hashedFileName, imType, mimeType, call
             } else {
                 callback(null, body, response);
             }
-        });
+        }, operation);
 };
 
 /**
