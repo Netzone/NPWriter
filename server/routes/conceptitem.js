@@ -43,7 +43,7 @@ router.get('/search/concepts/locations', function (req, res) {
         '{"action":"search", "data": {"entity": "' + entity + '", "query":"' + query + '"}}',
         config.get('external.conceptbackend'),
         (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, null, req, "concept search");
+            Backend.defaultHandling(res, error, response, body, null, req, undefined);
         }
     );
 });
@@ -95,7 +95,7 @@ router.get('/concepts/author/:twitterHandle/thumbnail', function (req, res) {
         '{"action":"thumbnail", "data": {"url":"https://twitter.com/' + twitterHandle + '"}}',
         config.get('external.conceptbackend'),
         (error, response, body) => {
-            Backend.defaultHandling(res, error, response, body, 'text/html', req, twitterHandle);
+            Backend.defaultHandling(res, error, response, body, 'text/html', req, operation);
         },
         operation
     );

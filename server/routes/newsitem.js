@@ -62,12 +62,12 @@ router.get('/newsitem/:uuid', function (req, res) {
         environment = config.get('environment'),
         imType = req.query.imType;
 
+    var operation = generateAndLogOperation(log, req, 'Get newsitem', {uuid: uuid, imType: imType});
+
     if (imType === undefined) {
-        Backend.defaultHandling(res, "Missing query parameter imType in request", "", "", null, req, uuid);
+        Backend.defaultHandling(res, "Missing query parameter imType in request", "", "", null, req, operation);
         return;
     }
-
-    var operation = generateAndLogOperation(log, req, 'Get newsitem', {uuid: uuid, imType: imType});
 
     if ("demo" === uuid || "demo" === environment) {
         res.sendFile('newsitem-text.xml', {root: './data'});
