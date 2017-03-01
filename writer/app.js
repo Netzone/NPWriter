@@ -110,6 +110,10 @@ class App extends Component {
     didMount() {
 
         document.onkeydown = this.handleApplicationKeyCombos.bind(this)
+        // TODO Remove below
+        document.addEventListener('compositionstart', (e)=>console.log('start', e))
+        document.addEventListener('compositionend', (e)=>console.log('end', e))
+        // ------
 
         this.configurator = new NPWriterConfigurator().import(AppPackage)
 
