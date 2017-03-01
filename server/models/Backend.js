@@ -182,20 +182,16 @@ Backend.defaultHandling = function (res, error, response, body, contentType, req
 
         if (response.headers && response.headers.etag) {
             res.setHeader('ETag', response.headers.etag)
-            if (context) {
-                context['ETag'] = response.headers.etag
-            }
         }
 
         if (response.headers && response.headers.location) {
             res.setHeader('Location', response.headers.location)
-            if (context) {
-                context['Location'] = response.headers.location
-            }
         }
 
-        if (context) {
+        if (validContext(context)) {
             context['statusCode'] = response.statusCode
+            context['ETag'] = response.headers.etag
+            context['Location'] = response.headers.location
             log.info({context: context}, "operation finished");
         }
 
@@ -220,6 +216,19 @@ Backend.defaultErrorHandling = function (responseOut, error, statusCode, respons
     statusCode = statusCode || 500;
     responseOut.contentType('application/json').status(statusCode).send({error: error});
 };
+
+function validContext(context) {
+    if (context === null || context === undefined) {
+        return false;
+    }
+
+    if (typeof context === 'object' && context.operation && context.requestId) {
+        return true;
+    } else {
+        log.warn({context: context}, 'Deprecated use of context [' + context + '], it should be look like: { "operation": "...", requestId: "..." }. Oh, operation finished.');
+        return false;
+    }
+}
 
 
 module.exports = Backend;
