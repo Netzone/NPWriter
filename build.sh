@@ -19,6 +19,7 @@ echo Running tests
 #fi
 
 echo Running build for production
+npm run build-dep
 npm run build
 
 

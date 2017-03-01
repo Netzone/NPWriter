@@ -58,7 +58,7 @@
     "sass-loader": "^4.0.2",
     "sinon": "2.0.0-pre.3",
     "style-loader": "^0.13.1",
-    "substance": "v1.0.0-beta.6.4",
+    "substance": "git@github.com:Infomaker/substance.git#beta-6-fixes",
     "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2"
