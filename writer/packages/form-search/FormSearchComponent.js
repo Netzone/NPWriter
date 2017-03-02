@@ -319,6 +319,10 @@ class FormSearchComponent extends Component {
                 .append($$('span').append(description).addClass('item__short-description'))
                 .attr('id', itemId);
 
+            itemEl.on('mousedown', (e) => {
+                e.preventDefault()
+            })
+            
             itemEl.on('click', function () {
                 this.doAction(itemToSave);
             }.bind(this));
@@ -333,6 +337,7 @@ class FormSearchComponent extends Component {
 
         el.append(formGroup);
         el.append(list);
+        searchInput.on('blur', this.clearItems)
 
         return el;
     }
