@@ -190,8 +190,10 @@ Backend.defaultHandling = function (res, error, response, body, contentType, req
 
         if (validContext(context)) {
             context['statusCode'] = response.statusCode
-            context['ETag'] = response.headers.etag
-            context['Location'] = response.headers.location
+            if (response.headers) {
+                context['ETag'] = response.headers.etag
+                context['Location'] = response.headers.location
+            }
             log.info({context: context}, "operation finished");
         }
 
