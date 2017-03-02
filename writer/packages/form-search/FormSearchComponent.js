@@ -144,10 +144,6 @@ class FormSearchComponent extends Component {
         var input = this.refs.searchInput.val(),
             originalInput = input;
 
-        if (input.length === 0) {
-            this.clearItems()
-            return;
-        }
 
         this.extendState({
             isSearching: true
@@ -281,6 +277,7 @@ class FormSearchComponent extends Component {
             .addClass('form-control')
             .addClass('form__search')
             .on('keyup', this.search)
+            .on('click', this.search)
             .attr('autocomplete', 'off')
             .attr({
                 type: 'text', id: 'formSearch', placeholder: this.getLabel(this.props.placeholderText)
@@ -319,6 +316,10 @@ class FormSearchComponent extends Component {
                 .append($$('span').append(description).addClass('item__short-description'))
                 .attr('id', itemId);
 
+            itemEl.on('mousedown', (e) => {
+                e.preventDefault()
+            })
+
             itemEl.on('click', function () {
                 this.doAction(itemToSave);
             }.bind(this));
@@ -333,6 +334,8 @@ class FormSearchComponent extends Component {
 
         el.append(formGroup);
         el.append(list);
+        searchInput.on('blur', this.clearItems)
+
 
         return el;
     }
