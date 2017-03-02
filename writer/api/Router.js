@@ -183,8 +183,15 @@ class Router {
      * @return {string}
      */
     getEndpoint() {
-        var location = window.location;
-        return location.protocol + "//" + location.hostname + ":" + location.port;
+        const location = window.location;
+
+        let result = location.protocol + "//" + location.hostname
+
+        if (location.port) {
+            result += ":" + location.port
+        }
+
+        return result;
     }
 
 
