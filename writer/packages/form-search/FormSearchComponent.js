@@ -337,7 +337,7 @@ class FormSearchComponent extends Component {
 
         el.append(formGroup);
         el.append(list);
-        searchInput.on('blur', this.clearItems)
+        searchInput.on('blur', this.hide)
 
         return el;
     }
